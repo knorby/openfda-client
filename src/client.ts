@@ -8,6 +8,17 @@ import type {
   OpenFdaResponse,
   SearchParams,
 } from "./types/common";
+import type { CosmeticEvent } from "./types/cosmetic";
+import type {
+  DrugEnforcement,
+  DrugEvent,
+  DrugLabel,
+  DrugNdc,
+  DrugOrangeBook,
+  DrugShortage,
+  DrugsFda,
+} from "./types/drug";
+import type { FoodEnforcement, FoodEvent } from "./types/food";
 
 export type {
   FetchLike,
@@ -104,9 +115,22 @@ async function* paginate<T>(
  * Maps endpoint paths to their result models. Typed entries get real
  * response interfaces; untyped paths fall back to
  * `Record<string, unknown>` (see `types/drug.ts`, `types/food.ts`,
- * `types/cosmetic.ts`).
+ * `types/cosmetic.ts`). Add new entries here as models are authored — the
+ * generic `client.search()` escape hatch keeps untyped endpoints usable in
+ * the meantime.
  */
-export type EndpointResultMap = Record<never, never>;
+export interface EndpointResultMap {
+  "cosmetic/event": CosmeticEvent;
+  "drug/drugsfda": DrugsFda;
+  "drug/enforcement": DrugEnforcement;
+  "drug/event": DrugEvent;
+  "drug/label": DrugLabel;
+  "drug/ndc": DrugNdc;
+  "drug/orangebook": DrugOrangeBook;
+  "drug/shortages": DrugShortage;
+  "food/enforcement": FoodEnforcement;
+  "food/event": FoodEvent;
+}
 
 /**
  * Resolves the result model for a path: real model when registered, generic
@@ -160,7 +184,7 @@ export class OpenFdaClient {
     event: EndpointClient<Record<string, unknown>>;
   };
   /** `client.cosmetic` — adverse-event reports for cosmetics. */
-  readonly cosmetic: { event: EndpointClient<Record<string, unknown>> };
+  readonly cosmetic: { event: EndpointClient<CosmeticEvent> };
   /** `client.device` — device clearances, approvals, events, recalls, UDI. */
   readonly device: {
     "510k": EndpointClient<Record<string, unknown>>;
@@ -175,18 +199,18 @@ export class OpenFdaClient {
   };
   /** `client.drug` — the highest-value openFDA namespace. */
   readonly drug: {
-    drugsfda: EndpointClient<Record<string, unknown>>;
-    enforcement: EndpointClient<Record<string, unknown>>;
-    event: EndpointClient<Record<string, unknown>>;
-    label: EndpointClient<Record<string, unknown>>;
-    ndc: EndpointClient<Record<string, unknown>>;
-    orangebook: EndpointClient<Record<string, unknown>>;
-    shortages: EndpointClient<Record<string, unknown>>;
+    drugsfda: EndpointClient<DrugsFda>;
+    enforcement: EndpointClient<DrugEnforcement>;
+    event: EndpointClient<DrugEvent>;
+    label: EndpointClient<DrugLabel>;
+    ndc: EndpointClient<DrugNdc>;
+    orangebook: EndpointClient<DrugOrangeBook>;
+    shortages: EndpointClient<DrugShortage>;
   };
   /** `client.food` — food events and recall enforcement reports. */
   readonly food: {
-    enforcement: EndpointClient<Record<string, unknown>>;
-    event: EndpointClient<Record<string, unknown>>;
+    enforcement: EndpointClient<FoodEnforcement>;
+    event: EndpointClient<FoodEvent>;
   };
   /** `client.other` — NSDE, UNII, substance, historical documents. */
   readonly other: {
