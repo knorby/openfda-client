@@ -1,0 +1,29 @@
+{
+  "definition": "string",
+  "device_class": "string",
+  "device_name": "string",
+  "gmp_exempt_flag": "string",
+  "implant_flag": "string",
+  "life_sustain_support_flag": "string",
+  "medical_specialty": "string",
+  "medical_specialty_description": "string",
+  "openfda": {
+    "fei_number": [
+      "string"
+    ],
+    "k_number": [
+      "string"
+    ],
+    "registration_number": [
+      "string"
+    ]
+  },
+  "product_code": "string",
+  "regulation_number": "string",
+  "review_code": "string",
+  "review_panel": "string",
+  "submission_type_id": "string",
+  "summary_malfunction_reporting": "string",
+  "third_party_flag": "string",
+  "unclassified_reason": "string"
+}

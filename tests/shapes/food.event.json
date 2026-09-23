@@ -1,0 +1,24 @@
+{
+  "consumer": {
+    "gender": "string",
+    "age": "string",
+    "age_unit": "string"
+  },
+  "date_created": "string",
+  "date_started": "mixed",
+  "outcomes": [
+    "string"
+  ],
+  "products": [
+    {
+      "industry_code": "string",
+      "industry_name": "string",
+      "name_brand": "string",
+      "role": "string"
+    }
+  ],
+  "reactions": [
+    "string"
+  ],
+  "report_number": "string"
+}

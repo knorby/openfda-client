@@ -1,0 +1,80 @@
+{
+  "brand_name": "string",
+  "commercial_distribution_status": "string",
+  "company_name": "string",
+  "device_count_in_base_package": "string",
+  "device_description": "string",
+  "gmdn_terms": [
+    {
+      "code": "string",
+      "code_status": "string",
+      "definition": "string",
+      "implantable": "string",
+      "name": "string"
+    }
+  ],
+  "has_donation_id_number": "string",
+  "has_expiration_date": "string",
+  "has_lot_or_batch_number": "string",
+  "has_manufacturing_date": "string",
+  "has_serial_number": "string",
+  "identifiers": [
+    {
+      "id": "string",
+      "issuing_agency": "string",
+      "type": "string",
+      "package_status": "string",
+      "package_type": "string",
+      "quantity_per_package": "string",
+      "unit_of_use_id": "string"
+    }
+  ],
+  "is_combination_product": "string",
+  "is_direct_marking_exempt": "string",
+  "is_hct_p": "string",
+  "is_kit": "string",
+  "is_labeled_as_no_nrl": "string",
+  "is_labeled_as_nrl": "string",
+  "is_otc": "string",
+  "is_pm_exempt": "string",
+  "is_rx": "string",
+  "is_single_use": "string",
+  "labeler_duns_number": "string",
+  "mri_safety": "string",
+  "premarket_submissions": [
+    {
+      "submission_number": "string",
+      "supplement_number": "string"
+    }
+  ],
+  "product_codes": [
+    {
+      "code": "string",
+      "name": "string",
+      "openfda": {
+        "device_class": "string",
+        "device_name": "string",
+        "medical_specialty_description": "string",
+        "regulation_number": "string"
+      }
+    }
+  ],
+  "public_device_record_key": "string",
+  "public_version_date": "string",
+  "public_version_number": "string",
+  "public_version_status": "string",
+  "publish_date": "string",
+  "record_status": "string",
+  "sterilization": {
+    "is_sterile": "string",
+    "is_sterilization_prior_use": "string"
+  },
+  "version_or_model_number": "string",
+  "catalog_number": "string",
+  "customer_contacts": [
+    {
+      "email": "string",
+      "phone": "string"
+    }
+  ]
+}

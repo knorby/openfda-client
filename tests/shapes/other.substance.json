@@ -1,0 +1,202 @@
+{
+  "codes": [
+    {
+      "code": "string",
+      "code_system": "string",
+      "references": [
+        "string"
+      ],
+      "type": "string",
+      "url": "string",
+      "uuid": "string",
+      "comments": "string"
+    }
+  ],
+  "definition_level": "string",
+  "definition_type": "string",
+  "moieties": [
+    {
+      "atropisomerism": "string",
+      "charge": "number",
+      "count": "number",
+      "count_amount": {
+        "average": "number",
+        "type": "string",
+        "units": "string",
+        "uuid": "string"
+      },
+      "defined_stereo": "number",
+      "ez_centers": "number",
+      "formula": "string",
+      "id": "string",
+      "molecular_weight": "string",
+      "molfile": "string",
+      "optical_activity": "string",
+      "smiles": "string",
+      "stereo_centers": "number",
+      "stereochemistry": "string",
+      "uuid": "string"
+    }
+  ],
+  "names": [
+    {
+      "display_name": "boolean",
+      "languages": [
+        "string"
+      ],
+      "name": "string",
+      "preferred": "boolean",
+      "references": [
+        "string"
+      ],
+      "stdName": "string",
+      "type": "string",
+      "uuid": "string",
+      "domains": [
+        "string"
+      ],
+      "name_orgs": [
+        {
+          "name_org": "string",
+          "uuid": "string"
+        }
+      ]
+    }
+  ],
+  "references": [
+    {
+      "citation": "string",
+      "doc_type": "string",
+      "public_domain": "boolean",
+      "tags": [
+        "string"
+      ],
+      "url": "string",
+      "uuid": "string",
+      "document_date": "number"
+    }
+  ],
+  "relationships": [
+    {
+      "amount": {
+        "uuid": "string",
+        "high": "number",
+        "low": "number",
+        "units": "string"
+      },
+      "qualification": "string",
+      "references": [
+        "string"
+      ],
+      "related_substance": {
+        "linking_id": "string",
+        "name": "string",
+        "ref_pname": "string",
+        "refuuid": "string",
+        "substance_class": "string",
+        "unii": "string",
+        "uuid": "string"
+      },
+      "type": "string",
+      "uuid": "string",
+      "interaction_type": "string"
+    }
+  ],
+  "structure": {
+    "atropisomerism": "string",
+    "charge": "number",
+    "count": "number",
+    "defined_stereo": "number",
+    "ez_centers": "number",
+    "formula": "string",
+    "id": "string",
+    "molecular_weight": "string",
+    "molfile": "string",
+    "optical_activity": "string",
+    "references": [
+      "string"
+    ],
+    "smiles": "string",
+    "stereo_centers": "number",
+    "stereochemistry": "string"
+  },
+  "substance_class": "string",
+  "unii": "string",
+  "uuid": "string",
+  "version": "string",
+  "modifications": {
+    "agent_modifications": [
+      {
+        "agent_modification_process": "string",
+        "agent_modification_role": "string",
+        "agent_modification_type": "string",
+        "agent_substance": {
+          "linking_id": "string",
+          "name": "string",
+          "ref_pname": "string",
+          "refuuid": "string",
+          "substance_class": "string",
+          "unii": "string",
+          "uuid": "string"
+        },
+        "uuid": "string"
+      }
+    ],
+    "structural_modifications": [
+      {
+        "molecular_fragment": {
+          "linking_id": "string",
+          "name": "string",
+          "ref_pname": "string",
+          "refuuid": "string",
+          "substance_class": "string",
+          "unii": "string",
+          "uuid": "string"
+        },
+        "structural_modification_type": "string",
+        "uuid": "string"
+      }
+    ],
+    "uuid": "string"
+  },
+  "structurally_diverse": {
+    "fraction_material_type": "string",
+    "fraction_name": "string",
+    "parent_substance": {
+      "linking_id": "string",
+      "name": "string",
+      "ref_pname": "string",
+      "refuuid": "string",
+      "substance_class": "string",
+      "unii": "string",
+      "uuid": "string"
+    },
+    "part": [
+      "string"
+    ],
+    "references": [
+      "string"
+    ],
+    "source_material_class": "string",
+    "source_material_state": "string",
+    "source_material_type": "string",
+    "uuid": "string"
+  },
+  "properties": [
+    {
+      "defining": "boolean",
+      "name": "string",
+      "property_type": "string",
+      "references": [
+        "string"
+      ],
+      "uuid": "string",
+      "value": {
+        "high": "number",
+        "low": "number",
+        "units": "string",
+        "uuid": "string"
+      }
+    }
+  ]
+}

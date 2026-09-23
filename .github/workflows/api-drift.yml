@@ -1,0 +1,98 @@
+name: openFDA API drift
+
+# Weekly drift detection against the live openFDA API:
+#   1. diff the endpoint registry against the download.json manifest + live probes
+#   2. diff regenerated shape snapshots against tests/shapes/ (field drift)
+#   3. run the live test tripwire
+# Any endpoint/shape drift is collected into drift-report.txt and opened as a
+# reviewable PR (snapshot updates + report); a failing live tripwire opens an
+# issue instead. Drift PRs are NEVER auto-merged — a human adjudicates.
+#
+# NOTE: GitHub disables scheduled workflows after 60 days of repository
+# inactivity. PR/issue traffic from this workflow usually keeps the repo
+# active, but if it goes quiet, re-enable it under Actions → Workflow Runs.
+# See docs/decisions/0003-api-drift-strategy.md.
+
+on:
+  schedule:
+    - cron: "17 6 * * 1" # weekly, Mon 06:17 UTC (off the top of the hour)
+  workflow_dispatch:
+
+permissions:
+  contents: write # push the drift branch
+  pull-requests: write # open the drift PR
+  issues: write # open an issue when the tripwire fails
+
+concurrency:
+  group: api-drift
+  cancel-in-progress: false
+
+jobs:
+  drift:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: ".nvmrc"
+          cache: npm
+      - run: npm ci
+
+      - name: Discover endpoints
+        env:
+          OPENFDA_API_KEY: ${{ secrets.OPENFDA_API_KEY }}
+        run: |
+          {
+            echo "## Endpoint discovery"
+            echo '```'
+            node scripts/discover-endpoints.mjs
+            echo '```'
+          } > drift-report.txt || true
+
+      - name: Check shape drift (report, then regenerate snapshots)
+        env:
+          OPENFDA_API_KEY: ${{ secrets.OPENFDA_API_KEY }}
+        run: |
+          {
+            echo "## Shape drift (tests/shapes/)"
+            echo '```'
+            node scripts/capture-shapes.mjs --check || true
+            echo '```'
+          } >> drift-report.txt
+          node scripts/capture-shapes.mjs
+
+      - name: Live tripwire tests
+        id: live
+        env:
+          OPENFDA_LIVE_TESTS: "1"
+          OPENFDA_API_KEY: ${{ secrets.OPENFDA_API_KEY }}
+        run: npm run test:live
+
+      - name: Open drift PR
+        # No-ops by itself when there is nothing to commit (no drift).
+        if: success()
+        uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8.1.1
+        with:
+          title: "chore: openFDA API drift detected"
+          body-path: drift-report.txt
+          branch: bot/openfda-drift
+          add-paths: |
+            tests/shapes/*.json
+            drift-report.txt
+          commit-message: "chore: refresh endpoint shape snapshots after openFDA drift"
+          delete-branch: true
+
+      - name: Open issue on tripwire failure
+        if: failure() && steps.live.outcome == 'failure'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          gh issue create \
+            --title "openFDA live tripwire failing" \
+            --body "The scheduled live smoke tests failed against the real API. This usually means openFDA changed behavior (or is having an outage). Run: \`npm run test:live\` locally to reproduce.
+
+          Run details: $RUN_URL
+
+          DISCLAIMER: this workflow queries public FDA data; the openFDA medical-care disclaimer applies to all retrieved data. This repository is not affiliated with the FDA."

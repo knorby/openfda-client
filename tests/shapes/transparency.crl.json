@@ -1,0 +1,19 @@
+{
+  "application_number": [
+    "string"
+  ],
+  "approval_status": "string",
+  "approver_center": [
+    "mixed"
+  ],
+  "approver_name": "string",
+  "approver_title": "mixed",
+  "company_address": "string",
+  "company_name": "string",
+  "company_rep": "string",
+  "file_name": "string",
+  "letter_date": "string",
+  "letter_type": "string",
+  "letter_year": "string",
+  "text": "string"
+}

@@ -1,0 +1,43 @@
+{
+  "action": "string",
+  "additional_info_contact": "string",
+  "address_1": "string",
+  "cfres_id": "string",
+  "city": "string",
+  "code_info": "string",
+  "distribution_pattern": "string",
+  "event_date_initiated": "string",
+  "event_date_posted": "string",
+  "event_date_terminated": "string",
+  "firm_fei_number": "string",
+  "k_numbers": [
+    "string"
+  ],
+  "openfda": {
+    "device_class": "string",
+    "device_name": "string",
+    "fei_number": [
+      "string"
+    ],
+    "k_number": [
+      "string"
+    ],
+    "medical_specialty_description": "string",
+    "registration_number": [
+      "string"
+    ],
+    "regulation_number": "string"
+  },
+  "postal_code": "string",
+  "product_code": "string",
+  "product_description": "string",
+  "product_quantity": "string",
+  "product_res_number": "string",
+  "reason_for_recall": "string",
+  "recall_status": "string",
+  "recalling_firm": "string",
+  "res_event_number": "string",
+  "root_cause_description": "string",
+  "state": "string",
+  "address_2": "string"
+}

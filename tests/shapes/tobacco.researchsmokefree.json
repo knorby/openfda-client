@@ -1,0 +1,13 @@
+{
+  "metric": "string",
+  "traffic_referral_group": {
+    "direct_traffic": "string",
+    "direct_traffic_denominator": "string",
+    "organic_traffic": "string",
+    "organic_traffic_denominator": "string",
+    "the_real_cost_campaign": "string",
+    "the_real_cost_campaign_denominator": "string"
+  },
+  "variable": "string",
+  "variable_definition": "string"
+}

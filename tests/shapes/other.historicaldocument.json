@@ -1,0 +1,6 @@
+{
+  "doc_type": "string",
+  "num_of_pages": "number",
+  "text": "string",
+  "year": "number"
+}

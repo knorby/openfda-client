@@ -1,0 +1,37 @@
+{
+  "address_1": "string",
+  "address_2": "string",
+  "advisory_committee": "string",
+  "advisory_committee_description": "string",
+  "applicant": "string",
+  "city": "string",
+  "clearance_type": "string",
+  "contact": "string",
+  "country_code": "string",
+  "date_received": "string",
+  "decision_code": "string",
+  "decision_date": "string",
+  "decision_description": "string",
+  "device_name": "string",
+  "expedited_review_flag": "string",
+  "k_number": "string",
+  "openfda": {
+    "device_class": "string",
+    "device_name": "string",
+    "fei_number": [
+      "string"
+    ],
+    "medical_specialty_description": "string",
+    "registration_number": [
+      "string"
+    ],
+    "regulation_number": "string"
+  },
+  "postal_code": "string",
+  "product_code": "string",
+  "review_advisory_committee": "string",
+  "state": "string",
+  "statement_or_summary": "string",
+  "third_party_flag": "string",
+  "zip_code": "string"
+}

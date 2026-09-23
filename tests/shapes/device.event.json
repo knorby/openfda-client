@@ -1,0 +1,171 @@
+{
+  "adverse_event_flag": "string",
+  "date_added": "string",
+  "date_changed": "string",
+  "date_facility_aware": "string",
+  "date_of_event": "string",
+  "date_received": "string",
+  "date_report": "string",
+  "date_report_to_fda": "string",
+  "device": [
+    {
+      "baseline_510_k__exempt_flag": "string",
+      "baseline_510_k__flag": "string",
+      "baseline_510_k__number": "string",
+      "brand_name": "string",
+      "catalog_number": "string",
+      "date_received": "string",
+      "date_removed_flag": "string",
+      "device_age_text": "string",
+      "device_availability": "string",
+      "device_evaluated_by_manufacturer": "string",
+      "device_event_key": "string",
+      "device_operator": "string",
+      "device_report_product_code": "string",
+      "device_sequence_number": "string",
+      "generic_name": "string",
+      "implant_flag": "string",
+      "lot_number": "string",
+      "manufacturer_d_address_1": "string",
+      "manufacturer_d_address_2": "string",
+      "manufacturer_d_city": "string",
+      "manufacturer_d_country": "string",
+      "manufacturer_d_name": "string",
+      "manufacturer_d_postal_code": "string",
+      "manufacturer_d_state": "string",
+      "manufacturer_d_zip_code": "string",
+      "manufacturer_d_zip_code_ext": "string",
+      "model_number": "string",
+      "openfda": {
+        "device_class": "string",
+        "device_name": "string",
+        "medical_specialty_description": "string",
+        "regulation_number": "string",
+        "fei_number": [
+          "string"
+        ],
+        "registration_number": [
+          "string"
+        ]
+      },
+      "other_id_number": "string",
+      "date_returned_to_manufacturer": "string",
+      "combination_product_flag": "string",
+      "udi_di": "string",
+      "udi_public": "string"
+    }
+  ],
+  "distributor_address_1": "string",
+  "distributor_address_2": "string",
+  "distributor_city": "string",
+  "distributor_name": "string",
+  "distributor_state": "string",
+  "distributor_zip_code": "string",
+  "distributor_zip_code_ext": "string",
+  "event_key": "string",
+  "event_location": "string",
+  "event_type": "string",
+  "exemption_number": "string",
+  "health_professional": "string",
+  "initial_report_to_fda": "string",
+  "manufacturer_address_1": "string",
+  "manufacturer_address_2": "string",
+  "manufacturer_city": "string",
+  "manufacturer_contact_address_1": "string",
+  "manufacturer_contact_address_2": "string",
+  "manufacturer_contact_area_code": "string",
+  "manufacturer_contact_city": "string",
+  "manufacturer_contact_country": "string",
+  "manufacturer_contact_exchange": "string",
+  "manufacturer_contact_extension": "string",
+  "manufacturer_contact_f_name": "string",
+  "manufacturer_contact_l_name": "string",
+  "manufacturer_contact_pcity": "string",
+  "manufacturer_contact_pcountry": "string",
+  "manufacturer_contact_phone_number": "string",
+  "manufacturer_contact_plocal": "string",
+  "manufacturer_contact_postal_code": "string",
+  "manufacturer_contact_state": "string",
+  "manufacturer_contact_t_name": "string",
+  "manufacturer_contact_zip_code": "string",
+  "manufacturer_contact_zip_ext": "string",
+  "manufacturer_country": "string",
+  "manufacturer_g1_address_1": "string",
+  "manufacturer_g1_address_2": "string",
+  "manufacturer_g1_city": "string",
+  "manufacturer_g1_country": "string",
+  "manufacturer_g1_name": "string",
+  "manufacturer_g1_postal_code": "string",
+  "manufacturer_g1_state": "string",
+  "manufacturer_g1_zip_code": "string",
+  "manufacturer_g1_zip_code_ext": "string",
+  "manufacturer_link_flag": "string",
+  "manufacturer_name": "string",
+  "manufacturer_postal_code": "string",
+  "manufacturer_state": "string",
+  "manufacturer_zip_code": "string",
+  "manufacturer_zip_code_ext": "string",
+  "mdr_report_key": "string",
+  "mdr_text": [
+    {
+      "mdr_text_key": "string",
+      "patient_sequence_number": "string",
+      "text": "string",
+      "text_type_code": "string"
+    }
+  ],
+  "mfr_report_type": "string",
+  "noe_summarized": "string",
+  "number_devices_in_event": "string",
+  "number_patients_in_event": "string",
+  "patient": [
+    {
+      "date_received": "string",
+      "patient_age": "string",
+      "patient_ethnicity": "string",
+      "patient_race": "string",
+      "patient_sequence_number": "string",
+      "patient_sex": "string",
+      "patient_weight": "string",
+      "sequence_number_outcome": [
+        "string"
+      ],
+      "sequence_number_treatment": [
+        "string"
+      ],
+      "patient_problems": [
+        "string"
+      ]
+    }
+  ],
+  "pma_pmn_number": "string",
+  "previous_use_code": "string",
+  "product_problem_flag": "string",
+  "remedial_action": [
+    "string"
+  ],
+  "removal_correction_number": "string",
+  "report_date": "string",
+  "report_number": "string",
+  "report_source_code": "string",
+  "report_to_fda": "string",
+  "report_to_manufacturer": "string",
+  "reporter_country_code": "string",
+  "reporter_occupation_code": "string",
+  "reporter_state_code": "string",
+  "reprocessed_and_reused_flag": "string",
+  "single_use_flag": "string",
+  "source_type": [
+    "string"
+  ],
+  "summary_report_flag": "string",
+  "suppl_dates_fda_received": "string",
+  "suppl_dates_mfr_received": "string",
+  "type_of_report": [
+    "string"
+  ],
+  "date_report_to_manufacturer": "string",
+  "product_problems": [
+    "string"
+  ]
+}

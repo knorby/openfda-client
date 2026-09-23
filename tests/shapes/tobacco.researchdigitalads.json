@@ -1,0 +1,14 @@
+{
+  "ad_number": "string",
+  "ad_recognition": "string",
+  "attention_average": "string",
+  "attentive_seconds": "string",
+  "attentive_seconds_standard_deviation": "string",
+  "attentive_vtr": "string",
+  "brand_recognition": "string",
+  "channel_or_format": "string",
+  "playback_seconds": "string",
+  "playback_seconds_standard_deviation": "string",
+  "view_through_rate": "string",
+  "views": "string"
+}
