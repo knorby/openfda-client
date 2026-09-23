@@ -118,7 +118,21 @@ Settings → Environments; workflow permissions set to Read and write with PR
 creation allowed; a trusted publisher configured on npmjs.com (repository,
 workflow filename `release.yml`, environment `release` — must match exactly);
 and npm 2FA (`npm profile enable-2fa auth-and-writes`). The very first
-publish is manual — see the README "First publish (manual)" section.
+publish is manual (npm needs the package to exist before it can link a
+trusted publisher):
+
+```bash
+npm login
+npm pkg delete publishConfig.provenance   # provenance needs CI + public repo
+npm run release                           # build + changeset publish
+npm pkg set publishConfig.provenance=true
+git push origin main --follow-tags
+gh release create vX.Y.Z --notes-from-tag
+```
+
+> Publishing also requires the repository to be public (provenance + OIDC
+> trusted publishing). While this repo is private, keep the release workflow
+> staged and publish manually only when ready to go public.
 
 **Manual release (if needed):**
 ```bash

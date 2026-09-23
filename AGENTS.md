@@ -2,9 +2,47 @@
 
 Instructions and steering for AI coding agents working in this repository.
 
-This is a TypeScript starter template for universal npm packages (Node, React
-Native, and more). Customize per project and keep this file updated as
-conventions evolve.
+This is `@knorby/openfda-client` — a fully-typed, zero-dependency
+TypeScript client for the openFDA API (https://open.fda.gov/apis/). It
+targets a universal runtime (Node, React Native, browsers, Bun, Deno) and
+ships under Apache-2.0. Keep this file updated as conventions evolve.
+
+**Unaffiliated-with-FDA disclaimer:** this library is a third-party client;
+never present it as an FDA product. openFDA's own medical-care disclaimer
+("Do not rely on openFDA to make decisions regarding medical care…") applies
+to all data the client returns and is quoted in `README.md` and the
+entry-point docs.
+
+The client surface mirrors the openFDA API (every endpoint shares one query
+surface: `search`/`count`/`limit`/`skip`/`sort`):
+
+- `client.drug.{event,label,ndc,enforcement,drugsfda,orangebook,shortages}`,
+  `client.food.{event,enforcement}`, `client.cosmetic.event` — typed
+  namespaces (models in `src/types/drug|food|cosmetic.ts`), each exposing
+  `search`, `count`, and `searchAll` (auto-pagination; stops at the API's
+  25,000-record skip ceiling — bulk access belongs to the download files).
+- `client.{device,tobacco,animalandveterinary,other,research,transparency}` —
+  generic namespaces (`Record<string, unknown>` results; `device["510k"]`
+  uses bracket access for the digit-leading key).
+- `client.search("noun/endpoint")` / `client.count("noun/endpoint")` —
+  generic escape hatch for **any** path, including endpoints FDA adds in the
+  future; registered paths resolve typed models via `EndpointResultMap`.
+- `client.search("x")` rejecting with `OpenFdaNotFoundError` is **API
+  semantics**: openFDA answers zero-match searches with HTTP 404
+  (`{"error":{"code":"NOT_FOUND"}}`), never an empty array. Do not
+  "normalize" this away.
+- `src/endpoints.ts` is the endpoint registry, seeded and verified by
+  `scripts/discover-endpoints.mjs` against `https://api.fda.gov/download.json`
+  + live probes. Two paths differ from the docs slugs: `device/pma` (not
+  "premarketapproval") and `drug/shortages` (not "drugshortages").
+- Search-syntax helpers live in `src/query.ts`
+  (`and/or/not/field/exact/range/exists/term`).
+- Drift protection: `tests/shapes/*.json` are skeleton snapshots of every
+  endpoint; `scripts/capture-shapes.mjs` regenerates/diffs them. The weekly
+  `api-drift` GitHub workflow opens a review PR on drift — **never
+  auto-merge drift PRs**; a human checks the diff against the field
+  references. (Note: GitHub disables cron workflows after 60 days of repo
+  inactivity; re-enable under Actions if the repo goes quiet.)
 
 ---
 
@@ -17,6 +55,7 @@ system:
 
 1. **Node.js 24 (LTS)** — use [nvm](https://github.com/nvm-sh/nvm) or
    [fnm](https://github.com/Schniz/fnm); this repo includes an `.nvmrc`.
+   (The published package supports Node 18+.)
 2. **npm** — bundled with Node.
 3. **pre-commit** — install via `pipx install pre-commit` or
    `brew install pre-commit`. Handles file hygiene + secret scanning.
@@ -80,6 +119,9 @@ scanning). Both are needed for full coverage.
 | `npm test` | Run tests once (Vitest) |
 | `npm run test:watch` | Run tests in watch mode |
 | `npm run test:coverage` | Run tests with coverage reporting |
+| `npm run test:live` | Opt-in live smoke tests against the real openFDA API (`OPENFDA_LIVE_TESTS=1`) |
+| `npm run drift:check` | Verify endpoint registry + shape snapshots against the live API |
+| `npm run drift:capture` | Regenerate shape snapshots in `tests/shapes/` |
 | `npx changeset` | Create a changeset (required for any change that affects published output) |
 
 ---
@@ -87,7 +129,9 @@ scanning). Both are needed for full coverage.
 ## Testing and CI
 
 - Tests live in `tests/` and use **Vitest**. Add test files as
-  `*.test.ts` alongside or under `tests/`.
+  `*.test.ts`. `tests/live.test.ts` is env-gated (`OPENFDA_LIVE_TESTS=1`)
+  and skipped by default; it makes ~11 real API requests per run — keep
+  that small and respect the rate limits.
 - **GitHub Actions** runs the full check suite on every push to `main` and on
   PRs against `main` (see `.github/workflows/tests.yml`):
   - `npm run lint` (Biome — lint + formatting; formatting is enforced in CI,
@@ -103,12 +147,17 @@ scanning). Both are needed for full coverage.
   by design). The workflow installs a system gitleaks binary matching the rev
   in `.pre-commit-config.yaml`; the trufflehog golang hook uses the Go
   toolchain preinstalled on ubuntu-latest.
+- The **openFDA API drift** workflow (`.github/workflows/api-drift.yml`)
+  runs weekly on a schedule (plus manual `workflow_dispatch`): endpoint
+  discovery, shape-snapshot diff, snapshot regeneration, live tripwire, then
+  a drift PR (or an issue if live tests fail). Actions runners can use the
+  optional `OPENFDA_API_KEY` secret for higher rate limits.
 - Husky hooks (Biome + commitlint) remain local only.
 - Optional security scanning additions (free for public repos): CodeQL
   (<https://github.com/github/codeql-action>), gitleaks-action
   (<https://github.com/gitleaks/gitleaks-action>), Semgrep
   (<https://github.com/returntocorp/semgrep-action>). Add workflows in
-  `.github/workflows/` if desired and document them here.
+  `.github/workflows/` if desired and document it here.
 
 ---
 
@@ -125,60 +174,15 @@ PRs and release them all at once.
   `CHANGELOG.md`), then `npm run release` (builds + publishes).
 - **GitHub Actions release** (`workflow-templates/release.yml`): ships
   **staged** — GitHub only runs workflows from `.github/workflows/`, so this
-  workflow is inert in the template repo (no publish attempts on pushes to
-  `main`). To activate in a repo created from this template:
-  `git mv workflow-templates/release.yml .github/workflows/release.yml`.
-  Once active, it runs on every push to `main` (and can be triggered
-  manually via `workflow_dispatch`, e.g. to retry after a transient publish
-  failure): with no pending changesets
-  it is a no-op. With changesets, it opens a "Version Packages" PR
-  (`changeset version` bumps the version string, updates `CHANGELOG.md`,
-  and removes consumed changesets); merging that PR publishes to npm, tags,
-  and creates a GitHub Release. Publishing uses OIDC trusted publishing — no
-  npm token secrets are involved. Permissions follow the changesets v2
-  sub-action split (`select-mode` → `version` | `pack` → `publish`);
-  `id-token: write` is scoped to the publish job only.
+  workflow is inert until moved
+  (`git mv workflow-templates/release.yml .github/workflows/release.yml`).
+  Once active, it runs on every push to `main` and publishes via OIDC
+  trusted publishing (no npm token secrets involved); with no pending
+  changesets it is a no-op. One-time setup (trusted publisher + GitHub
+  environment) follows the checklist in `CONTRIBUTING.md`.
 - **Always verify before publishing**: `npm run build && npm pack --dry-run`
   to confirm only `dist/`, `README.md`, `CHANGELOG.md`, and `LICENSE` are
   included.
-
-### One-time release setup (repository owner)
-
-0. Activate the staged workflow:
-   `git mv workflow-templates/release.yml .github/workflows/release.yml`.
-1. Repo **Settings → Actions → General → Workflow permissions**: select **Read
-   and write permissions**, and check **Allow GitHub Actions to create and
-   approve pull requests**.
-2. Repo **Settings → Environments**: create an environment named `release`.
-3. On npmjs.com, add a **trusted publisher** for the package. Values must
-   match the workflow exactly: this repository, workflow filename
-   `release.yml`, environment `release`.
-4. Enable npm 2FA: `npm profile enable-2fa auth-and-writes`.
-
-### First publish (manual)
-
-npm requires a package to exist before it can link a trusted publisher
-([npm/cli#8544](https://github.com/npm/cli/issues/8544)), so the very first
-publish is manual:
-
-```bash
-npm login
-npm pkg delete publishConfig.provenance   # provenance needs CI + public repo
-npm run release                           # build + changeset publish
-npm pkg set publishConfig.provenance=true
-git push origin main --follow-tags
-gh release create vX.Y.Z --notes-from-tag
-```
-
-### Release failure quick reference
-
-| Symptom | Likely cause / fix |
-| --- | --- |
-| `EOTP` errors | A token is being used on a 2FA-enabled account — trusted publishing (no token) avoids this |
-| `ENEEDAUTH` / 401 on publish | npm < 11.5.1 (the workflow upgrades npm), or the trusted-publisher config on npmjs.com does not match exactly (repo, workflow filename, environment) |
-| "not permitted to create pull requests" | Enable "Allow GitHub Actions to create and approve pull requests" in Actions settings |
-| Provenance warning `provider: null` | Published locally instead of via CI — provenance only works from CI on a public repo |
-| 404 "package not found" right after publishing | npm registry replication lag — retry in a minute |
 
 ### Publishing security
 
@@ -189,11 +193,10 @@ gh release create vX.Y.Z --notes-from-tag
   (`npm profile enable-2fa auth-and-writes`) because no token needs an OTP.
 - **Provenance** — `publishConfig.provenance: true` in `package.json` enables
   npm provenance attestation (cryptographic link to commit + workflow).
-  Provenance requires publishing from CI on a **public** repository; the
-  manual first publish temporarily removes it (see "First publish").
-- **Scoped names** — use `@knorby/package`-style scoped names to prevent
-  dependency confusion attacks. Scoped packages default to restricted
-  visibility, so `publishConfig.access: "public"` is set.
+  Provenance requires publishing from CI on a **public** repository.
+- **Scoped names** — `@knorby/*` scoped names prevent dependency confusion
+  attacks. Scoped packages default to restricted visibility, so
+  `publishConfig.access: "public"` is set.
 - **No secrets in published files** — the `files` field in `package.json`
   whitelists only `dist`, `README.md`, `CHANGELOG.md`, and `LICENSE`. Never
   add `src/`, `.env`, `tsconfig.json`, or other config to the `files` list.
@@ -221,7 +224,25 @@ These rules are mandatory. Follow them strictly.
   shell tricks, or alternative deletion methods).
 - Use `git rm` for tracked files that need removal.
 - If untracked files need removal, or if your action is required to remove
-  something, **stop** and flag what needs to be removed and why in your output.
+  something, **stop** and flag what needs to be removed and why in your
+  output.
+
+### Licensing
+
+- Do **not** add a `LICENSE` file, license headers, or any licensing
+  declarations without explicit user instruction.
+- This applies broadly: build configs, package manifests (e.g. `license`
+  fields in `package.json`, `pyproject.toml`, etc.), boilerplate, comments,
+  and anywhere else a license might appear. Committing an unintentional
+  license is not acceptable. If a license field is required by a tool's
+  schema, leave it blank or omit it and flag it in your output for the user
+  to decide.
+
+### Disclaimers
+
+- Keep the not-affiliated-with-FDA disclaimer and openFDA's medical-care
+  disclaimer present and prominent in `README.md` and `src/index.ts` (and
+  reuse them in generated docs). Never remove or weaken them.
 
 ### Documentation
 

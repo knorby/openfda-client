@@ -1,230 +1,236 @@
-# repo-template-typescript
+# @knorby/openfda-client
 
-A TypeScript starter template for universal npm packages (Node, React Native,
-and more) with dual ESM/CJS output, Biome linting/formatting, Vitest testing,
-Changesets versioning, and security-focused publishing defaults.
+A fully-typed, zero-dependency TypeScript client for the
+[openFDA API](https://open.fda.gov/apis/) — search FDA public data on drugs,
+devices, foods, cosmetics, tobacco, and more. Universal: works in Node,
+React Native (Expo), browsers, Bun, and Deno — anywhere the standard Web
+`fetch` is available.
 
-<!-- TODO: Replace project name and description above with project-specific values. -->
+> **Disclaimer:** This library is an independent, open-source project and is
+> **not affiliated with, endorsed by, or sponsored by the U.S. Food and Drug
+> Administration (FDA) or the U.S. Government**. "openFDA" is an FDA
+> research project; this package is only a third-party API client for it.
 
-## What's included
+- **Zero runtime dependencies** — built on the standard `fetch`, `Headers`,
+  `AbortController`, and `Response` (all global in modern runtimes).
+- **Every endpoint, one interface** — all openFDA endpoints share one query
+  surface (`search` / `count` / `limit` / `skip` / `sort`), so every one of
+  the 30 live endpoints is reachable through the same client — typed
+  namespaces for the high-value ones, generic paths for everything else.
+- **Fully typed where it matters** — drug (events, labels, NDC directory,
+  Drugs@FDA, Orange Book, enforcement, shortages), food, and cosmetic
+  endpoints ship with hand-written response models; every other endpoint is
+  a caller-typable generic.
+- **Auto-pagination** — `searchAll()` async iterators walk pages for you and
+  respect the API's 25,000-record paging ceiling.
+- **Predictable errors** — typed `OpenFdaApiError` / `OpenFdaTimeoutError`
+  with parsed `Retry-After` on rate-limit (429) responses, and a dedicated
+  `OpenFdaNotFoundError` for openFDA's distinctive "zero matches = 404"
+  behavior.
+- **Drift-resilient** — a scheduled GitHub Actions job diffs the client's
+  endpoint registry and field-shape snapshots against the live API and opens
+  a review PR when FDA changes something.
 
-- **`tsup`** — zero-config build tool producing dual ESM + CJS output with
-  TypeScript declaration files (`.d.ts`).
-- **`Biome`** — single-tool linter + formatter (replaces ESLint + Prettier;
-  10-100x faster).
-- **`Vitest`** — fast test runner with native ESM and TypeScript support.
-- **`Changesets`** — versioning and changelog management (decoupled from
-  merges).
-- **`Husky` + `lint-staged`** — pre-commit hooks for Biome (lint + format
-  staged files).
-- **`commitlint`** — enforces [conventional commits](https://www.conventionalcommits.org/).
-- **`pre-commit`** — file hygiene (whitespace, EOL, YAML/JSON validation),
-  secret scanning (gitleaks + TruffleHog), shellcheck, and
-  `no-commit-to-branch` protection.
-- **GitHub Actions** — CI runs lint, typecheck, build, test, and `npm audit`
-  on every push/PR, plus the pre-commit suite (`pre-commit run --all-files`).
-  A release workflow (staged at `workflow-templates/release.yml`, inactive
-  until moved into `.github/workflows/`) publishes via trusted publishing
-  (OIDC — no npm tokens).
-- **Security defaults** — `.npmrc` blocks dependency `postinstall` scripts,
-  `package.json` ships with provenance attestation enabled, `files` field
-  whitelists only `dist/` + docs + `LICENSE`.
+## Data and medical disclaimers
 
-## Using this template
+openFDA's own warning applies to **all data retrieved through this client**:
 
-1. Rename the package: update `name` and `description` in `package.json`.
-2. Reset `version` and clear `CHANGELOG.md`.
-3. Set `repository`, `author`, `bugs`, and `homepage` in `package.json`
-   (provenance attestation requires `repository`).
-4. Update `.github/CODEOWNERS` with your GitHub username, the copyright line
-   in `LICENSE`, and replace `src/`, `tests/`, and examples with your code.
-5. Delete scaffolding you don't need: the ADR template in `docs/README.md`
-   (and the empty `docs/decisions/`), `CONTRIBUTING.md` (optional), and this
-   section.
-6. Set up publishing: move the staged release workflow into place
-   (`git mv workflow-templates/release.yml .github/workflows/release.yml`),
-   then see [Versioning and publishing](#versioning-and-publishing).
+> Do not rely on openFDA to make decisions regarding medical care. While we
+> make every effort to ensure that data is accurate, you should assume all
+> results are unvalidated.
 
-## Prerequisites
+- **Not all openFDA data has been validated for clinical or production
+  use.** Treat every result as unvalidated.
+- **Adverse-event reports are voluntary.** Drug (FAERS), food, cosmetic, and
+  device event reports do **not** establish causation, can be incomplete or
+  inaccurate, and must not be used to estimate incidence.
+- **Data is public domain** (CC0 1.0) unless otherwise noted on
+  [open.fda.gov](https://open.fda.gov/license/). openFDA asks (but does not
+  require) attribution: *"Data provided by the U.S. Food and Drug
+  Administration (https://open.fda.gov)"*.
+- Some device data includes GMDN® content licensed from The GMDN Agency,
+  which carries its own usage restrictions — see the
+  [openFDA terms](https://open.fda.gov/terms/).
 
-- **Node.js 24+** (use [nvm](https://github.com/nvm-sh/nvm) or
-  [fnm](https://github.com/Schniz/fnm); this repo includes an `.nvmrc`).
-- **npm** (bundled with Node).
-- **pre-commit** — `pipx install pre-commit` or `brew install pre-commit`.
-- **gitleaks** — `brew install gitleaks` (secret scanner for pre-commit).
-- **Go toolchain** — `brew install go` (required once for the TruffleHog hook
-  build).
-
-## Getting started
+## Install
 
 ```bash
-# 1. Clone the repo (or use it as a template on GitHub)
-git clone <repo-url>
-cd <repo-name>
-
-# 2. Use the correct Node version
-nvm use              # or: fnm use
-
-# 3. Install dependencies
-npm install
-
-# 4. Set up Husky hooks (prepare script is blocked by .npmrc ignore-scripts)
-npx husky
-
-# 5. Install pre-commit hooks (file hygiene + secret scanning)
-pre-commit install
-
-# 6. Run all hooks against all files to verify
-pre-commit run --all-files
+npm install @knorby/openfda-client
 ```
 
-The first `pre-commit run` installs all hook environments and builds
-TruffleHog from source (a few minutes). Subsequent runs are cached and fast.
+## Quick start
+
+```ts
+import { OpenFdaClient } from "@knorby/openfda-client";
+
+// No API key needed (240 req/min, 1,000 req/day per IP);
+// a free key raises this to 120,000 req/day.
+const client = new OpenFdaClient({
+  // apiKey: process.env.OPENFDA_API_KEY,
+});
+
+// Typed namespaces for the priority endpoints
+const labels = await client.drug.label.search({
+  search: 'openfda.brand_name:"advil"',
+  limit: 5,
+});
+
+// Facet counts (unique values of a field)
+const reactions = await client.drug.event.count({
+  count: "patient.reaction.reactionmeddrapt.exact",
+});
+
+// Lazily iterate every matching record across pages (stops at the 25k cap)
+for await (const recall of client.food.enforcement.searchAll({
+  search: "status:Ongoing",
+})) {
+  console.log(recall.recalling_firm, recall.reason_for_recall);
+}
+```
+
+### Composing searches
+
+Search expressions are openFDA's Elasticsearch-style syntax. Build them with
+the bundled helpers instead of hand-escaping:
+
+```ts
+import { and, exact, field, range } from "@knorby/openfda-client";
+
+const search = and(
+  exact("openfda.brand_name", "ADVIL"),
+  range("receivedate", { gte: "20240101", lte: "20241231" }),
+);
+// 'openfda.brand_name.exact:ADVIL AND receivedate:[20240101 TO 20241231]'
+
+const events = await client.drug.event.search({ search, limit: 10 });
+```
+
+### Every endpoint, even untyped ones
+
+All nine live API nouns are exposed as namespaces (`client.drug`,
+`client.food`, `client.cosmetic`, `client.device`, `client.tobacco`,
+`client.animalandveterinary`, `client.other`, `client.research`,
+`client.transparency`). Untyped endpoints surface generic records:
+
+```ts
+const cls = await client.device.classification.search({ limit: 1 });
+cls.results[0]?.device_name; // typed models land as FDA data stabilizes
+
+// Any endpoint — including brand-new ones FDA hasn't announced — via the
+// generic path methods (new endpoints work without a client release):
+const crl = await client.search("transparency/crl", { limit: 1 });
+const byUdi = await client.device["510k"].search({ limit: 1 }); // digit-leading keys use bracket access
+```
+
+### Zero matches is a 404
+
+openFDA reports a search with **zero matching records as HTTP 404**
+(`{"error":{"code":"NOT_FOUND"}}`), not as an empty array. The client
+surfaces this as a typed error you can catch:
+
+```ts
+import { OpenFdaNotFoundError } from "@knorby/openfda-client";
+
+try {
+  await client.drug.label.search({ search: 'openfda.brand_name:"nope"' });
+} catch (err) {
+  if (err instanceof OpenFdaNotFoundError) {
+    // treat as "no matches" (e.g. resolve to [])
+  } else {
+    throw err;
+  }
+}
+```
+
+## Universal runtime notes
+
+The client uses the global `fetch` (and `Headers` / `AbortController` /
+`Response`), which is native in:
+
+| Runtime        | Available since          |
+| -------------- | ------------------------ |
+| Node.js        | 18                       |
+| Browsers       | Evergreen                |
+| React Native   | 0.73+ (fetch polyfill)   |
+| Bun / Deno     | All                      |
+
+For tests or older runtimes, inject a custom `fetch`:
+
+```ts
+const client = new OpenFdaClient({ fetch: (url, init) => myFetchImpl(url, init) });
+```
+
+## Endpoint coverage
+
+| Namespace member                  | Dataset                                  | Typed model |
+| --------------------------------- | ---------------------------------------- | ----------- |
+| `client.drug.event`               | Drug adverse events (FAERS)              | `DrugEvent` |
+| `client.drug.label`               | Structured product labeling              | `DrugLabel` |
+| `client.drug.ndc`                 | NDC directory                            | `DrugNdc`   |
+| `client.drug.enforcement`         | Drug recall enforcement reports          | `DrugEnforcement` |
+| `client.drug.drugsfda`            | Drugs@FDA applications                   | `DrugsFda`  |
+| `client.drug.orangebook`          | Orange Book approvals                    | `DrugOrangeBook` |
+| `client.drug.shortages`           | Drug shortages                           | `DrugShortage` |
+| `client.food.event`               | Food adverse events                      | `FoodEvent` |
+| `client.food.enforcement`         | Food recall enforcement reports          | `FoodEnforcement` |
+| `client.cosmetic.event`           | Cosmetic adverse events                  | `CosmeticEvent` |
+| `client.device.*` (9 endpoints)   | 510(k)s, PMA, classification, events, recalls, registration & listing, UDI, COVID-19 serology | generic |
+| `client.tobacco.*` (4 endpoints)  | Problem reports + research datasets      | generic     |
+| `client.animalandveterinary.event`| Animal-drug adverse events               | generic     |
+| `client.other.*` (4 endpoints)    | Historical documents, NSDE, substance, UNII | generic  |
+| `client.research.covidmirnaandproteomics` | COVID-19 miRNA/proteomics        | generic     |
+| `client.transparency.crl`         | Complete Response Letters                | generic     |
+
+Every endpoint object exposes `search(params)`, `count(params)`, and
+`searchAll(params, pageSize?)`. Generic access works for all paths via
+`client.search("noun/endpoint", …)`.
+
+## Rate limits and authentication
+
+| Mode          | Rate limit                        |
+| ------------- | --------------------------------- |
+| No API key    | 240 requests/min · 1,000 requests/day (per IP) |
+| Free API key  | 240 requests/min · 120,000 requests/day (per key) |
+
+Request a free key at [open.fda.gov](https://open.fda.gov/apis/authentication/)
+and pass it via `new OpenFdaClient({ apiKey })`. The key is appended as the
+`api_key` query parameter and **redacted from every error** this client
+produces. On 429 responses, `OpenFdaApiError.retryAfterSeconds` carries the
+server's recommended back-off.
+
+### Paging limit
+
+`skip` maxes out at 25,000 (with `limit` ≤ 1,000), so search pagination
+covers ~26,000 records per query. `searchAll()` stops there automatically
+and documents it; for bulk access use the official
+[download files](https://open.fda.gov/data/downloads/).
+
+## Keeping up with the API
+
+`scripts/discover-endpoints.mjs` diffs the client's endpoint registry
+against the live API manifest, and `scripts/capture-shapes.mjs` snapshots
+every endpoint's field skeleton into `tests/shapes/` — together with
+`npm run test:live` these run weekly in the **openFDA API drift** workflow,
+which opens a review PR when FDA adds, removes, or reshapes anything. Run
+them yourself with `npm run drift:check`.
 
 ## Development
 
-| Command | What it does |
-| --- | --- |
-| `npm run build` | Build the package (tsup + tsc — dual ESM/CJS output with `.d.ts`/`.d.cts` declarations) |
-| `npm run dev` | Build in watch mode |
-| `npm run lint` | Lint + formatting check with Biome (read-only) |
-| `npm run format` | Format with Biome (writes changes) |
-| `npm run check` | Lint + format in one pass (writes changes) |
-| `npm run typecheck` | Type-check with `tsc --noEmit` |
-| `npm test` | Run tests once (Vitest) |
-| `npm run test:watch` | Run tests in watch mode |
-| `npm run test:coverage` | Run tests with coverage reporting |
-
-### Project structure
-
-```
-src/
-  index.ts              # package entry point (add exports here)
-tests/
-  index.test.ts         # test files (*.test.ts)
-dist/                   # build output (gitignored, generated by tsup)
-.changeset/             # changeset files (versioning)
-.github/workflows/      # CI workflows
-workflow-templates/     # staged workflows (inactive until moved into .github/workflows/)
-docs/decisions/          # architecture decision records (ADRs)
-```
-
-## Testing
-
-Tests use [Vitest](https://vitest.dev/) and live in `tests/`. Add test files
-as `*.test.ts`. The CI workflow (`.github/workflows/tests.yml`) runs the full
-suite on every push to `main` and on PRs:
-
-- Biome (lint + format check)
-- TypeScript type-check (`tsc --noEmit`)
-- Build (`tsup`)
-- Tests (`vitest run`)
-- Vulnerability scan (`npm audit --audit-level=moderate`)
-
-A second workflow (`.github/workflows/pre-commit.yml`) runs the pre-commit
-suite (file hygiene + secret scanning) with `SKIP=no-commit-to-branch`.
-
-## Versioning and publishing
-
-This repo uses [Changesets](https://github.com/changesets/changesets) for
-versioning. Versioning is decoupled from merges — you can merge multiple PRs
-and release them all at once.
-
-### Adding a changeset
+See [AGENTS.md](AGENTS.md) for repository conventions and
+[CONTRIBUTING.md](CONTRIBUTING.md) for the development workflow.
 
 ```bash
-npx changeset
+npm install     # does not run prepare (see .npmrc)
+npx husky       # set up git hooks
+pre-commit install
+npm test        # unit tests (no network)
+npm run test:live  # opt-in live smoke tests
+npm run drift:check # verify endpoint registry + shape snapshots
 ```
-
-Select patch/minor/major, write a summary. Commit the generated
-`.changeset/*.md` alongside your code.
-
-### Releasing
-
-The release workflow ships **staged** at `workflow-templates/release.yml` and
-is inactive in this template (GitHub only runs workflows from
-`.github/workflows/`). To enable it:
-
-```bash
-git mv workflow-templates/release.yml .github/workflows/release.yml
-```
-
-Once active, the flow is automated. The release workflow runs on every push
-to `main`: with no pending changesets it is a no-op; with changesets, it
-opens a "Version Packages" PR (`changeset version` bumps `package.json`,
-updates `CHANGELOG.md`, and removes the consumed changesets). Merging that
-PR publishes to npm, tags the release, and creates a GitHub Release.
-Publishing uses OIDC trusted publishing — no npm tokens are stored as
-secrets, and `id-token: write` is scoped to the publish job only.
-
-For a manual release: `npx changeset version`, then `npm run release`.
-
-#### One-time setup (trusted publishing)
-
-1. Repo **Settings → Actions → General → Workflow permissions**: select
-   **Read and write permissions**, and check **Allow GitHub Actions to
-   create and approve pull requests**.
-2. Repo **Settings → Environments**: create an environment named `release`.
-3. On npmjs.com, add a trusted publisher for the package. Values must match
-   exactly: this repository, workflow filename `release.yml`, environment
-   `release`.
-4. Enable npm 2FA: `npm profile enable-2fa auth-and-writes`.
-
-#### First publish (manual)
-
-npm requires a package to exist before it can link a trusted publisher, so
-the very first publish is manual:
-
-```bash
-npm login
-npm pkg delete publishConfig.provenance   # provenance needs CI + public repo
-npm run release                           # build + changeset publish
-npm pkg set publishConfig.provenance=true
-git push origin main --follow-tags
-gh release create vX.Y.Z --notes-from-tag
-```
-
-### Publishing security
-
-- **Trusted publishing (OIDC)**: the release workflow publishes with an OIDC
-  token minted by GitHub Actions — no npm tokens involved. This is compatible
-  with 2FA (`npm profile enable-2fa auth-and-writes`).
-- **Provenance**: publishes with provenance attestation (cryptographic link
-  from package to commit + workflow). Requires a public repo and publishing
-  from CI; the manual first publish temporarily disables it.
-- **Scoped names**: use `@yourscope/package` to prevent dependency confusion;
-  `publishConfig.access: "public"` is set because scoped packages default to
-  restricted visibility.
-- **`.npmrc`**: `ignore-scripts=true` blocks dependency `postinstall`
-  scripts. This also blocks the `prepare` script, so run `npx husky`
-  after `npm install` to set up hooks (or use
-  `npm install --ignore-scripts=false`).
-
-See [CONTRIBUTING.md](CONTRIBUTING.md) for the full workflow.
-
-## Customizing
-
-- **Package name**: update `name` in `package.json`.
-- **Build targets**: adjust `tsup.config.ts` (format, target, entry points).
-- **TypeScript config**: modify `tsconfig.json` (target, module, strictness).
-- **Biome rules**: edit `biome.json` (formatter style, linter rules).
-- **Biome → ESLint + Prettier**: if you need a larger rule ecosystem, remove
-  `@biomejs/biome` from devDependencies, install ESLint + Prettier +
-  `eslint-config-prettier`, create `eslint.config.mjs` (flat config) and
-  `.prettierrc`, and update the `lint-staged` config in `package.json`.
-- **Branch protection**: `no-commit-to-branch` is a local guard only. Also
-  enable GitHub branch protection rules on `main` (Settings → Branches).
-- **CODEOWNERS**: update `.github/CODEOWNERS` with your GitHub username.
-
-## Documentation
-
-- [`AGENTS.md`](AGENTS.md) — instructions and steering for AI coding agents.
-- [`CONTRIBUTING.md`](CONTRIBUTING.md) — development workflow, commit
-  conventions, publishing.
-- [`docs/`](docs/) — design notes, architecture, and decision records.
 
 ## License
 
 [Apache-2.0](LICENSE) © Kali Norby ([@knorby](https://github.com/knorby))
 
-<!-- TODO: Add npm version / downloads / license badges once published. -->
+This project is unaffiliated with the FDA; openFDA data is public domain
+(CC0 1.0) unless otherwise noted.
