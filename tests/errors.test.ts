@@ -69,7 +69,9 @@ describe("OpenFdaApiError", () => {
 
 describe("OpenFdaNotFoundError", () => {
   it("is an OpenFdaApiError and an OpenFdaError with code NOT_FOUND", () => {
-    const err = new OpenFdaNotFoundError("https://api.fda.gov/drug/label.json?api_key=[redacted]");
+    const err = new OpenFdaNotFoundError(
+      "https://api.fda.gov/drug/label.json?api_key=[redacted]",
+    );
     expect(err).toBeInstanceOf(OpenFdaApiError);
     expect(err).toBeInstanceOf(OpenFdaError);
     expect(err.name).toBe("OpenFdaNotFoundError");
@@ -83,7 +85,10 @@ describe("OpenFdaNotFoundError", () => {
 describe("OpenFdaNetworkError", () => {
   it("wraps the cause and redacts nothing itself", () => {
     const cause = new TypeError("fetch failed");
-    const err = new OpenFdaNetworkError("https://api.fda.gov/drug/event.json", cause);
+    const err = new OpenFdaNetworkError(
+      "https://api.fda.gov/drug/event.json",
+      cause,
+    );
     expect(err).toBeInstanceOf(OpenFdaError);
     expect(err.name).toBe("OpenFdaNetworkError");
     expect(err.cause).toBe(cause);

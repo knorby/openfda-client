@@ -1,8 +1,5 @@
 import { describe, expect, it } from "vitest";
-import {
-  buildQueryString,
-  mergeParams,
-} from "../src/utils/serialize";
+import { buildQueryString, mergeParams } from "../src/utils/serialize";
 
 describe("buildQueryString", () => {
   it("encodes scalars and joins with &", () => {
@@ -12,9 +9,9 @@ describe("buildQueryString", () => {
   });
 
   it("omits undefined, null, and empty arrays", () => {
-    expect(
-      buildQueryString({ a: undefined, b: null, c: [], d: 1 }),
-    ).toBe("d=1");
+    expect(buildQueryString({ a: undefined, b: null, c: [], d: 1 })).toBe(
+      "d=1",
+    );
   });
 
   it("joins array values with a literal (unencoded) comma", () => {

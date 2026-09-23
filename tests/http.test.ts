@@ -1,4 +1,4 @@
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import {
   OpenFdaApiError,
   OpenFdaError,
@@ -21,7 +21,9 @@ function hangingFetch() {
   return vi.fn((_url: string | URL | Request, init?: RequestInit) => {
     const signal = init?.signal;
     if (signal?.aborted) {
-      return Promise.reject(new DOMException("The operation was aborted.", "AbortError"));
+      return Promise.reject(
+        new DOMException("The operation was aborted.", "AbortError"),
+      );
     }
     return new Promise<Response>((_resolve, reject) => {
       signal?.addEventListener("abort", () =>
@@ -49,8 +51,13 @@ describe("OpenFdaRequester.get", () => {
   it("builds the URL from path + params", async () => {
     const { fetch, lastUrl } = recordingFetch(() => jsonResponse({ ok: true }));
     const requester = new OpenFdaRequester({ fetch });
-    const result = await requester.get("drug/label.json", { search: "a b", limit: 5 });
-    expect(lastUrl()).toBe("https://api.fda.gov/drug/label.json?search=a%20b&limit=5");
+    const result = await requester.get("drug/label.json", {
+      search: "a b",
+      limit: 5,
+    });
+    expect(lastUrl()).toBe(
+      "https://api.fda.gov/drug/label.json?search=a%20b&limit=5",
+    );
     expect(result).toEqual({ ok: true });
   });
 
@@ -58,7 +65,9 @@ describe("OpenFdaRequester.get", () => {
     const { fetch, lastUrl } = recordingFetch(() => jsonResponse({}));
     const requester = new OpenFdaRequester({ fetch, apiKey: "SECRET" });
     await requester.get("drug/event.json", { limit: 1 });
-    expect(lastUrl()).toBe("https://api.fda.gov/drug/event.json?limit=1&api_key=SECRET");
+    expect(lastUrl()).toBe(
+      "https://api.fda.gov/drug/event.json?limit=1&api_key=SECRET",
+    );
   });
 
   it("resolves to null on an empty 2xx body", async () => {
@@ -154,7 +163,9 @@ describe("error mapping", () => {
       () => new Response("<html>hi</html>", { status: 200 }),
     );
     const requester = new OpenFdaRequester({ fetch });
-    await expect(requester.get("drug/label.json")).rejects.toThrow(OpenFdaError);
+    await expect(requester.get("drug/label.json")).rejects.toThrow(
+      OpenFdaError,
+    );
   });
 
   it("maps fetch failures to OpenFdaNetworkError with redaction", async () => {
@@ -179,14 +190,15 @@ describe("timeout", () => {
       fetch: hangingFetch(),
       timeoutMs: 20,
     });
-    await expect(requester.get("drug/label.json")).rejects.toThrow(OpenFdaTimeoutError);
+    await expect(requester.get("drug/label.json")).rejects.toThrow(
+      OpenFdaTimeoutError,
+    );
   });
 });
 
 describe("fetch resolution", () => {
   it("throws OpenFdaError when no fetch is available", () => {
     const original = globalThis.fetch;
-    // biome-ignore lint/suspicious/noGlobalAssign: testing the no-fetch path
     (globalThis as { fetch?: typeof fetch }).fetch = undefined;
     try {
       expect(() => new OpenFdaRequester()).toThrow(OpenFdaError);
