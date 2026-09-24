@@ -1,0 +1,105 @@
+{
+  "animal": {
+    "age": {
+      "min": "string",
+      "qualifier": "string",
+      "unit": "string"
+    },
+    "breed": {
+      "breed_component": "mixed",
+      "is_crossbred": "string"
+    },
+    "female_animal_physiological_status": "string",
+    "gender": "string",
+    "reproductive_status": "string",
+    "species": "string",
+    "weight": {
+      "min": "string",
+      "qualifier": "string",
+      "unit": "string"
+    }
+  },
+  "drug": [
+    {
+      "active_ingredients": [
+        {
+          "dose": {
+            "denominator": "string",
+            "denominator_unit": "string",
+            "numerator": "string",
+            "numerator_unit": "string"
+          },
+          "name": "string"
+        }
+      ],
+      "administered_by": "string",
+      "atc_vet_code": "string",
+      "brand_name": "string",
+      "dosage_form": "string",
+      "dose": {
+        "denominator": "string",
+        "denominator_unit": "string",
+        "numerator": "string",
+        "numerator_unit": "string"
+      },
+      "first_exposure_date": "string",
+      "last_exposure_date": "string",
+      "lot_number": "string",
+      "manufacturer": {
+        "name": "string",
+        "registration_number": "string"
+      },
+      "previous_exposure_to_drug": "string",
+      "route": "string",
+      "used_according_to_label": "string",
+      "previous_ae_to_drug": "string",
+      "frequency_of_administration": {
+        "unit": "string",
+        "value": "string"
+      },
+      "off_label_use": "string",
+      "product_ndc": "string",
+      "lot_expiration": "string"
+    }
+  ],
+  "foreign_or_domestic": "string",
+  "health_assessment_prior_to_exposure": {
+    "assessed_by": "string",
+    "condition": "string"
+  },
+  "number_of_animals_affected": "string",
+  "number_of_animals_treated": "string",
+  "onset_date": "string",
+  "original_receive_date": "string",
+  "outcome": [
+    {
+      "medical_status": "string",
+      "number_of_animals_affected": "string"
+    }
+  ],
+  "primary_reporter": "string",
+  "reaction": [
+    {
+      "accuracy": "string",
+      "number_of_animals_affected": "string",
+      "veddra_term_code": "string",
+      "veddra_term_name": "string",
+      "veddra_version": "string"
+    }
+  ],
+  "receiver": {
+    "city": "string",
+    "country": "string",
+    "organization": "string",
+    "postal_code": "string",
+    "state": "string",
+    "street_address": "string"
+  },
+  "report_id": "string",
+  "secondary_reporter": "string",
+  "serious_ae": "string",
+  "time_between_exposure_and_onset": "string",
+  "treated_for_ae": "string",
+  "type_of_information": "string",
+  "unique_aer_id_number": "string"
+}

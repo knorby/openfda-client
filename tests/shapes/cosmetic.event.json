@@ -1,0 +1,23 @@
+{
+  "event_date": "string",
+  "initial_received_date": "string",
+  "latest_received_date": "string",
+  "legacy_report_id": "string",
+  "meddra_version": "string",
+  "outcomes": ["string"],
+  "patient": {
+    "age": "string",
+    "age_unit": "string",
+    "gender": "string"
+  },
+  "products": [
+    {
+      "product_name": "string",
+      "role": "string"
+    }
+  ],
+  "reactions": ["string"],
+  "report_number": "string",
+  "report_type": "string",
+  "report_version": "string"
+}

@@ -1,0 +1,57 @@
+{
+  "application_number": "string",
+  "openfda": {
+    "application_number": ["string"],
+    "brand_name": ["string"],
+    "generic_name": ["string"],
+    "manufacturer_name": ["string"],
+    "package_ndc": ["string"],
+    "product_ndc": ["string"],
+    "product_type": ["string"],
+    "route": ["string"],
+    "rxcui": ["string"],
+    "spl_id": ["string"],
+    "spl_set_id": ["string"],
+    "substance_name": ["string"],
+    "unii": ["string"]
+  },
+  "products": [
+    {
+      "active_ingredients": [
+        {
+          "name": "string",
+          "strength": "string"
+        }
+      ],
+      "brand_name": "string",
+      "dosage_form": "string",
+      "marketing_status": "string",
+      "product_number": "string",
+      "reference_drug": "string",
+      "reference_standard": "string",
+      "route": "string",
+      "te_code": "string"
+    }
+  ],
+  "sponsor_name": "string",
+  "submissions": [
+    {
+      "review_priority": "string",
+      "submission_class_code": "string",
+      "submission_class_code_description": "string",
+      "submission_number": "string",
+      "submission_status": "string",
+      "submission_status_date": "string",
+      "submission_type": "string",
+      "application_docs": [
+        {
+          "date": "string",
+          "id": "string",
+          "title": "string",
+          "type": "string",
+          "url": "string"
+        }
+      ]
+    }
+  ]
+}

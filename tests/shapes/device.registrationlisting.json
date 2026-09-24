@@ -1,0 +1,72 @@
+{
+  "establishment_type": ["string"],
+  "k_number": "string",
+  "pma_number": "string",
+  "products": [
+    {
+      "created_date": "string",
+      "exempt": "string",
+      "openfda": {
+        "device_class": "string",
+        "device_name": "string",
+        "medical_specialty_description": "string",
+        "regulation_number": "string"
+      },
+      "owner_operator_number": "string",
+      "product_code": "string"
+    }
+  ],
+  "proprietary_name": ["mixed"],
+  "registration": {
+    "address_line_1": "string",
+    "address_line_2": "string",
+    "city": "string",
+    "fei_number": "string",
+    "initial_importer_flag": "string",
+    "iso_country_code": "string",
+    "name": "string",
+    "owner_operator": {
+      "contact_address": {
+        "address_1": "string",
+        "address_2": "string",
+        "city": "string",
+        "iso_country_code": "string",
+        "postal_code": "string",
+        "state_code": "string",
+        "state_province": "string"
+      },
+      "firm_name": "string",
+      "official_correspondent": {
+        "first_name": "string",
+        "last_name": "string",
+        "middle_initial": "string",
+        "phone_number": "string",
+        "subaccount_company_name": "string"
+      },
+      "owner_operator_number": "string"
+    },
+    "postal_code": "string",
+    "reg_expiry_date_year": "string",
+    "registration_number": "string",
+    "state_code": "string",
+    "status_code": "string",
+    "us_agent": {
+      "address_line_1": "string",
+      "address_line_2": "string",
+      "bus_phone_area_code": "string",
+      "bus_phone_extn": "string",
+      "bus_phone_num": "string",
+      "business_name": "string",
+      "city": "string",
+      "email_address": "string",
+      "fax_area_code": "string",
+      "fax_num": "string",
+      "iso_country_code": "string",
+      "name": "string",
+      "postal_code": "string",
+      "state_code": "string",
+      "zip_code": "string"
+    },
+    "zip_code": "string"
+  }
+}

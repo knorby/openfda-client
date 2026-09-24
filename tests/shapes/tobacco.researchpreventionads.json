@@ -1,0 +1,538 @@
+{
+  "ad_number": "string",
+  "age_group": [
+    {
+      "ad_number": "string",
+      "age_group": "string",
+      "cigarette_addiction_beliefs": {
+        "effect_size": "string",
+        "lower_bound": "string",
+        "mean": "string",
+        "number": "string",
+        "standard_deviation": "string",
+        "upper_bound": "string"
+      },
+      "cigarette_attitudes": {
+        "effect_size": "string",
+        "lower_bound": "string",
+        "mean": "string",
+        "number": "string",
+        "standard_deviation": "string",
+        "upper_bound": "string"
+      },
+      "cigarette_harmful_and_potentially_harmful_constituents": {
+        "effect_size": "string",
+        "lower_bound": "string",
+        "mean": "string",
+        "number": "string",
+        "standard_deviation": "string",
+        "upper_bound": "string"
+      },
+      "cigarette_health_consequences_beliefs": {
+        "effect_size": "string",
+        "lower_bound": "string",
+        "mean": "string",
+        "number": "string",
+        "standard_deviation": "string",
+        "upper_bound": "string"
+      },
+      "control_group_number": "string",
+      "exposure_group_number": "string",
+      "exposure_type": "string",
+      "product": "string",
+      "smokeless_tobacco_addiction_beliefs": {
+        "effect_size": "string",
+        "lower_bound": "string",
+        "mean": "string",
+        "number": "string",
+        "standard_deviation": "string",
+        "upper_bound": "string"
+      },
+      "smokeless_tobacco_attitudes": {
+        "effect_size": "string",
+        "lower_bound": "string",
+        "mean": "string",
+        "number": "string",
+        "standard_deviation": "string",
+        "upper_bound": "string"
+      },
+      "smokeless_tobacco_harmful_and_potentially_harmful_constituents": {
+        "effect_size": "string",
+        "lower_bound": "string",
+        "mean": "string",
+        "number": "string",
+        "standard_deviation": "string",
+        "upper_bound": "string"
+      },
+      "smokeless_tobacco_health_consequences_beliefs": {
+        "effect_size": "string",
+        "lower_bound": "string",
+        "mean": "string",
+        "number": "string",
+        "standard_deviation": "string",
+        "upper_bound": "string"
+      },
+      "study_name": "string",
+      "vape_addiction_beliefs": {
+        "effect_size": "string",
+        "lower_bound": "string",
+        "mean": "string",
+        "number": "string",
+        "standard_deviation": "string",
+        "upper_bound": "string"
+      },
+      "vape_attitudes": {
+        "effect_size": "string",
+        "lower_bound": "string",
+        "mean": "string",
+        "number": "string",
+        "standard_deviation": "string",
+        "upper_bound": "string"
+      },
+      "vape_harmful_and_potentially_harmful_constituents": {
+        "effect_size": "string",
+        "lower_bound": "string",
+        "mean": "string",
+        "number": "string",
+        "standard_deviation": "string",
+        "upper_bound": "string"
+      },
+      "vape_health_consequences_beliefs": {
+        "effect_size": "string",
+        "lower_bound": "string",
+        "mean": "string",
+        "number": "string",
+        "standard_deviation": "string",
+        "upper_bound": "string"
+      }
+    }
+  ],
+  "full_sample": [
+    {
+      "ad_number": "string",
+      "cigarette_addiction_beliefs": {
+        "effect_size": "string",
+        "lower_bound": "string",
+        "mean": "string",
+        "number": "string",
+        "standard_deviation": "string",
+        "upper_bound": "string"
+      },
+      "cigarette_attitudes": {
+        "effect_size": "string",
+        "lower_bound": "string",
+        "mean": "string",
+        "number": "string",
+        "standard_deviation": "string",
+        "upper_bound": "string"
+      },
+      "cigarette_harmful_and_potentially_harmful_constituents": {
+        "effect_size": "string",
+        "lower_bound": "string",
+        "mean": "string",
+        "number": "string",
+        "standard_deviation": "string",
+        "upper_bound": "string"
+      },
+      "cigarette_health_consequences_beliefs": {
+        "effect_size": "string",
+        "lower_bound": "string",
+        "mean": "string",
+        "number": "string",
+        "standard_deviation": "string",
+        "upper_bound": "string"
+      },
+      "control_group_number": "string",
+      "exposure_group_number": "string",
+      "exposure_type": "string",
+      "product": "string",
+      "smokeless_tobacco_addiction_beliefs": {
+        "effect_size": "string",
+        "lower_bound": "string",
+        "mean": "string",
+        "number": "string",
+        "standard_deviation": "string",
+        "upper_bound": "string"
+      },
+      "smokeless_tobacco_attitudes": {
+        "effect_size": "string",
+        "lower_bound": "string",
+        "mean": "string",
+        "number": "string",
+        "standard_deviation": "string",
+        "upper_bound": "string"
+      },
+      "smokeless_tobacco_harmful_and_potentially_harmful_constituents": {
+        "effect_size": "string",
+        "lower_bound": "string",
+        "mean": "string",
+        "number": "string",
+        "standard_deviation": "string",
+        "upper_bound": "string"
+      },
+      "smokeless_tobacco_health_consequences_beliefs": {
+        "effect_size": "string",
+        "lower_bound": "string",
+        "mean": "string",
+        "number": "string",
+        "standard_deviation": "string",
+        "upper_bound": "string"
+      },
+      "study_name": "string",
+      "vape_addiction_beliefs": {
+        "effect_size": "string",
+        "lower_bound": "string",
+        "mean": "string",
+        "number": "string",
+        "standard_deviation": "string",
+        "upper_bound": "string"
+      },
+      "vape_attitudes": {
+        "effect_size": "string",
+        "lower_bound": "string",
+        "mean": "string",
+        "number": "string",
+        "standard_deviation": "string",
+        "upper_bound": "string"
+      },
+      "vape_harmful_and_potentially_harmful_constituents": {
+        "effect_size": "string",
+        "lower_bound": "string",
+        "mean": "string",
+        "number": "string",
+        "standard_deviation": "string",
+        "upper_bound": "string"
+      },
+      "vape_health_consequences_beliefs": {
+        "effect_size": "string",
+        "lower_bound": "string",
+        "mean": "string",
+        "number": "string",
+        "standard_deviation": "string",
+        "upper_bound": "string"
+      }
+    }
+  ],
+  "gender": [
+    {
+      "ad_number": "string",
+      "cigarette_addiction_beliefs": {
+        "effect_size": "string",
+        "lower_bound": "string",
+        "mean": "string",
+        "number": "string",
+        "standard_deviation": "string",
+        "upper_bound": "string"
+      },
+      "cigarette_attitudes": {
+        "effect_size": "string",
+        "lower_bound": "string",
+        "mean": "string",
+        "number": "string",
+        "standard_deviation": "string",
+        "upper_bound": "string"
+      },
+      "cigarette_harmful_and_potentially_harmful_constituents": {
+        "effect_size": "string",
+        "lower_bound": "string",
+        "mean": "string",
+        "number": "string",
+        "standard_deviation": "string",
+        "upper_bound": "string"
+      },
+      "cigarette_health_consequences_beliefs": {
+        "effect_size": "string",
+        "lower_bound": "string",
+        "mean": "string",
+        "number": "string",
+        "standard_deviation": "string",
+        "upper_bound": "string"
+      },
+      "control_group_number": "string",
+      "exposure_group_number": "string",
+      "exposure_type": "string",
+      "gender": "string",
+      "product": "string",
+      "smokeless_tobacco_addiction_beliefs": {
+        "effect_size": "string",
+        "lower_bound": "string",
+        "mean": "string",
+        "number": "string",
+        "standard_deviation": "string",
+        "upper_bound": "string"
+      },
+      "smokeless_tobacco_attitudes": {
+        "effect_size": "string",
+        "lower_bound": "string",
+        "mean": "string",
+        "number": "string",
+        "standard_deviation": "string",
+        "upper_bound": "string"
+      },
+      "smokeless_tobacco_harmful_and_potentially_harmful_constituents": {
+        "effect_size": "string",
+        "lower_bound": "string",
+        "mean": "string",
+        "number": "string",
+        "standard_deviation": "string",
+        "upper_bound": "string"
+      },
+      "smokeless_tobacco_health_consequences_beliefs": {
+        "effect_size": "string",
+        "lower_bound": "string",
+        "mean": "string",
+        "number": "string",
+        "standard_deviation": "string",
+        "upper_bound": "string"
+      },
+      "study_name": "string",
+      "vape_addiction_beliefs": {
+        "effect_size": "string",
+        "lower_bound": "string",
+        "mean": "string",
+        "number": "string",
+        "standard_deviation": "string",
+        "upper_bound": "string"
+      },
+      "vape_attitudes": {
+        "effect_size": "string",
+        "lower_bound": "string",
+        "mean": "string",
+        "number": "string",
+        "standard_deviation": "string",
+        "upper_bound": "string"
+      },
+      "vape_harmful_and_potentially_harmful_constituents": {
+        "effect_size": "string",
+        "lower_bound": "string",
+        "mean": "string",
+        "number": "string",
+        "standard_deviation": "string",
+        "upper_bound": "string"
+      },
+      "vape_health_consequences_beliefs": {
+        "effect_size": "string",
+        "lower_bound": "string",
+        "mean": "string",
+        "number": "string",
+        "standard_deviation": "string",
+        "upper_bound": "string"
+      }
+    }
+  ],
+  "race_or_ethnicity": [
+    {
+      "ad_number": "string",
+      "cigarette_addiction_beliefs": {
+        "effect_size": "string",
+        "lower_bound": "string",
+        "mean": "string",
+        "number": "string",
+        "standard_deviation": "string",
+        "upper_bound": "string"
+      },
+      "cigarette_attitudes": {
+        "effect_size": "string",
+        "lower_bound": "string",
+        "mean": "string",
+        "number": "string",
+        "standard_deviation": "string",
+        "upper_bound": "string"
+      },
+      "cigarette_harmful_and_potentially_harmful_constituents": {
+        "effect_size": "string",
+        "lower_bound": "string",
+        "mean": "string",
+        "number": "string",
+        "standard_deviation": "string",
+        "upper_bound": "string"
+      },
+      "cigarette_health_consequences_beliefs": {
+        "effect_size": "string",
+        "lower_bound": "string",
+        "mean": "string",
+        "number": "string",
+        "standard_deviation": "string",
+        "upper_bound": "string"
+      },
+      "control_group_number": "string",
+      "exposure_group_number": "string",
+      "exposure_type": "string",
+      "product": "string",
+      "race": "string",
+      "smokeless_tobacco_addiction_beliefs": {
+        "effect_size": "string",
+        "lower_bound": "string",
+        "mean": "string",
+        "number": "string",
+        "standard_deviation": "string",
+        "upper_bound": "string"
+      },
+      "smokeless_tobacco_attitudes": {
+        "effect_size": "string",
+        "lower_bound": "string",
+        "mean": "string",
+        "number": "string",
+        "standard_deviation": "string",
+        "upper_bound": "string"
+      },
+      "smokeless_tobacco_harmful_and_potentially_harmful_constituents": {
+        "effect_size": "string",
+        "lower_bound": "string",
+        "mean": "string",
+        "number": "string",
+        "standard_deviation": "string",
+        "upper_bound": "string"
+      },
+      "smokeless_tobacco_health_consequences_beliefs": {
+        "effect_size": "string",
+        "lower_bound": "string",
+        "mean": "string",
+        "number": "string",
+        "standard_deviation": "string",
+        "upper_bound": "string"
+      },
+      "study_name": "string",
+      "vape_addiction_beliefs": {
+        "effect_size": "string",
+        "lower_bound": "string",
+        "mean": "string",
+        "number": "string",
+        "standard_deviation": "string",
+        "upper_bound": "string"
+      },
+      "vape_attitudes": {
+        "effect_size": "string",
+        "lower_bound": "string",
+        "mean": "string",
+        "number": "string",
+        "standard_deviation": "string",
+        "upper_bound": "string"
+      },
+      "vape_harmful_and_potentially_harmful_constituents": {
+        "effect_size": "string",
+        "lower_bound": "string",
+        "mean": "string",
+        "number": "string",
+        "standard_deviation": "string",
+        "upper_bound": "string"
+      },
+      "vape_health_consequences_beliefs": {
+        "effect_size": "string",
+        "lower_bound": "string",
+        "mean": "string",
+        "number": "string",
+        "standard_deviation": "string",
+        "upper_bound": "string"
+      }
+    }
+  ],
+  "risk_status": [
+    {
+      "ad_number": "string",
+      "cigarette_addiction_beliefs": {
+        "effect_size": "string",
+        "lower_bound": "string",
+        "mean": "string",
+        "number": "string",
+        "standard_deviation": "string",
+        "upper_bound": "string"
+      },
+      "cigarette_attitudes": {
+        "effect_size": "string",
+        "lower_bound": "string",
+        "mean": "string",
+        "number": "string",
+        "standard_deviation": "string",
+        "upper_bound": "string"
+      },
+      "cigarette_harmful_and_potentially_harmful_constituents": {
+        "effect_size": "string",
+        "lower_bound": "string",
+        "mean": "string",
+        "number": "string",
+        "standard_deviation": "string",
+        "upper_bound": "string"
+      },
+      "cigarette_health_consequences_beliefs": {
+        "effect_size": "string",
+        "lower_bound": "string",
+        "mean": "string",
+        "number": "string",
+        "standard_deviation": "string",
+        "upper_bound": "string"
+      },
+      "control_group_number": "string",
+      "exposure_group_number": "string",
+      "exposure_type": "string",
+      "product": "string",
+      "smokeless_tobacco_addiction_beliefs": {
+        "effect_size": "string",
+        "lower_bound": "string",
+        "mean": "string",
+        "number": "string",
+        "standard_deviation": "string",
+        "upper_bound": "string"
+      },
+      "smokeless_tobacco_attitudes": {
+        "effect_size": "string",
+        "lower_bound": "string",
+        "mean": "string",
+        "number": "string",
+        "standard_deviation": "string",
+        "upper_bound": "string"
+      },
+      "smokeless_tobacco_harmful_and_potentially_harmful_constituents": {
+        "effect_size": "string",
+        "lower_bound": "string",
+        "mean": "string",
+        "number": "string",
+        "standard_deviation": "string",
+        "upper_bound": "string"
+      },
+      "smokeless_tobacco_health_consequences_beliefs": {
+        "effect_size": "string",
+        "lower_bound": "string",
+        "mean": "string",
+        "number": "string",
+        "standard_deviation": "string",
+        "upper_bound": "string"
+      },
+      "study_name": "string",
+      "tobacco_use_status": "string",
+      "vape_addiction_beliefs": {
+        "effect_size": "string",
+        "lower_bound": "string",
+        "mean": "string",
+        "number": "string",
+        "standard_deviation": "string",
+        "upper_bound": "string"
+      },
+      "vape_attitudes": {
+        "effect_size": "string",
+        "lower_bound": "string",
+        "mean": "string",
+        "number": "string",
+        "standard_deviation": "string",
+        "upper_bound": "string"
+      },
+      "vape_harmful_and_potentially_harmful_constituents": {
+        "effect_size": "string",
+        "lower_bound": "string",
+        "mean": "string",
+        "number": "string",
+        "standard_deviation": "string",
+        "upper_bound": "string"
+      },
+      "vape_health_consequences_beliefs": {
+        "effect_size": "string",
+        "lower_bound": "string",
+        "mean": "string",
+        "number": "string",
+        "standard_deviation": "string",
+        "upper_bound": "string"
+      }
+    }
+  ],
+  "study_name": "string"
+}

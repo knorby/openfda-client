@@ -1,0 +1,11 @@
+{
+  "date_submitted": "string",
+  "nonuser_affected": "string",
+  "number_health_problems": "number",
+  "number_product_problems": "number",
+  "number_tobacco_products": "number",
+  "report_id": "number",
+  "reported_health_problems": ["string"],
+  "reported_product_problems": ["string"],
+  "tobacco_products": ["string"]
+}

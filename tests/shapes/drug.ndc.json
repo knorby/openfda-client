@@ -1,0 +1,44 @@
+{
+  "active_ingredients": [
+    {
+      "name": "string",
+      "strength": "string"
+    }
+  ],
+  "application_number": "string",
+  "brand_name": "string",
+  "brand_name_base": "string",
+  "brand_name_suffix": "string",
+  "dosage_form": "string",
+  "finished": "boolean",
+  "generic_name": "string",
+  "labeler_name": "string",
+  "listing_expiration_date": "string",
+  "marketing_category": "string",
+  "marketing_start_date": "string",
+  "openfda": {
+    "is_original_packager": ["boolean"],
+    "manufacturer_name": ["string"],
+    "spl_set_id": ["string"],
+    "unii": ["string"],
+    "upc": ["string"],
+    "rxcui": ["string"],
+    "nui": ["string"],
+    "pharm_class_epc": ["string"],
+    "pharm_class_moa": ["string"]
+  },
+  "packaging": [
+    {
+      "description": "string",
+      "marketing_start_date": "string",
+      "package_ndc": "string",
+      "sample": "boolean"
+    }
+  ],
+  "product_id": "string",
+  "product_ndc": "string",
+  "product_type": "string",
+  "route": ["string"],
+  "spl_id": "string",
+  "pharm_class": ["string"]
+}
