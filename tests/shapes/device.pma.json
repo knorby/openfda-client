@@ -13,13 +13,9 @@
   "openfda": {
     "device_class": "string",
     "device_name": "string",
-    "fei_number": [
-      "string"
-    ],
+    "fei_number": ["string"],
     "medical_specialty_description": "string",
-    "registration_number": [
-      "string"
-    ],
+    "registration_number": ["string"],
     "regulation_number": "string"
   },
   "pma_number": "string",

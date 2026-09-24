@@ -3,9 +3,7 @@
     {
       "code": "string",
       "code_system": "string",
-      "references": [
-        "string"
-      ],
+      "references": ["string"],
       "type": "string",
       "url": "string",
       "uuid": "string",
@@ -41,20 +39,14 @@
   "names": [
     {
       "display_name": "boolean",
-      "languages": [
-        "string"
-      ],
+      "languages": ["string"],
       "name": "string",
       "preferred": "boolean",
-      "references": [
-        "string"
-      ],
+      "references": ["string"],
       "stdName": "string",
       "type": "string",
       "uuid": "string",
-      "domains": [
-        "string"
-      ],
+      "domains": ["string"],
       "name_orgs": [
         {
           "name_org": "string",
@@ -68,9 +60,7 @@
       "citation": "string",
       "doc_type": "string",
       "public_domain": "boolean",
-      "tags": [
-        "string"
-      ],
+      "tags": ["string"],
       "url": "string",
       "uuid": "string",
       "document_date": "number"
@@ -85,9 +75,7 @@
         "units": "string"
       },
       "qualification": "string",
-      "references": [
-        "string"
-      ],
+      "references": ["string"],
       "related_substance": {
         "linking_id": "string",
         "name": "string",
@@ -113,9 +101,7 @@
     "molecular_weight": "string",
     "molfile": "string",
     "optical_activity": "string",
-    "references": [
-      "string"
-    ],
+    "references": ["string"],
     "smiles": "string",
     "stereo_centers": "number",
     "stereochemistry": "string"
@@ -171,12 +157,8 @@
       "unii": "string",
       "uuid": "string"
     },
-    "part": [
-      "string"
-    ],
-    "references": [
-      "string"
-    ],
+    "part": ["string"],
+    "references": ["string"],
     "source_material_class": "string",
     "source_material_state": "string",
     "source_material_type": "string",
@@ -187,9 +169,7 @@
       "defining": "boolean",
       "name": "string",
       "property_type": "string",
-      "references": [
-        "string"
-      ],
+      "references": ["string"],
       "uuid": "string",
       "value": {
         "high": "number",

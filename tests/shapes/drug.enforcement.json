@@ -10,48 +10,20 @@
   "event_id": "string",
   "initial_firm_notification": "string",
   "openfda": {
-    "application_number": [
-      "string"
-    ],
-    "brand_name": [
-      "string"
-    ],
-    "generic_name": [
-      "string"
-    ],
-    "is_original_packager": [
-      "boolean"
-    ],
-    "manufacturer_name": [
-      "string"
-    ],
-    "package_ndc": [
-      "string"
-    ],
-    "product_ndc": [
-      "string"
-    ],
-    "product_type": [
-      "string"
-    ],
-    "route": [
-      "string"
-    ],
-    "rxcui": [
-      "string"
-    ],
-    "spl_id": [
-      "string"
-    ],
-    "spl_set_id": [
-      "string"
-    ],
-    "substance_name": [
-      "string"
-    ],
-    "unii": [
-      "string"
-    ]
+    "application_number": ["string"],
+    "brand_name": ["string"],
+    "generic_name": ["string"],
+    "is_original_packager": ["boolean"],
+    "manufacturer_name": ["string"],
+    "package_ndc": ["string"],
+    "product_ndc": ["string"],
+    "product_type": ["string"],
+    "route": ["string"],
+    "rxcui": ["string"],
+    "spl_id": ["string"],
+    "spl_set_id": ["string"],
+    "substance_name": ["string"],
+    "unii": ["string"]
   },
   "postal_code": "string",
   "product_description": "string",

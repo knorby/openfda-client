@@ -1,11 +1,7 @@
 {
-  "application_number": [
-    "string"
-  ],
+  "application_number": ["string"],
   "approval_status": "string",
-  "approver_center": [
-    "mixed"
-  ],
+  "approver_center": ["mixed"],
   "approver_name": "string",
   "approver_title": "mixed",
   "company_address": "string",

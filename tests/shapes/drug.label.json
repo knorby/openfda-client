@@ -1,179 +1,65 @@
 {
-  "active_ingredient": [
-    "string"
-  ],
-  "do_not_use": [
-    "string"
-  ],
-  "dosage_and_administration": [
-    "string"
-  ],
+  "active_ingredient": ["string"],
+  "do_not_use": ["string"],
+  "dosage_and_administration": ["string"],
   "effective_time": "string",
   "id": "string",
-  "inactive_ingredient": [
-    "string"
-  ],
-  "indications_and_usage": [
-    "string"
-  ],
-  "keep_out_of_reach_of_children": [
-    "string"
-  ],
+  "inactive_ingredient": ["string"],
+  "indications_and_usage": ["string"],
+  "keep_out_of_reach_of_children": ["string"],
   "openfda": {
-    "brand_name": [
-      "string"
-    ],
-    "generic_name": [
-      "string"
-    ],
-    "is_original_packager": [
-      "boolean"
-    ],
-    "manufacturer_name": [
-      "string"
-    ],
-    "package_ndc": [
-      "string"
-    ],
-    "product_ndc": [
-      "string"
-    ],
-    "product_type": [
-      "string"
-    ],
-    "route": [
-      "string"
-    ],
-    "spl_id": [
-      "string"
-    ],
-    "spl_set_id": [
-      "string"
-    ],
-    "substance_name": [
-      "string"
-    ],
-    "unii": [
-      "string"
-    ],
-    "upc": [
-      "string"
-    ],
-    "application_number": [
-      "string"
-    ],
-    "nui": [
-      "string"
-    ],
-    "pharm_class_cs": [
-      "string"
-    ],
-    "pharm_class_epc": [
-      "string"
-    ],
-    "rxcui": [
-      "string"
-    ]
+    "brand_name": ["string"],
+    "generic_name": ["string"],
+    "is_original_packager": ["boolean"],
+    "manufacturer_name": ["string"],
+    "package_ndc": ["string"],
+    "product_ndc": ["string"],
+    "product_type": ["string"],
+    "route": ["string"],
+    "spl_id": ["string"],
+    "spl_set_id": ["string"],
+    "substance_name": ["string"],
+    "unii": ["string"],
+    "upc": ["string"],
+    "application_number": ["string"],
+    "nui": ["string"],
+    "pharm_class_cs": ["string"],
+    "pharm_class_epc": ["string"],
+    "rxcui": ["string"]
   },
-  "package_label_principal_display_panel": [
-    "string"
-  ],
-  "pregnancy_or_breast_feeding": [
-    "string"
-  ],
-  "purpose": [
-    "string"
-  ],
-  "questions": [
-    "string"
-  ],
+  "package_label_principal_display_panel": ["string"],
+  "pregnancy_or_breast_feeding": ["string"],
+  "purpose": ["string"],
+  "questions": ["string"],
   "set_id": "string",
-  "spl_product_data_elements": [
-    "string"
-  ],
-  "stop_use": [
-    "string"
-  ],
-  "storage_and_handling": [
-    "string"
-  ],
+  "spl_product_data_elements": ["string"],
+  "stop_use": ["string"],
+  "storage_and_handling": ["string"],
   "version": "string",
-  "warnings": [
-    "string"
-  ],
-  "when_using": [
-    "string"
-  ],
-  "ask_doctor": [
-    "string"
-  ],
-  "adverse_reactions": [
-    "string"
-  ],
-  "carcinogenesis_and_mutagenesis_and_impairment_of_fertility": [
-    "string"
-  ],
-  "clinical_pharmacology": [
-    "string"
-  ],
-  "clinical_pharmacology_table": [
-    "string"
-  ],
-  "clinical_studies": [
-    "string"
-  ],
-  "contraindications": [
-    "string"
-  ],
-  "description": [
-    "string"
-  ],
-  "dosage_and_administration_table": [
-    "string"
-  ],
-  "drug_interactions": [
-    "string"
-  ],
-  "general_precautions": [
-    "string"
-  ],
-  "geriatric_use": [
-    "string"
-  ],
-  "how_supplied": [
-    "string"
-  ],
-  "information_for_patients": [
-    "string"
-  ],
-  "microbiology": [
-    "string"
-  ],
-  "microbiology_table": [
-    "string"
-  ],
-  "nonteratogenic_effects": [
-    "string"
-  ],
-  "nursing_mothers": [
-    "string"
-  ],
-  "pediatric_use": [
-    "string"
-  ],
-  "pharmacokinetics": [
-    "string"
-  ],
-  "precautions": [
-    "string"
-  ],
-  "pregnancy": [
-    "string"
-  ],
-  "spl_unclassified_section": [
-    "string"
-  ],
-  "spl_unclassified_section_table": [
-    "string"
-  ]
+  "warnings": ["string"],
+  "when_using": ["string"],
+  "ask_doctor": ["string"],
+  "adverse_reactions": ["string"],
+  "carcinogenesis_and_mutagenesis_and_impairment_of_fertility": ["string"],
+  "clinical_pharmacology": ["string"],
+  "clinical_pharmacology_table": ["string"],
+  "clinical_studies": ["string"],
+  "contraindications": ["string"],
+  "description": ["string"],
+  "dosage_and_administration_table": ["string"],
+  "drug_interactions": ["string"],
+  "general_precautions": ["string"],
+  "geriatric_use": ["string"],
+  "how_supplied": ["string"],
+  "information_for_patients": ["string"],
+  "microbiology": ["string"],
+  "microbiology_table": ["string"],
+  "nonteratogenic_effects": ["string"],
+  "nursing_mothers": ["string"],
+  "pediatric_use": ["string"],
+  "pharmacokinetics": ["string"],
+  "precautions": ["string"],
+  "pregnancy": ["string"],
+  "spl_unclassified_section": ["string"],
+  "spl_unclassified_section_table": ["string"]
 }

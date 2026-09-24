@@ -22,9 +22,15 @@
 //   with 300ms spacing is well within either limit.
 //
 // Zero dependencies by design (AGENTS.md); uses global fetch (Node 18+).
+import { execFile } from "node:child_process";
 import { mkdir, readdir, readFile, writeFile } from "node:fs/promises";
+import { createRequire } from "node:module";
 import { resolve } from "node:path";
+import { promisify } from "node:util";
 import { ALL_PATHS } from "../src/endpoints.ts";
+
+const require = createRequire(import.meta.url);
+const execFileP = promisify(execFile);
 
 const BASE_URL = "https://api.fda.gov";
 const SHAPES_DIR = resolve(import.meta.dirname, "../tests/shapes");
@@ -114,6 +120,22 @@ async function captureEndpoint(path) {
   return shapeOfRecord(records);
 }
 
+/**
+ * Reformats tests/shapes with the repo's Biome so regenerated snapshots
+ * match `npm run lint` exactly (Biome owns JSON formatting here — e.g. it
+ * collapses single-element arrays, which JSON.stringify never does).
+ */
+async function formatShapes() {
+  try {
+    const bin = require.resolve("@biomejs/biome/bin/biome");
+    await execFileP(process.execPath, [bin, "format", "--write", SHAPES_DIR]);
+  } catch (error) {
+    console.warn(
+      `capture-shapes: could not run Biome (${error instanceof Error ? error.message : error}) — run \`npx biome format --write tests/shapes\` before committing`,
+    );
+  }
+}
+
 /** Flattens a shape into "path: kind" leaf strings for diffing. */
 function flattenShape(shape, prefix = "") {
   if (typeof shape === "string") return [`${prefix || "<root>"}: ${shape}`];
@@ -140,6 +162,7 @@ if (!CHECK_ONLY) {
     const file = resolve(SHAPES_DIR, `${path.replace("/", ".")}.json`);
     await writeFile(file, `${JSON.stringify(shape, null, 2)}\n`);
   }
+  await formatShapes();
   console.log(
     `capture-shapes: wrote ${shapes.size} snapshot(s) to tests/shapes/`,
   );

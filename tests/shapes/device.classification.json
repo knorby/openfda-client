@@ -8,15 +8,9 @@
   "medical_specialty": "string",
   "medical_specialty_description": "string",
   "openfda": {
-    "fei_number": [
-      "string"
-    ],
-    "k_number": [
-      "string"
-    ],
-    "registration_number": [
-      "string"
-    ]
+    "fei_number": ["string"],
+    "k_number": ["string"],
+    "registration_number": ["string"]
   },
   "product_code": "string",
   "regulation_number": "string",

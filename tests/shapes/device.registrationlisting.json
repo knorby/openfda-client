@@ -1,7 +1,5 @@
 {
-  "establishment_type": [
-    "string"
-  ],
+  "establishment_type": ["string"],
   "k_number": "string",
   "pma_number": "string",
   "products": [
@@ -18,9 +16,7 @@
       "product_code": "string"
     }
   ],
-  "proprietary_name": [
-    "mixed"
-  ],
+  "proprietary_name": ["mixed"],
   "registration": {
     "address_line_1": "string",
     "address_line_2": "string",

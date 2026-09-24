@@ -17,33 +17,15 @@
   "marketing_category": "string",
   "marketing_start_date": "string",
   "openfda": {
-    "is_original_packager": [
-      "boolean"
-    ],
-    "manufacturer_name": [
-      "string"
-    ],
-    "spl_set_id": [
-      "string"
-    ],
-    "unii": [
-      "string"
-    ],
-    "upc": [
-      "string"
-    ],
-    "rxcui": [
-      "string"
-    ],
-    "nui": [
-      "string"
-    ],
-    "pharm_class_epc": [
-      "string"
-    ],
-    "pharm_class_moa": [
-      "string"
-    ]
+    "is_original_packager": ["boolean"],
+    "manufacturer_name": ["string"],
+    "spl_set_id": ["string"],
+    "unii": ["string"],
+    "upc": ["string"],
+    "rxcui": ["string"],
+    "nui": ["string"],
+    "pharm_class_epc": ["string"],
+    "pharm_class_moa": ["string"]
   },
   "packaging": [
     {
@@ -56,11 +38,7 @@
   "product_id": "string",
   "product_ndc": "string",
   "product_type": "string",
-  "route": [
-    "string"
-  ],
+  "route": ["string"],
   "spl_id": "string",
-  "pharm_class": [
-    "string"
-  ]
+  "pharm_class": ["string"]
 }

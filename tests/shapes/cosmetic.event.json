@@ -4,9 +4,7 @@
   "latest_received_date": "string",
   "legacy_report_id": "string",
   "meddra_version": "string",
-  "outcomes": [
-    "string"
-  ],
+  "outcomes": ["string"],
   "patient": {
     "age": "string",
     "age_unit": "string",
@@ -18,9 +16,7 @@
       "role": "string"
     }
   ],
-  "reactions": [
-    "string"
-  ],
+  "reactions": ["string"],
   "report_number": "string",
   "report_type": "string",
   "report_version": "string"

@@ -41,12 +41,8 @@
         "device_name": "string",
         "medical_specialty_description": "string",
         "regulation_number": "string",
-        "fei_number": [
-          "string"
-        ],
-        "registration_number": [
-          "string"
-        ]
+        "fei_number": ["string"],
+        "registration_number": ["string"]
       },
       "other_id_number": "string",
       "date_returned_to_manufacturer": "string",
@@ -127,23 +123,15 @@
       "patient_sequence_number": "string",
       "patient_sex": "string",
       "patient_weight": "string",
-      "sequence_number_outcome": [
-        "string"
-      ],
-      "sequence_number_treatment": [
-        "string"
-      ],
-      "patient_problems": [
-        "string"
-      ]
+      "sequence_number_outcome": ["string"],
+      "sequence_number_treatment": ["string"],
+      "patient_problems": ["string"]
     }
   ],
   "pma_pmn_number": "string",
   "previous_use_code": "string",
   "product_problem_flag": "string",
-  "remedial_action": [
-    "string"
-  ],
+  "remedial_action": ["string"],
   "removal_correction_number": "string",
   "report_date": "string",
   "report_number": "string",
@@ -155,17 +143,11 @@
   "reporter_state_code": "string",
   "reprocessed_and_reused_flag": "string",
   "single_use_flag": "string",
-  "source_type": [
-    "string"
-  ],
+  "source_type": ["string"],
   "summary_report_flag": "string",
   "suppl_dates_fda_received": "string",
   "suppl_dates_mfr_received": "string",
-  "type_of_report": [
-    "string"
-  ],
+  "type_of_report": ["string"],
   "date_report_to_manufacturer": "string",
-  "product_problems": [
-    "string"
-  ]
+  "product_problems": ["string"]
 }

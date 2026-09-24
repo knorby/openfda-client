@@ -6,65 +6,29 @@
   "generic_name": "string",
   "initial_posting_date": "string",
   "openfda": {
-    "application_number": [
-      "string"
-    ],
-    "brand_name": [
-      "string"
-    ],
-    "generic_name": [
-      "string"
-    ],
-    "manufacturer_name": [
-      "string"
-    ],
-    "package_ndc": [
-      "string"
-    ],
-    "product_ndc": [
-      "string"
-    ],
-    "product_type": [
-      "string"
-    ],
-    "route": [
-      "string"
-    ],
-    "rxcui": [
-      "string"
-    ],
-    "spl_id": [
-      "string"
-    ],
-    "spl_set_id": [
-      "string"
-    ],
-    "substance_name": [
-      "string"
-    ],
-    "unii": [
-      "string"
-    ],
-    "nui": [
-      "string"
-    ],
-    "pharm_class_cs": [
-      "string"
-    ],
-    "pharm_class_epc": [
-      "string"
-    ],
-    "pharm_class_pe": [
-      "string"
-    ]
+    "application_number": ["string"],
+    "brand_name": ["string"],
+    "generic_name": ["string"],
+    "manufacturer_name": ["string"],
+    "package_ndc": ["string"],
+    "product_ndc": ["string"],
+    "product_type": ["string"],
+    "route": ["string"],
+    "rxcui": ["string"],
+    "spl_id": ["string"],
+    "spl_set_id": ["string"],
+    "substance_name": ["string"],
+    "unii": ["string"],
+    "nui": ["string"],
+    "pharm_class_cs": ["string"],
+    "pharm_class_epc": ["string"],
+    "pharm_class_pe": ["string"]
   },
   "package_ndc": "string",
   "presentation": "string",
   "related_info": "string",
   "status": "string",
-  "therapeutic_category": [
-    "string"
-  ],
+  "therapeutic_category": ["string"],
   "update_date": "string",
   "update_type": "string",
   "shortage_reason": "string",

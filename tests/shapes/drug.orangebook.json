@@ -19,9 +19,7 @@
       "reference_listed_drug": "boolean",
       "reference_standard": "boolean",
       "route": "string",
-      "therapeutic_equivalence_codes": [
-        "string"
-      ]
+      "therapeutic_equivalence_codes": ["string"]
     }
   ]
 }

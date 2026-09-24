@@ -38,7 +38,9 @@ surface: `search`/`count`/`limit`/`skip`/`sort`):
 - Search-syntax helpers live in `src/query.ts`
   (`and/or/not/field/exact/range/exists/term`).
 - Drift protection: `tests/shapes/*.json` are skeleton snapshots of every
-  endpoint; `scripts/capture-shapes.mjs` regenerates/diffs them. The weekly
+  endpoint; `scripts/capture-shapes.mjs` regenerates/diffs them (comparison is
+  semantic, and the capture script reformats output with Biome after writing,
+  so regenerated snapshots always pass `npm run lint`). The weekly
   `api-drift` GitHub workflow opens a review PR on drift — **never
   auto-merge drift PRs**; a human checks the diff against the field
   references. (Note: GitHub disables cron workflows after 60 days of repo
