@@ -1,13 +1,8 @@
 // @knorby/openfda-client — TypeScript client for the openFDA API.
 // Universal: Node, React Native, browsers, Bun, Deno. Zero runtime deps.
 //
-// DISCLAIMER: This library is not affiliated with, endorsed by, or sponsored
-// by the FDA or the U.S. Government. openFDA's own warning applies to all
-// data retrieved through this client: "Do not rely on openFDA to make
-// decisions regarding medical care. While we make every effort to ensure
-// that data is accurate, you should assume all results are unvalidated."
-// Data provided by the U.S. Food and Drug Administration
-// (https://open.fda.gov).
+// Not affiliated with the FDA. openFDA data carries its own disclaimers —
+// see README.md ("Data and medical disclaimers").
 
 export type {
   EndpointClient,

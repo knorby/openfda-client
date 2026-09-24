@@ -6,8 +6,6 @@ import type { OpenFdaHarmonized, RecallEnforcementReport } from "./openfda";
  * These are **voluntary reports**: a reported association does not establish
  * causation, reports can be incomplete/inaccurate, and the data should not
  * be used to estimate incidence. openFDA's standing warning applies.
- *
- * @disclaimer Do not rely on openFDA to make decisions regarding medical care.
  */
 export interface DrugEvent {
   /** Reporter's internal company number. */
@@ -151,10 +149,9 @@ export interface DrugEventPrimarySource {
 /**
  * Structured product labeling for an FDA-approved drug
  * (`drug/label` endpoint). Most content sections are string arrays of
- * paragraphs; openFDA omits empty sections entirely.
- *
- * @disclaimer Label text is presented as-is from the SPL — always consult
- * the current official labeling for clinical use.
+ * paragraphs; openFDA omits empty sections entirely. Label text is
+ * presented as-is from the SPL — always consult the current official
+ * labeling for clinical use.
  */
 export interface DrugLabel {
   /** Active ingredients (free text). */

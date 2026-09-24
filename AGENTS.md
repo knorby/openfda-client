@@ -10,8 +10,7 @@ ships under Apache-2.0. Keep this file updated as conventions evolve.
 **Unaffiliated-with-FDA disclaimer:** this library is a third-party client;
 never present it as an FDA product. openFDA's own medical-care disclaimer
 ("Do not rely on openFDA to make decisions regarding medical care…") applies
-to all data the client returns and is quoted in `README.md` and the
-entry-point docs.
+to all data the client returns and is quoted in `README.md`.
 
 The client surface mirrors the openFDA API (every endpoint shares one query
 surface: `search`/`count`/`limit`/`skip`/`sort`):
@@ -242,9 +241,11 @@ These rules are mandatory. Follow them strictly.
 
 ### Disclaimers
 
-- Keep the not-affiliated-with-FDA disclaimer and openFDA's medical-care
-  disclaimer present and prominent in `README.md` and `src/index.ts` (and
-  reuse them in generated docs). Never remove or weaken them.
+- `README.md` is the **single home** for the disclaimers: the short
+  not-affiliated-with-FDA notice near the top plus the longer "Data and
+  medical disclaimers" section. Do not duplicate the full text per-file in
+  source TSDoc — at most a one-line pointer ("see README.md"). Never remove
+  or weaken the README notices.
 
 ### Documentation
 

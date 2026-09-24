@@ -7,8 +7,6 @@ import type { RecallEnforcementReport } from "./openfda";
  * These are **voluntary reports** about foods, including dietary
  * supplements: a reported association does not establish causation, and the
  * data are not verified by FDA.
- *
- * @disclaimer Do not rely on openFDA to make decisions regarding medical care.
  */
 export interface FoodEvent {
   /** Consumer demographics (when provided). */

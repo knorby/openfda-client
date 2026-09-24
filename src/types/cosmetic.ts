@@ -3,8 +3,6 @@
  *
  * These are **voluntary reports**; a reported association does not establish
  * causation, and FDA does not verify the data.
- *
- * @disclaimer Do not rely on openFDA to make decisions regarding medical care.
  */
 export interface CosmeticEvent {
   /** Date of the adverse event (`YYYYMMDD`). */

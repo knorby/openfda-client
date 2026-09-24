@@ -170,11 +170,8 @@ export type ResultFor<P extends string> = P extends keyof EndpointResultMap
  * });
  * ```
  *
- * @disclaimer This library is not affiliated with, endorsed by, or sponsored
- * by the FDA or the U.S. Government. openFDA's own warning applies to
- * everything this client returns: "Do not rely on openFDA to make decisions
- * regarding medical care. While we make every effort to ensure that data is
- * accurate, you should assume all results are unvalidated."
+ * Not affiliated with the FDA; openFDA data carries its own disclaimers —
+ * see README.md ("Data and medical disclaimers").
  */
 export class OpenFdaClient {
   private readonly requester: OpenFdaRequester;
