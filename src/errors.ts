@@ -45,7 +45,7 @@ export class OpenFdaTimeoutError extends OpenFdaError {
 export class OpenFdaApiError extends OpenFdaError {
   /** HTTP status code returned by the server. */
   readonly status: number;
-  /** Raw response body (string) for debugging. */
+  /** Response body for debugging, with the configured API key redacted. */
   readonly body: string;
   /** Machine-readable error code from the API's `{"error":{"code":…}}` body. */
   readonly code: string | undefined;
@@ -112,8 +112,8 @@ export class OpenFdaNotFoundError extends OpenFdaApiError {
 
 /**
  * Raised when a network-level failure prevents the request from completing
- * (DNS failure, connection reset, etc.). The original error is attached as
- * `cause`.
+ * (DNS failure, connection reset, etc.). A sanitized copy of the transport
+ * error is attached as `cause` to avoid leaking a key from its nested stack.
  */
 export class OpenFdaNetworkError extends OpenFdaError {
   /**

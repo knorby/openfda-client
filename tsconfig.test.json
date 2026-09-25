@@ -1,17 +1,7 @@
 {
-  "//": "Standalone (not `extends`) on purpose: the TS 7 native compiler ignores a child config's `include` override, so an extending config silently type-checked `src` only. Keep these options in sync with tsconfig.json.",
+  "extends": "./tsconfig.json",
   "compilerOptions": {
-    "target": "ES2022",
-    "module": "ESNext",
-    "moduleResolution": "bundler",
-    "lib": ["ES2022", "DOM", "DOM.Iterable"],
-    "strict": true,
-    "esModuleInterop": true,
-    "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "noUncheckedIndexedAccess": true,
+    "rootDir": ".",
     "types": ["node"],
     "noEmit": true
   },

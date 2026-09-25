@@ -11,17 +11,18 @@
 //
 // Usage:
 //   node scripts/discover-endpoints.mjs                 # print NEW/GONE/OK report
-//   node scripts/discover-endpoints.mjs --fail-on-diff  # exit 1 on NEW/GONE
+//   node scripts/discover-endpoints.mjs --fail-on-diff  # 2 drift, 1 probe failure
 //
 // Environment:
 //   OPENFDA_API_KEY — optional; raised rate limits (240/min keyless).
 //
-// Zero dependencies by design (AGENTS.md); uses global fetch (Node 18+).
+// No extra script dependencies; run with the repo's Node 24 toolchain
+// (the registry is imported directly from TypeScript).
 import { existsSync } from "node:fs";
 import { resolve } from "node:path";
 
 const BASE_URL = "https://api.fda.gov";
-const PROBE_SPACING_MS = 300;
+const PROBE_SPACING_MS = Number(process.env.OPENFDA_PROBE_SPACING_MS ?? 300);
 const API_KEY = process.env.OPENFDA_API_KEY || "";
 const FAIL_ON_DIFF = process.argv.includes("--fail-on-diff");
 const REGISTRY_PATH = resolve(import.meta.dirname, "../src/endpoints.ts");
@@ -32,7 +33,7 @@ function sleep(ms) {
 
 async function fetchJson(url) {
   const sep = url.includes("?") ? "&" : "?";
-  const full = API_KEY ? `${url}${sep}api_key=${API_KEY}` : url;
+  const full = API_KEY ? `${url}${sep}api_key=${encodeURIComponent(API_KEY)}` : url;
   const res = await fetch(full, { headers: { Accept: "application/json" } });
   const text = await res.text();
   try {
@@ -56,22 +57,25 @@ function manifestCandidates(manifest) {
   return paths.sort();
 }
 
-/** Probes a candidate endpoint; "alive" iff 2xx JSON with a meta key. */
-async function probeAlive(path) {
+/** A registered path's 404 may mean zero records, not a removed route. */
+async function probeAlive(path, registered) {
   let result;
   try {
     result = await fetchJson(`${BASE_URL}/${path}.json?limit=1`);
   } catch (err) {
-    return { alive: false, detail: `network error: ${err?.message ?? err}` };
+    return { state: "unknown", detail: "network error" };
   }
   if (result.status >= 200 && result.status < 300 && result.json && "meta" in result.json) {
-    return { alive: true, detail: "ok" };
+    return { state: "alive", detail: "ok" };
   }
-  const message =
-    result.json && typeof result.json === "object" && "error" in result.json
-      ? JSON.stringify(result.json.error)
-      : `HTTP ${result.status}`;
-  return { alive: false, detail: message };
+  if (result.status === 404 && !registered) {
+    return { state: "dead", detail: "HTTP 404" };
+  }
+  // 429/5xx and a registered route's 404 cannot prove that it disappeared.
+  if (result.status === 429 || result.status >= 500 || registered) {
+    return { state: "unknown", detail: `HTTP ${result.status}` };
+  }
+  return { state: "dead", detail: `HTTP ${result.status}` };
 }
 
 /** Registry paths, imported directly (Node 24+ strips erasable TS types). */
@@ -81,29 +85,48 @@ async function registryPaths() {
   return [...registry.ALL_PATHS];
 }
 
-const manifest = await fetchJson(`${BASE_URL}/download.json`);
-if (!manifest.json) {
+let manifest;
+try {
+  manifest = await fetchJson(`${BASE_URL}/download.json`);
+} catch {
+  console.error("discover-endpoints: download.json request failed");
+  process.exit(1);
+}
+if (manifest.status !== 200 || !manifest.json?.results) {
   console.error("discover-endpoints: could not fetch download.json");
   process.exit(1);
 }
 const candidates = manifestCandidates(manifest.json);
+if (candidates.length === 0) {
+  console.error("discover-endpoints: download.json contained no endpoint candidates");
+  process.exit(1);
+}
 console.log(
   `discover-endpoints: ${candidates.length} candidate endpoint(s) from download.json (last_updated ${manifest.json.meta?.last_updated ?? "?"})`,
 );
 
 const alive = [];
+const unknown = [];
+const registered = await registryPaths();
+const registeredSet = new Set(registered ?? []);
 for (const path of candidates) {
   await sleep(PROBE_SPACING_MS);
-  const probe = await probeAlive(path);
-  if (probe.alive) {
+  const probe = await probeAlive(path, registeredSet.has(path));
+  if (probe.state === "alive") {
     alive.push(path);
     console.log(`  ALIVE  ${path}`);
+  } else if (probe.state === "unknown") {
+    unknown.push(path);
+    console.log(`  UNKNOWN ${path}  (${probe.detail})`);
   } else {
     console.log(`  dead   ${path}  (${probe.detail})`);
   }
 }
 
-const registered = await registryPaths();
+if (unknown.length > 0) {
+  console.error(`discover-endpoints: ${unknown.length} inconclusive probe(s): ${unknown.join(", ")}`);
+  process.exit(1);
+}
 if (registered === null) {
   console.log(
     `\nno registry at src/endpoints.ts yet — ${alive.length} live endpoint(s) to seed it with:\n${alive.map((p) => `  ${p}`).join("\n")}`,
@@ -112,7 +135,6 @@ if (registered === null) {
 }
 
 const aliveSet = new Set(alive);
-const registeredSet = new Set(registered);
 const news = alive.filter((p) => !registeredSet.has(p));
 const gone = registered.filter((p) => !aliveSet.has(p));
 
@@ -124,5 +146,5 @@ console.log(rows.join("\n"));
 if (news.length > 0 || gone.length > 0) {
   if (news.length > 0) console.error(`NEW endpoints (add to registry): ${news.join(", ")}`);
   if (gone.length > 0) console.error(`GONE endpoints (remove from registry): ${gone.join(", ")}`);
-  if (FAIL_ON_DIFF) process.exit(1);
+  if (FAIL_ON_DIFF) process.exit(2);
 }

@@ -17,7 +17,17 @@ const INITIAL_BACKOFF_MS = 1000;
 
 /** Replaces the `api_key` query value with `[redacted]` in a URL. */
 function redactApiKey(url: string): string {
-  return url.replace(/([?&]api_key=)[^&]*/, "$1[redacted]");
+  return url.replace(/([?&]api_key=)[^&]*/g, "$1[redacted]");
+}
+
+/** Remove both plain and URL-encoded forms of a configured key from diagnostics. */
+function sanitizeDiagnostic(text: string, apiKey?: string): string {
+  const redacted = redactApiKey(text);
+  if (!apiKey) return redacted;
+  const encoded = encodeURIComponent(apiKey);
+  return redacted
+    .replaceAll(apiKey, "[redacted]")
+    .replaceAll(encoded, "[redacted]");
 }
 
 /** Resolves after `ms` milliseconds (0 resolves on the next tick). */
@@ -79,7 +89,8 @@ export interface OpenFdaClientConfig {
    * Opt-in automatic retry for `429` (rate-limit) responses.
    *
    * - `true` retries up to 3 times.
-   * - `{ maxRetries: n }` overrides the retry count (`0` disables).
+   * - `{ maxRetries: n }` overrides the retry count with a nonnegative
+   *   integer (`0` disables); invalid values throw a `RangeError`.
    *
    * The wait between attempts honors the response's `Retry-After` header
    * (seconds or HTTP-date), capped at 60 seconds; without the header it
@@ -128,6 +139,11 @@ export class OpenFdaRequester {
         : retry429 && typeof retry429 === "object"
           ? (retry429.maxRetries ?? DEFAULT_MAX_429_RETRIES)
           : 0;
+    if (!Number.isSafeInteger(this.max429Retries) || this.max429Retries < 0) {
+      throw new RangeError(
+        "retryOn429.maxRetries must be a nonnegative integer",
+      );
+    }
 
     // Typed as always-present, but absent in runtimes without global `fetch`.
     const globalFetch = globalThis.fetch as FetchLike | undefined;
@@ -188,7 +204,21 @@ export class OpenFdaRequester {
           throw new OpenFdaTimeoutError(this.timeoutMs);
         }
         if (err instanceof OpenFdaError) throw err;
-        throw new OpenFdaNetworkError(redactApiKey(url), err);
+        // A fetch implementation may put the request URL (and key) in its
+        // message, stack, or nested cause. Copy only sanitized diagnostics.
+        const cause = new Error(
+          sanitizeDiagnostic(
+            err instanceof Error ? err.message : String(err),
+            this.apiKey,
+          ),
+        );
+        if (err instanceof Error) {
+          cause.name = sanitizeDiagnostic(err.name, this.apiKey);
+        }
+        throw new OpenFdaNetworkError(
+          sanitizeDiagnostic(url, this.apiKey),
+          cause,
+        );
       } finally {
         clearTimeout(timer);
       }
@@ -237,18 +267,21 @@ export class OpenFdaRequester {
         // openFDA signals "zero matching records" as 404 NOT_FOUND rather
         // than an empty result set. Redacted so logged errors cannot leak
         // the caller's openFDA key.
-        throw new OpenFdaNotFoundError(redactApiKey(url));
+        throw new OpenFdaNotFoundError(sanitizeDiagnostic(url, this.apiKey));
       }
       const retryAfterSeconds = this.parseRetryAfter(
         response.headers.get("Retry-After"),
       );
       throw new OpenFdaApiError({
         status: response.status,
-        body: bodyText,
-        code,
+        body: sanitizeDiagnostic(bodyText, this.apiKey),
+        code:
+          code === undefined
+            ? undefined
+            : sanitizeDiagnostic(code, this.apiKey),
         retryAfterSeconds,
         // Redacted so logged errors cannot leak the caller's openFDA key.
-        url: redactApiKey(url),
+        url: sanitizeDiagnostic(url, this.apiKey),
       });
     }
     if (bodyText === "") return null;
@@ -257,7 +290,10 @@ export class OpenFdaRequester {
     } catch {
       const contentType = response.headers.get("content-type") ?? "unknown";
       throw new OpenFdaError(
-        `openFDA API returned a non-JSON body (${contentType}): ${bodyText.slice(0, 120)}`,
+        sanitizeDiagnostic(
+          `openFDA API returned a non-JSON body (${contentType}): ${bodyText.slice(0, 120)}`,
+          this.apiKey,
+        ),
       );
     }
   }

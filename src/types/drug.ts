@@ -15,7 +15,7 @@ export interface DrugEvent {
   /** The patient and their drug/reaction records. */
   patient?: DrugEventPatient;
   /** Country where the event occurred. */
-  occurredcountry?: string;
+  occurcountry?: string;
   /** Duplicate-report cross-reference. */
   reportduplicate?: { duplicatenumb?: string; duplicatesource?: string };
   /** Date FDA received the report (`YYYYMMDD`). */
@@ -217,7 +217,7 @@ export interface DrugLabel {
   /** Product's principal display panel text. */
   package_label_principal_display_panel?: string[];
   /** Nonclinical toxicology. */
-  carcinogenesis_mutagenesis_impairment_of_fertility?: string[];
+  carcinogenesis_and_mutagenesis_and_impairment_of_fertility?: string[];
   /** Patient-counseling information. */
   patient_counseling_information?: string[];
   /** Precautions (legacy text). */
@@ -399,13 +399,25 @@ export interface DrugsFda {
 }
 
 /** One product row in an Orange Book application record. */
-export interface OrangeBookProduct extends Omit<ApplicationProduct, "te_code"> {
+export interface OrangeBookProduct {
+  /** Active ingredients and their strengths. */
+  active_ingredients?: ActiveIngredient[];
+  /** Proprietary product name. */
+  brand_name?: string;
+  /** Dosage form and route of administration. */
+  dosage_form?: string;
+  route?: string;
+  /** Current marketing status. */
+  marketing_status?: string;
   /** Drug's full application name. */
   application_full_name?: string;
   /** Application short name. */
   application_name?: string;
-  /** Therapeutic-equivalence code (e.g. `"AB"`, `"BX"`). */
-  te_code?: string;
+  /** Therapeutic-equivalence evaluations (e.g. `"AB"`, `"BX"`). */
+  therapeutic_equivalence_codes?: string[];
+  /** Whether this is a reference listed drug or reference standard. */
+  reference_listed_drug?: boolean;
+  reference_standard?: boolean;
   /** Application-level fields echoed per product. */
   application_type?: string;
   application_number?: string;
@@ -416,14 +428,10 @@ export interface OrangeBookProduct extends Omit<ApplicationProduct, "te_code"> {
  * drug products with therapeutic-equivalence evaluations.
  */
 export interface DrugOrangeBook {
-  /** Application number (e.g. `"ANDA070660"`). */
-  application_number?: string;
-  /** Application full name. */
-  application_full_name?: string;
-  /** Sponsor firm name. */
-  sponsor_name?: string;
   /** Date the application was approved (`YYYYMMDD`). */
   approval_date?: string;
+  /** Product number within the application. */
+  product_number?: string;
   /** Products listed under this application. */
   products?: OrangeBookProduct[];
 }
@@ -437,19 +445,23 @@ export interface DrugShortage {
   /** Company associated with the shortage. */
   company_name?: string;
   /** Contact information for the company. */
-  contact_info?: string[];
+  contact_info?: string;
   /** Dosage form of the affected product. */
   dosage_form?: string;
   /** Generic name of the affected product. */
   generic_name?: string;
   /** Date the shortage was first posted (`YYYYMMDD`). */
   initial_posting_date?: string;
-  /** Package-level NDC(s) affected. */
-  package_ndc?: string[];
+  /** Package-level NDC affected. */
+  package_ndc?: string;
   /** Presentation (e.g. `"Prefilled Syringes"`). */
   presentation?: string;
   /** Related-info links/notes. */
-  related_info?: string[];
+  related_info?: string;
+  /** Reason given for the shortage. */
+  shortage_reason?: string;
+  /** Date the product was discontinued (`YYYYMMDD`). */
+  discontinued_date?: string;
   /** Shortage status (e.g. `"Active"`, `"Resolved"`). */
   status?: string;
   /** Therapeutic category bucket used by FDA CDER shortages. */

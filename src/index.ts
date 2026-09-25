@@ -29,7 +29,8 @@ export {
   OpenFdaNotFoundError,
   OpenFdaTimeoutError,
 } from "./errors";
-export type { FetchLike, OpenFdaClientConfig, OpenFdaRequester } from "./http";
+export type { FetchLike, OpenFdaClientConfig } from "./http";
+export { OpenFdaRequester } from "./http";
 // Search-syntax helpers.
 export {
   and,

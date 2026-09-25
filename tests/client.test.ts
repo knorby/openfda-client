@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { OpenFdaClient } from "../src/client";
+import { createEndpoint, OpenFdaRequester } from "../src/index";
 import { envelope, queuedFetch } from "./helpers";
 
 function clientWith(responses: unknown[] | (() => unknown)) {
@@ -46,6 +47,44 @@ describe("namespaced search", () => {
 });
 
 describe("generic path access", () => {
+  it("constructs a public custom endpoint using the exported requester", async () => {
+    const { fetch, urls } = queuedFetch([envelope([{ future: true }], 1)]);
+    const endpoint = createEndpoint<{ future: boolean }>(
+      new OpenFdaRequester({ fetch }),
+      "future/endpoint",
+    );
+    expect((await endpoint.search()).results[0]?.future).toBe(true);
+    expect(urls[0]).toBe("https://api.fda.gov/future/endpoint.json");
+  });
+
+  it("supports caller-specified result models without losing path inference", async () => {
+    const { client } = clientWith([
+      envelope([{ custom: "value" }], 1),
+      envelope([{ active_ingredient: ["drug"] }], 1),
+      envelope([{ arbitrary: 2 }], 1),
+    ]);
+    const custom = await client.search<{ custom: string }>("future/endpoint");
+    const name: string = custom.results[0]?.custom ?? "";
+    expect(name).toBe("value");
+    const known = await client.search("drug/label");
+    const ingredients: string[] | undefined =
+      known.results[0]?.active_ingredient;
+    expect(ingredients).toEqual(["drug"]);
+    const unknown = await client.search("future/endpoint");
+    const arbitrary: unknown = unknown.results[0]?.arbitrary;
+    expect(arbitrary).toBe(2);
+  });
+
+  it("forwards the optional count limit", async () => {
+    const { client, urls } = clientWith([envelope([{ term: 2, count: 3 }])]);
+    const response = await client.count("drug/event", {
+      count: "patient.patientsex",
+      limit: 1,
+    });
+    expect(urls[0]).toContain("limit=1");
+    expect(response.results[0]?.term).toBe(2);
+  });
+
   it("searches any registered path via client.search", async () => {
     const { client, urls } = clientWith([envelope([{ udi: "x" }], 1)]);
     const res = await client.search("device/udi", { limit: 1 });

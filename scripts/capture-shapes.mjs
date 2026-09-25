@@ -15,13 +15,14 @@
 //
 // Usage:
 //   node scripts/capture-shapes.mjs             # rewrite tests/shapes/*.json
-//   node scripts/capture-shapes.mjs --check     # exit 1 if shapes drifted
+//   node scripts/capture-shapes.mjs --check     # 2 drift, 1 probe failure
 //
 // Environment:
 //   OPENFDA_API_KEY — optional; raised rate limits. 5 records per endpoint
 //   with 300ms spacing is well within either limit.
 //
-// Zero dependencies by design (AGENTS.md); uses global fetch (Node 18+).
+// No extra script dependencies; run with the repo's Node 24 toolchain
+// (the registry is imported directly from TypeScript).
 import { execFile } from "node:child_process";
 import { mkdir, readdir, readFile, writeFile } from "node:fs/promises";
 import { createRequire } from "node:module";
@@ -34,7 +35,7 @@ const execFileP = promisify(execFile);
 
 const BASE_URL = "https://api.fda.gov";
 const SHAPES_DIR = resolve(import.meta.dirname, "../tests/shapes");
-const PROBE_SPACING_MS = 300;
+const PROBE_SPACING_MS = Number(process.env.OPENFDA_PROBE_SPACING_MS ?? 300);
 const RECORDS_PER_ENDPOINT = 5;
 const API_KEY = process.env.OPENFDA_API_KEY || "";
 const CHECK_ONLY = process.argv.includes("--check");
@@ -91,9 +92,8 @@ function mergeShapes(a, b) {
 }
 
 async function fetchRecords(path) {
-  const sep = API_KEY ? "?" : "?";
-  const url = `${BASE_URL}/${path}.json${sep}limit=${RECORDS_PER_ENDPOINT}${
-    API_KEY ? `&api_key=${API_KEY}` : ""
+  const url = `${BASE_URL}/${path}.json?limit=${RECORDS_PER_ENDPOINT}${
+    API_KEY ? `&api_key=${encodeURIComponent(API_KEY)}` : ""
   }`;
   const res = await fetch(url, { headers: { Accept: "application/json" } });
   const text = await res.text();
@@ -106,16 +106,16 @@ async function fetchRecords(path) {
   return { res, json };
 }
 
-/** Captures the shape of one endpoint; undefined when it has no records. */
+/** Captures one endpoint, failing when a probe cannot establish its shape. */
 async function captureEndpoint(path) {
   await sleep(PROBE_SPACING_MS);
   const { res, json } = await fetchRecords(path);
+  if (!res.ok) {
+    throw new Error(`capture-shapes: ${path} returned HTTP ${res.status}`);
+  }
   const records = json?.results;
   if (!Array.isArray(records) || records.length === 0) {
-    console.warn(
-      `capture-shapes: ${path} returned no records (HTTP ${res.status}) — skipped`,
-    );
-    return undefined;
+    throw new Error(`capture-shapes: ${path} returned no records (HTTP ${res.status})`);
   }
   return shapeOfRecord(records);
 }
@@ -152,8 +152,12 @@ function flattenShape(shape, prefix = "") {
 // ── main ──────────────────────────────────────────────────────────────────
 const shapes = new Map();
 for (const path of ALL_PATHS) {
-  const shape = await captureEndpoint(path);
-  if (shape !== undefined) shapes.set(path, shape);
+  try {
+    shapes.set(path, await captureEndpoint(path));
+  } catch {
+    console.error(`capture-shapes: probe for ${path} failed or returned no records`);
+    process.exit(1);
+  }
 }
 
 if (!CHECK_ONLY) {
@@ -183,12 +187,6 @@ const lines = [];
 for (const path of ALL_PATHS) {
   const live = shapes.get(path);
   const snapshot = committed.get(path);
-  if (live === undefined && snapshot === undefined) continue;
-  if (live === undefined) {
-    drifted.push(path);
-    lines.push(`${path}: endpoint returned no records today (has snapshot)`);
-    continue;
-  }
   if (snapshot === undefined) {
     drifted.push(path);
     lines.push(`${path}: no committed snapshot (new endpoint?)`);
@@ -212,7 +210,7 @@ for (const path of ALL_PATHS) {
 if (drifted.length > 0) {
   console.error(`capture-shapes --check: DRIFT DETECTED in ${drifted.length} endpoint(s):\n`);
   console.error(lines.join("\n"));
-  process.exit(1);
+  process.exit(2);
 }
 console.log(
   `capture-shapes --check: no drift across ${shapes.size} captured endpoint(s)`,

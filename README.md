@@ -78,7 +78,9 @@ const labels = await client.drug.label.search({
 // Facet counts (unique values of a field)
 const reactions = await client.drug.event.count({
   count: "patient.reaction.reactionmeddrapt.exact",
+  limit: 10,
 });
+// A count term may be a string or a number, depending on the field.
 
 // Lazily iterate every matching record across pages (stops at the 25k cap)
 for await (const recall of client.food.enforcement.searchAll({
@@ -119,6 +121,7 @@ cls.results[0]?.device_name; // typed models land as FDA data stabilizes
 // Any endpoint — including brand-new ones FDA hasn't announced — via the
 // generic path methods (new endpoints work without a client release):
 const crl = await client.search("transparency/crl", { limit: 1 });
+const custom = await client.search<{ my_field: string }>("future/endpoint");
 const byUdi = await client.device["510k"].search({ limit: 1 }); // digit-leading keys use bracket access
 ```
 
@@ -196,12 +199,14 @@ Every endpoint object exposes `search(params)`, `count(params)`, and
 
 Request a free key at [open.fda.gov](https://open.fda.gov/apis/authentication/)
 and pass it via `new OpenFdaClient({ apiKey })`. The key is appended as the
-`api_key` query parameter and **redacted from every error** this client
-produces. On 429 responses, `OpenFdaApiError.retryAfterSeconds` carries the
+`api_key` query parameter and **redacted from client-generated error
+diagnostics**, including API response bodies and sanitized transport causes.
+On 429 responses, `OpenFdaApiError.retryAfterSeconds` carries the
 server's recommended back-off.
 
 The client can also retry 429s for you — opt in with
-`new OpenFdaClient({ retryOn429: true })` (or `{ retryOn429: { maxRetries: n } }`).
+`new OpenFdaClient({ retryOn429: true })` (or `{ retryOn429: { maxRetries: n } }`,
+where `n` is a nonnegative integer). Invalid retry counts throw `RangeError`.
 It honors `Retry-After` (capped at 60s) and otherwise backs off
 exponentially; see [ADR-0004](docs/decisions/0004-opt-in-429-retry.md).
 
@@ -254,7 +259,7 @@ See [AGENTS.md](AGENTS.md) for repository conventions and
 ```bash
 npm install     # does not run prepare (see .npmrc)
 npx husky       # set up git hooks
-pre-commit install
+pre-commit run --all-files  # optional full-repo validation
 npm test        # unit tests (no network)
 npm run test:live  # opt-in live smoke tests
 npm run drift:check # verify endpoint registry + shape snapshots

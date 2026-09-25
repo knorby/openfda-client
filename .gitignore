@@ -25,6 +25,7 @@ coverage/
 
 # --- Agent scratch ---
 .superpowers/
+docs/superpowers/
 
 # --- Misc ---
 *.log

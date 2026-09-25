@@ -322,11 +322,13 @@ export class OpenFdaClient {
   search<P extends EndpointPath | (string & {})>(
     path: P,
     params?: SearchParams,
-  ): Promise<OpenFdaResponse<ResultFor<P>>> {
-    return this.requester.get<OpenFdaResponse<ResultFor<P>>>(
-      `${path}.json`,
-      params,
-    );
+  ): Promise<OpenFdaResponse<ResultFor<P>>>;
+  search<T>(path: string, params?: SearchParams): Promise<OpenFdaResponse<T>>;
+  search(
+    path: string,
+    params?: SearchParams,
+  ): Promise<OpenFdaResponse<unknown>> {
+    return this.requester.get<OpenFdaResponse<unknown>>(`${path}.json`, params);
   }
 
   /**

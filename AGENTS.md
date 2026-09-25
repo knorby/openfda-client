@@ -79,16 +79,16 @@ system:
 nvm use                  # or: fnm use
 npm install              # installs deps (does NOT run prepare — see .npmrc)
 npx husky                # set up Husky hooks (blocked by ignore-scripts)
-pre-commit install       # wire pre-commit hooks into .git/hooks/
 pre-commit run --all-files  # validate against the entire repo
 ```
 
 `npm install` does **not** run the `prepare` script because `.npmrc` sets
 `ignore-scripts=true` (supply-chain security — blocks dependency postinstall
-scripts). Run `npx husky` separately to set up the Husky-managed hooks
-(pre-commit → lint-staged, commit-msg → commitlint). `pre-commit install`
-separately sets up the pre-commit-managed hooks (file hygiene + secret
-scanning). Both are needed for full coverage.
+scripts). Run `npx husky` separately to set up Git hooks. Its pre-commit
+hook runs lint-staged and then `pre-commit run` (file hygiene + secret
+scanning); its commit-msg hook runs commitlint. Install the pre-commit
+binary, but do not run `pre-commit install`: Husky's `core.hooksPath`
+means a hook installed under `.git/hooks/` would not execute.
 
 ### Adding and removing hooks
 
