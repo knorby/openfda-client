@@ -83,9 +83,13 @@ export function or(...clauses: string[]): string {
   return clauses.map(groupIfCompound).join(" OR ");
 }
 
-/** Negates a clause: `NOT <clause>`. */
+/**
+ * Negates a clause: `NOT <clause>`. Parenthesizes compound clauses so
+ * `not(or(a, b))` renders `NOT (a OR b)` — without grouping, Elasticsearch
+ * would parse `NOT a OR b` as `(NOT a) OR b`.
+ */
 export function not(clause: string): string {
-  return `NOT ${clause}`;
+  return `NOT ${groupIfCompound(clause)}`;
 }
 
 /**

@@ -3,6 +3,7 @@ import type { ResultFor } from "../src/client";
 import type { CosmeticEvent } from "../src/types/cosmetic";
 import type { DrugEvent, DrugLabel, DrugNdc } from "../src/types/drug";
 import type { FoodEvent } from "../src/types/food";
+import type { Substance, UniiRecord } from "../src/types/other";
 
 /**
  * Compile-time tests: these assign realistic fixtures to the model types
@@ -123,6 +124,48 @@ const cosmeticEvent: CosmeticEvent = {
 };
 expect(cosmeticEvent.products?.[0]?.role).toBe("SUSPECT");
 
+// A realistic other/substance (GSRS) record. Deep GSRS sections
+// (structure, moieties, …) are opaque `Record<string, unknown>` pass-throughs.
+const substance: Substance = {
+  unii: "E3986RS5NQ",
+  uuid: "1e5d0f0f-0f0f-4d3e-9d1f-0e5d0f0f0f0f",
+  version: "1",
+  substance_class: "chemical",
+  definition_type: "UNII",
+  definition_level: "base",
+  names: [
+    {
+      name: "ATORVASTATIN CALCIUM",
+      type: "cn",
+      preferred: true,
+      stdName: "atorvastatin calcium",
+      languages: ["EN"],
+      domains: ["name_type:cn"],
+      name_orgs: [{ name_org: "United States Pharmacopeia", uuid: "org-1" }],
+    },
+  ],
+  codes: [{ code: "E3986RS5NQ", code_system: "UNII", type: "PRIMARY" }],
+  references: [{ citation: "SPL submission", doc_type: "public-domain" }],
+  relationships: [
+    {
+      type: "active-moiety",
+      related_substance: { name: "ATORVASTATIN", unii: "K4MIA10C8L" },
+    },
+  ],
+  structure: { formula: "C66H68CaF2N4O10", stereochemistry: "undefined" },
+};
+expect(substance.names?.[0]?.name_orgs?.[0]?.name_org).toContain(
+  "Pharmacopeia",
+);
+expect(substance.codes?.[0]?.code_system).toBe("UNII");
+expect(substance.relationships?.[0]?.related_substance?.unii).toBe(
+  "K4MIA10C8L",
+);
+
+// A realistic other/unii crosswalk record.
+const unii: UniiRecord = { substance_name: "ATORVASTATIN", unii: "K4MIA10C8L" };
+expect(unii.substance_name).toBe("ATORVASTATIN");
+
 test("ResultFor resolves typed paths to their models", () => {
   type Assert<TActual, TExpected> = TActual extends TExpected
     ? TExpected extends TActual
@@ -134,7 +177,17 @@ test("ResultFor resolves typed paths to their models", () => {
   const c: Assert<ResultFor<"drug/ndc">, DrugNdc> = true;
   const d: Assert<ResultFor<"food/event">, FoodEvent> = true;
   const e: Assert<ResultFor<"cosmetic/event">, CosmeticEvent> = true;
-  expect([a, b, c, d, e]).toEqual([true, true, true, true, true]);
+  const f: Assert<ResultFor<"other/substance">, Substance> = true;
+  const g: Assert<ResultFor<"other/unii">, UniiRecord> = true;
+  expect([a, b, c, d, e, f, g]).toEqual([
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+  ]);
 });
 
 test("ResultFor falls back to a generic record for untyped paths", () => {

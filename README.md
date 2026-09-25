@@ -177,7 +177,9 @@ const client = new OpenFdaClient({ fetch: (url, init) => myFetchImpl(url, init) 
 | `client.device.*` (9 endpoints)   | 510(k)s, PMA, classification, events, recalls, registration & listing, UDI, COVID-19 serology | generic |
 | `client.tobacco.*` (4 endpoints)  | Problem reports + research datasets      | generic     |
 | `client.animalandveterinary.event`| Animal-drug adverse events               | generic     |
-| `client.other.*` (4 endpoints)    | Historical documents, NSDE, substance, UNII | generic  |
+| `client.other.nsde`, `.historicaldocument` | NSDE, historical documents | generic |
+| `client.other.substance`             | GSRS substance records                   | `Substance` |
+| `client.other.unii`                  | UNII substance-name crosswalk            | `UniiRecord` |
 | `client.research.covidmirnaandproteomics` | COVID-19 miRNA/proteomics        | generic     |
 | `client.transparency.crl`         | Complete Response Letters                | generic     |
 
@@ -198,12 +200,42 @@ and pass it via `new OpenFdaClient({ apiKey })`. The key is appended as the
 produces. On 429 responses, `OpenFdaApiError.retryAfterSeconds` carries the
 server's recommended back-off.
 
+The client can also retry 429s for you — opt in with
+`new OpenFdaClient({ retryOn429: true })` (or `{ retryOn429: { maxRetries: n } }`).
+It honors `Retry-After` (capped at 60s) and otherwise backs off
+exponentially; see [ADR-0004](docs/decisions/0004-opt-in-429-retry.md).
+
 ### Paging limit
 
 `skip` maxes out at 25,000 (with `limit` ≤ 1,000), so search pagination
 covers ~26,000 records per query. `searchAll()` stops there automatically
 and documents it; for bulk access use the official
 [download files](https://open.fda.gov/data/downloads/).
+
+## Known API quirks
+
+These `other/substance` (GSRS) search behaviors were mapped through live
+probing during development. They are openFDA-side behaviors — openFDA's own
+documentation does not call them out — and knowing them saves real
+debugging time:
+
+- **`names.name` searches can dead-end.** A value you can see in a
+  record's `names[].name` may still return `404 NOT_FOUND` when searched
+  as `names.name:<value>` (indexing/tokenization varies across records).
+  A 404 here does not prove the record doesn't exist.
+- **`other/unii` is the dependable crosswalk.** For substance-name ↔ UNII
+  resolution, query `client.other.unii` (`UniiRecord`:
+  `substance_name`/`unii`) instead of searching substance names.
+- **`.exact` fails on nested `name_orgs` fields.** Queries like
+  `names.name_orgs.name_org.exact:…` return `404 NOT_FOUND`. Drop the
+  `.exact` modifier on nested name-organization fields.
+- **Some `names.name` + `name_orgs` combinations return HTTP 500.**
+  Certain `names.name:… AND names.name_orgs.…` queries fail with a bare
+  server error rather than a structured error code. Narrow the name
+  query first, and test each clause on its own before combining.
+
+As everywhere in openFDA, a zero-match search surfaces as
+`404 NOT_FOUND` — see [Zero matches is a 404](#zero-matches-is-a-404).
 
 ## Keeping up with the API
 

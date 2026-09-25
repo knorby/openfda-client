@@ -23,6 +23,9 @@ coverage/
 # --- Husky internals ---
 .husky/_/
 
+# --- Agent scratch ---
+.superpowers/
+
 # --- Misc ---
 *.log
 *.bak

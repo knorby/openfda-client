@@ -22,7 +22,10 @@ surface: `search`/`count`/`limit`/`skip`/`sort`):
   25,000-record skip ceiling — bulk access belongs to the download files).
 - `client.{device,tobacco,animalandveterinary,other,research,transparency}` —
   generic namespaces (`Record<string, unknown>` results; `device["510k"]`
-  uses bracket access for the digit-leading key).
+  uses bracket access for the digit-leading key). Exception:
+  `other.substance`/`other.unii` are typed (models in
+  `src/types/other.ts`, authored from the drift snapshots; deep GSRS
+  sections are intentionally opaque).
 - `client.search("noun/endpoint")` / `client.count("noun/endpoint")` —
   generic escape hatch for **any** path, including endpoints FDA adds in the
   future; registered paths resolve typed models via `EndpointResultMap`.

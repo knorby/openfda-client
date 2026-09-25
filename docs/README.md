@@ -12,6 +12,7 @@ Living documentation for design, architecture, and decisions.
 - [ADR-0001: Generic endpoint core with priority-typed namespaces](decisions/0001-generic-endpoint-core.md)
 - [ADR-0002: Split build — tsup bundles, tsc declarations, import-path fix](decisions/0002-ts7-declaration-split.md)
 - [ADR-0003: openFDA API drift strategy](decisions/0003-api-drift-strategy.md)
+- [ADR-0004: Opt-in 429 retry honoring Retry-After](decisions/0004-opt-in-429-retry.md)
 
 ## ADR template
 

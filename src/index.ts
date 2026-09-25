@@ -79,6 +79,16 @@ export type {
   OpenFdaHarmonized,
   RecallEnforcementReport,
 } from "./types/openfda";
+export type {
+  Substance,
+  SubstanceCode,
+  SubstanceName,
+  SubstanceNameOrg,
+  SubstanceRef,
+  SubstanceReference,
+  SubstanceRelationship,
+  UniiRecord,
+} from "./types/other";
 export type { QueryRecord } from "./utils/serialize";
 // Query-parameter serializer, for advanced/callers building requests.
 export { buildQueryString, mergeParams } from "./utils/serialize";

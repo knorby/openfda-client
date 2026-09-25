@@ -90,7 +90,7 @@ describe("searchAll pagination", () => {
       { search: "x" },
       2,
     )) {
-      seen.push(rec.n);
+      seen.push((rec as { n?: number }).n as number);
     }
     expect(seen).toEqual([1, 2, 3]);
     expect(urls).toHaveLength(2);
@@ -158,5 +158,13 @@ describe("searchAll pagination", () => {
         }
       })(),
     ).rejects.toThrow(RangeError);
+  });
+
+  it("validates pageSize eagerly, before the generator is iterated", () => {
+    const { client } = clientWith([envelope([], 0)]);
+    // A lazy (generator-body) check would only throw on the first next().
+    expect(() => client.drug.label.searchAll({}, 0)).toThrow(RangeError);
+    expect(() => client.drug.label.searchAll({}, 2.5)).toThrow(RangeError);
+    expect(() => client.drug.label.searchAll({}, 100)).not.toThrow();
   });
 });

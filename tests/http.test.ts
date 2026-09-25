@@ -196,6 +196,104 @@ describe("timeout", () => {
   });
 });
 
+describe("429 retry", () => {
+  /** 429 response with a `Retry-After` header (seconds as string). */
+  function tooManyRequests(retryAfter?: string) {
+    return jsonResponse(
+      { error: { code: "TOO_MANY_REQUESTS", message: "rate limited" } },
+      {
+        status: 429,
+        headers: retryAfter === undefined ? {} : { "Retry-After": retryAfter },
+      },
+    );
+  }
+
+  /** Counting fetch mock: 429 for the first `limited` calls, 200 after. */
+  function limitedFetch(limited: number, retryAfter?: string) {
+    let call = 0;
+    const fn = vi.fn(() => {
+      call += 1;
+      return Promise.resolve(
+        call <= limited ? tooManyRequests(retryAfter) : jsonResponse({ ok: 1 }),
+      );
+    }) as unknown as typeof fetch;
+    return { fetch: fn, calls: () => call };
+  }
+
+  it("does not retry 429 by default", async () => {
+    const { fetch, calls } = limitedFetch(1, "0");
+    const requester = new OpenFdaRequester({ fetch });
+    await expect(requester.get("drug/label.json")).rejects.toThrow(
+      OpenFdaApiError,
+    );
+    expect(calls()).toBe(1);
+  });
+
+  it("retries a 429 when retryOn429 is enabled", async () => {
+    const { fetch, calls } = limitedFetch(1, "0");
+    const requester = new OpenFdaRequester({ fetch, retryOn429: true });
+    await expect(requester.get("drug/label.json")).resolves.toEqual({ ok: 1 });
+    expect(calls()).toBe(2);
+  });
+
+  it("retries at most maxRetries times, then throws the 429", async () => {
+    const { fetch, calls } = limitedFetch(10, "0");
+    const requester = new OpenFdaRequester({
+      fetch,
+      retryOn429: { maxRetries: 2 },
+    });
+    const err = (await requester
+      .get("drug/label.json")
+      .catch((e: unknown) => e)) as OpenFdaApiError;
+    expect(err).toBeInstanceOf(OpenFdaApiError);
+    expect(err.status).toBe(429);
+    expect(calls()).toBe(3); // initial attempt + 2 retries
+  });
+
+  it("releases the 429 response body before retrying", async () => {
+    // An unconsumed body pins the connection until GC — a leak under load.
+    const r429 = tooManyRequests("0");
+    let call = 0;
+    const fn = vi.fn(() => {
+      call += 1;
+      return Promise.resolve(call === 1 ? r429 : jsonResponse({ ok: 1 }));
+    }) as unknown as typeof fetch;
+    const requester = new OpenFdaRequester({ fetch: fn, retryOn429: true });
+    await expect(requester.get("drug/label.json")).resolves.toEqual({ ok: 1 });
+    expect(r429.bodyUsed).toBe(true);
+  });
+
+  it("uses an exponential fallback delay when Retry-After is absent", async () => {
+    vi.useFakeTimers();
+    try {
+      const { fetch, calls } = limitedFetch(1); // no Retry-After header
+      const requester = new OpenFdaRequester({ fetch, retryOn429: true });
+      const pending = requester.get("drug/label.json");
+      const done = await vi.advanceTimersByTimeAsync(1000).then(() => pending);
+      expect(done).toEqual({ ok: 1 });
+      expect(calls()).toBe(2);
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
+  it("caps an oversized Retry-After at 60 seconds", async () => {
+    vi.useFakeTimers();
+    try {
+      const { fetch, calls } = limitedFetch(1, "3600");
+      const requester = new OpenFdaRequester({ fetch, retryOn429: true });
+      const pending = requester.get("drug/label.json");
+      const done = await vi
+        .advanceTimersByTimeAsync(60_000)
+        .then(() => pending);
+      expect(done).toEqual({ ok: 1 });
+      expect(calls()).toBe(2);
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+});
+
 describe("fetch resolution", () => {
   it("throws OpenFdaError when no fetch is available", () => {
     const original = globalThis.fetch;

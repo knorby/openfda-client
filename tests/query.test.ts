@@ -73,6 +73,14 @@ describe("and / or / not", () => {
     );
   });
 
+  it("parenthesizes compound clauses under NOT", () => {
+    // Without grouping, `NOT a:1 OR a:2` parses as `(NOT a:1) OR a:2`.
+    expect(not(or(field("a", "1"), field("a", "2")))).toBe("NOT (a:1 OR a:2)");
+    expect(not(and(field("a", "1"), field("b", "2")))).toBe(
+      "NOT (a:1 AND b:2)",
+    );
+  });
+
   it("nests groups with parentheses", () => {
     expect(and(or(field("a", "1"), field("a", "2")), field("b", "3"))).toBe(
       "(a:1 OR a:2) AND b:3",
