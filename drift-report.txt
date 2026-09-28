@@ -1,0 +1,89 @@
+## Endpoint discovery
+```text
+discover-endpoints: 30 candidate endpoint(s) from download.json (last_updated 2026-09-26)
+  ALIVE  animalandveterinary/event
+  ALIVE  cosmetic/event
+  ALIVE  device/510k
+  ALIVE  device/classification
+  ALIVE  device/covid19serology
+  ALIVE  device/enforcement
+  ALIVE  device/event
+  ALIVE  device/pma
+  ALIVE  device/recall
+  ALIVE  device/registrationlisting
+  ALIVE  device/udi
+  ALIVE  drug/drugsfda
+  ALIVE  drug/enforcement
+  ALIVE  drug/event
+  ALIVE  drug/label
+  ALIVE  drug/ndc
+  ALIVE  drug/orangebook
+  ALIVE  drug/shortages
+  ALIVE  food/enforcement
+  ALIVE  food/event
+  ALIVE  other/historicaldocument
+  ALIVE  other/nsde
+  ALIVE  other/substance
+  ALIVE  other/unii
+  ALIVE  research/covidmirnaandproteomics
+  ALIVE  tobacco/problem
+  ALIVE  tobacco/researchdigitalads
+  ALIVE  tobacco/researchpreventionads
+  ALIVE  tobacco/researchsmokefree
+  ALIVE  transparency/crl
+
+registry diff vs 30 live endpoint(s):
+OK    animalandveterinary/event
+OK    cosmetic/event
+OK    device/510k
+OK    device/classification
+OK    device/covid19serology
+OK    device/enforcement
+OK    device/event
+OK    device/pma
+OK    device/recall
+OK    device/registrationlisting
+OK    device/udi
+OK    drug/drugsfda
+OK    drug/enforcement
+OK    drug/event
+OK    drug/label
+OK    drug/ndc
+OK    drug/orangebook
+OK    drug/shortages
+OK    food/enforcement
+OK    food/event
+OK    other/historicaldocument
+OK    other/nsde
+OK    other/substance
+OK    other/unii
+OK    research/covidmirnaandproteomics
+OK    tobacco/problem
+OK    tobacco/researchdigitalads
+OK    tobacco/researchpreventionads
+OK    tobacco/researchsmokefree
+OK    transparency/crl
+```
+## Shape drift (tests/shapes/)
+```text
+capture-shapes --check: DRIFT DETECTED in 4 endpoint(s):
+
+drug/drugsfda: fields ADDED (types may be stale):
+  openfda.nui[]: string
+  openfda.pharm_class_cs[]: string
+  openfda.pharm_class_epc[]: string
+drug/drugsfda: fields REMOVED (possible breaking change):
+  submissions[].application_docs[].title: string
+drug/ndc: fields ADDED (types may be stale):
+  openfda.pharm_class_cs[]: string
+drug/ndc: fields REMOVED (possible breaking change):
+  brand_name_suffix: string
+drug/orangebook: fields ADDED (types may be stale):
+  approved_prior_to_1982: boolean
+drug/orangebook: fields REMOVED (possible breaking change):
+  products[].therapeutic_equivalence_codes[]: string
+drug/shortages: fields REMOVED (possible breaking change):
+  openfda.pharm_class_cs[]: string
+  openfda.pharm_class_pe[]: string
+  shortage_reason: string
+```

@@ -13,7 +13,10 @@
     "spl_id": ["string"],
     "spl_set_id": ["string"],
     "substance_name": ["string"],
-    "unii": ["string"]
+    "unii": ["string"],
+    "nui": ["string"],
+    "pharm_class_cs": ["string"],
+    "pharm_class_epc": ["string"]
   },
   "products": [
     {
@@ -47,7 +50,6 @@
         {
           "date": "string",
           "id": "string",
-          "title": "string",
           "type": "string",
           "url": "string"
         }

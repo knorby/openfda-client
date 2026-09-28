@@ -8,7 +8,6 @@
   "application_number": "string",
   "brand_name": "string",
   "brand_name_base": "string",
-  "brand_name_suffix": "string",
   "dosage_form": "string",
   "finished": "boolean",
   "generic_name": "string",
@@ -24,6 +23,7 @@
     "upc": ["string"],
     "rxcui": ["string"],
     "nui": ["string"],
+    "pharm_class_cs": ["string"],
     "pharm_class_epc": ["string"],
     "pharm_class_moa": ["string"]
   },

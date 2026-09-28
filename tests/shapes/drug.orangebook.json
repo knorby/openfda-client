@@ -1,5 +1,5 @@
 {
-  "approval_date": "string",
+  "approved_prior_to_1982": "boolean",
   "product_number": "string",
   "products": [
     {
@@ -18,8 +18,8 @@
       "marketing_status": "string",
       "reference_listed_drug": "boolean",
       "reference_standard": "boolean",
-      "route": "string",
-      "therapeutic_equivalence_codes": ["string"]
+      "route": "string"
     }
-  ]
+  ],
+  "approval_date": "string"
 }

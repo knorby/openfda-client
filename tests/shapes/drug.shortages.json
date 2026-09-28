@@ -1,10 +1,18 @@
 {
-  "availability": "string",
   "company_name": "string",
   "contact_info": "string",
+  "discontinued_date": "string",
   "dosage_form": "string",
   "generic_name": "string",
   "initial_posting_date": "string",
+  "package_ndc": "string",
+  "presentation": "string",
+  "related_info": "string",
+  "status": "string",
+  "therapeutic_category": ["string"],
+  "update_date": "string",
+  "update_type": "string",
+  "availability": "string",
   "openfda": {
     "application_number": ["string"],
     "brand_name": ["string"],
@@ -20,17 +28,6 @@
     "substance_name": ["string"],
     "unii": ["string"],
     "nui": ["string"],
-    "pharm_class_cs": ["string"],
-    "pharm_class_epc": ["string"],
-    "pharm_class_pe": ["string"]
-  },
-  "package_ndc": "string",
-  "presentation": "string",
-  "related_info": "string",
-  "status": "string",
-  "therapeutic_category": ["string"],
-  "update_date": "string",
-  "update_type": "string",
-  "shortage_reason": "string",
-  "discontinued_date": "string"
+    "pharm_class_epc": ["string"]
+  }
 }

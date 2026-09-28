@@ -1,13 +1,13 @@
 {
   "application_number_or_citation": "string",
-  "billing_unit": "string",
   "dosage_form": "string",
+  "inactivation_date": "string",
   "marketing_category": "string",
-  "marketing_end_date": "string",
   "marketing_start_date": "string",
   "package_ndc": "string",
   "package_ndc11": "string",
   "product_type": "string",
   "proprietary_name": "string",
-  "inactivation_date": "string"
+  "marketing_end_date": "string",
+  "billing_unit": "string"
 }
