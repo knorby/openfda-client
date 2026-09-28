@@ -21,7 +21,7 @@ cd <repo-name>
 nvm use              # or: fnm use
 npm install          # installs deps (prepare blocked by .npmrc ignore-scripts)
 npx husky            # sets up Husky hooks (run after npm install)
-pre-commit install   # sets up pre-commit hooks for file hygiene + secrets
+pre-commit run --all-files # optional initial full-repo validation
 ```
 
 ## Development commands
@@ -40,9 +40,9 @@ pre-commit install   # sets up pre-commit hooks for file hygiene + secrets
 
 ## Git hooks
 
-This repo uses **two** git hook managers that complement each other:
+Husky owns the Git hooks and invokes both checks on each commit:
 
-1. **pre-commit** — file hygiene (whitespace, EOL, YAML/JSON validation),
+1. **pre-commit** (invoked by `.husky/pre-commit` after lint-staged) — file hygiene (whitespace, EOL, YAML/JSON validation),
    secret scanning (gitleaks + TruffleHog), and shellcheck. Enforces
    `no-commit-to-branch` to protect `main`/`master`.
 
@@ -52,11 +52,12 @@ This repo uses **two** git hook managers that complement each other:
    - `commit-msg`: runs `commitlint` to enforce
      [conventional commits](https://www.conventionalcommits.org/)
 
-You need both for full coverage:
+Install Husky and the `pre-commit` binary for full coverage:
 ```bash
-pre-commit install
 npx husky   # prepare script is blocked by .npmrc ignore-scripts=true
 ```
+Do not run `pre-commit install`: Husky's `core.hooksPath` redirects Git
+away from `.git/hooks`, so a second hook installation there will not run.
 
 ## Commit messages
 
@@ -123,12 +124,20 @@ trusted publisher):
 
 ```bash
 npm login
+npx changeset version                     # apply pending changesets before publishing
+npm install --package-lock-only            # keep lockfile version in sync
+git add package.json package-lock.json CHANGELOG.md .changeset
+git commit -m "chore: version packages"   # publish/tag this versioned commit
 npm pkg delete publishConfig.provenance   # provenance needs CI + public repo
 npm run release                           # build + changeset publish
-npm pkg set publishConfig.provenance=true
+npm pkg set publishConfig.provenance=true --json
+git diff --exit-code -- package.json       # ensure the temporary edit is gone
 git push origin main --follow-tags
 gh release create vX.Y.Z --notes-from-tag
 ```
+
+Verify that restoring provenance returns `package.json` to its committed
+state before pushing. Substitute the actual version for `vX.Y.Z`.
 
 > Publishing also requires the repository to be public (provenance + OIDC
 > trusted publishing). While this repo is private, keep the release workflow
@@ -137,8 +146,14 @@ gh release create vX.Y.Z --notes-from-tag
 **Manual release (if needed):**
 ```bash
 npx changeset version    # bumps package.json + generates CHANGELOG.md
+npm install --package-lock-only
+git add package.json package-lock.json CHANGELOG.md .changeset
+git commit -m "chore: version packages"
+npm pkg delete publishConfig.provenance
 npm run release          # builds + publishes to npm
-git add . && git commit -m "chore: release" && git push
+npm pkg set publishConfig.provenance=true --json
+git diff --exit-code -- package.json
+git push origin main --follow-tags
 ```
 
 ### Before publishing, always verify

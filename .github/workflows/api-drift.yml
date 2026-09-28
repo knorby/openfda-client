@@ -40,27 +40,43 @@ jobs:
       - run: npm ci
 
       - name: Discover endpoints
+        id: endpoints
         env:
           OPENFDA_API_KEY: ${{ secrets.OPENFDA_API_KEY }}
         run: |
-          {
-            echo "## Endpoint discovery"
-            echo '```'
-            node scripts/discover-endpoints.mjs
-            echo '```'
-          } > drift-report.txt || true
+          if node scripts/discover-endpoints.mjs --fail-on-diff > endpoint-report.txt 2>&1; then
+            status=0
+          else
+            status=$?
+          fi
+          cat endpoint-report.txt
+          if [ "$status" -eq 2 ]; then
+            echo 'drift=true' >> "$GITHUB_OUTPUT"
+          elif [ "$status" -eq 0 ]; then
+            echo 'drift=false' >> "$GITHUB_OUTPUT"
+          else
+            exit 1
+          fi
 
-      - name: Check shape drift (report, then regenerate snapshots)
+      - name: Check shape drift
+        id: shapes
         env:
           OPENFDA_API_KEY: ${{ secrets.OPENFDA_API_KEY }}
         run: |
-          {
-            echo "## Shape drift (tests/shapes/)"
-            echo '```'
-            node scripts/capture-shapes.mjs --check || true
-            echo '```'
-          } >> drift-report.txt
-          node scripts/capture-shapes.mjs
+          if node scripts/capture-shapes.mjs --check > shape-report.txt 2>&1; then
+            status=0
+          else
+            status=$?
+          fi
+          cat shape-report.txt
+          if [ "$status" -eq 2 ]; then
+            echo 'drift=true' >> "$GITHUB_OUTPUT"
+            node scripts/capture-shapes.mjs
+          elif [ "$status" -eq 0 ]; then
+            echo 'drift=false' >> "$GITHUB_OUTPUT"
+          else
+            exit 1
+          fi
 
       - name: Live tripwire tests
         id: live
@@ -69,9 +85,22 @@ jobs:
           OPENFDA_API_KEY: ${{ secrets.OPENFDA_API_KEY }}
         run: npm run test:live
 
+      - name: Assemble drift report
+        if: success() && (steps.endpoints.outputs.drift == 'true' || steps.shapes.outputs.drift == 'true')
+        run: |
+          {
+            echo '## Endpoint discovery'
+            echo '```text'
+            cat endpoint-report.txt
+            echo '```'
+            echo '## Shape drift (tests/shapes/)'
+            echo '```text'
+            cat shape-report.txt
+            echo '```'
+          } > drift-report.txt
+
       - name: Open drift PR
-        # No-ops by itself when there is nothing to commit (no drift).
-        if: success()
+        if: success() && (steps.endpoints.outputs.drift == 'true' || steps.shapes.outputs.drift == 'true')
         uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8.1.1
         with:
           title: "chore: openFDA API drift detected"

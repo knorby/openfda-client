@@ -34,8 +34,10 @@ Three complementary mechanisms, ordered by leverage:
    machine-readable `download.json` manifest enumerates candidate
    noun/endpoint pairs; each candidate is probed live to confirm it is a
    real search endpoint. The script diffs live reality against the
-   committed `ENDPOINTS` registry (`NEW`/`GONE`/`OK`) and exits non-zero
-   with `--fail-on-diff`.
+   committed `ENDPOINTS` registry (`NEW`/`GONE`/`OK`). With
+   `--fail-on-diff`, status 2 signals confirmed drift; an unavailable,
+   rate-limited, or inconclusive probe exits 1 instead of marking a
+   registered endpoint gone.
 
 3. **Sample-based shape snapshots (`scripts/capture-shapes.mjs`).** Since
    no schema source exists, drift detection samples a few records per
@@ -48,9 +50,10 @@ Three complementary mechanisms, ordered by leverage:
 
 These run together in the scheduled **api-drift workflow**
 (`.github/workflows/api-drift.yml`, weekly cron + manual dispatch): discovery
-report → shape diff → snapshot regeneration → live test tripwire → a review
-PR via SHA-pinned `peter-evans/create-pull-request` (no-ops when nothing
-changed) or an issue when the live tripwire fails.
+report → shape diff → snapshot regeneration on drift → live test tripwire → a
+review PR via SHA-pinned `peter-evans/create-pull-request` only on confirmed
+drift, or an issue when the live tripwire fails. Probe failures stop the
+workflow; no diagnostic report is committed on routine runs.
 
 ## Consequences
 

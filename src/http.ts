@@ -8,9 +8,31 @@ import {
 } from "./errors";
 import { buildQueryString, mergeParams } from "./utils/serialize";
 
+/** Retries performed for a 429 when `retryOn429` is enabled. */
+const DEFAULT_MAX_429_RETRIES = 3;
+/** Upper bound (seconds) on a wait derived from the `Retry-After` header. */
+const MAX_RETRY_AFTER_WAIT_SECONDS = 60;
+/** First fallback backoff step when no `Retry-After` header is present. */
+const INITIAL_BACKOFF_MS = 1000;
+
 /** Replaces the `api_key` query value with `[redacted]` in a URL. */
 function redactApiKey(url: string): string {
-  return url.replace(/([?&]api_key=)[^&]*/, "$1[redacted]");
+  return url.replace(/([?&]api_key=)[^&]*/g, "$1[redacted]");
+}
+
+/** Remove both plain and URL-encoded forms of a configured key from diagnostics. */
+function sanitizeDiagnostic(text: string, apiKey?: string): string {
+  const redacted = redactApiKey(text);
+  if (!apiKey) return redacted;
+  const encoded = encodeURIComponent(apiKey);
+  return redacted
+    .replaceAll(apiKey, "[redacted]")
+    .replaceAll(encoded, "[redacted]");
+}
+
+/** Resolves after `ms` milliseconds (0 resolves on the next tick). */
+function sleep(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 /**
@@ -63,6 +85,23 @@ export interface OpenFdaClientConfig {
    *   it (Node, Bun, Deno, React Native).
    */
   userAgent?: string;
+  /**
+   * Opt-in automatic retry for `429` (rate-limit) responses.
+   *
+   * - `true` retries up to 3 times.
+   * - `{ maxRetries: n }` overrides the retry count with a nonnegative
+   *   integer (`0` disables); invalid values throw a `RangeError`.
+   *
+   * The wait between attempts honors the response's `Retry-After` header
+   * (seconds or HTTP-date), capped at 60 seconds; without the header it
+   * falls back to exponential backoff (1s, 2s, 4s, …), also capped at
+   * 60 seconds. `timeoutMs` applies per attempt, not to the total.
+   * Off by default: callers with their own rate-limit strategy can rely
+   * on {@link OpenFdaApiError.retryAfterSeconds} instead.
+   *
+   * @default false
+   */
+  retryOn429?: boolean | { maxRetries?: number };
 }
 
 /** Package version, injected at build time by tsup's `define` config. */
@@ -84,6 +123,8 @@ export class OpenFdaRequester {
   private readonly fetchFn: FetchLike;
   private readonly headers: Record<string, string>;
   private readonly userAgent: string;
+  /** Max 429 retries; `0` disables retrying. */
+  private readonly max429Retries: number;
 
   constructor(config: OpenFdaClientConfig = {}) {
     this.baseUrl = (config.baseUrl ?? DEFAULT_BASE_URL).replace(/\/+$/, "");
@@ -91,6 +132,18 @@ export class OpenFdaRequester {
     this.timeoutMs = config.timeoutMs ?? DEFAULT_TIMEOUT_MS;
     this.userAgent = config.userAgent ?? CLIENT_USER_AGENT;
     this.headers = { ...config.headers };
+    const retry429 = config.retryOn429;
+    this.max429Retries =
+      retry429 === true
+        ? DEFAULT_MAX_429_RETRIES
+        : retry429 && typeof retry429 === "object"
+          ? (retry429.maxRetries ?? DEFAULT_MAX_429_RETRIES)
+          : 0;
+    if (!Number.isSafeInteger(this.max429Retries) || this.max429Retries < 0) {
+      throw new RangeError(
+        "retryOn429.maxRetries must be a nonnegative integer",
+      );
+    }
 
     // Typed as always-present, but absent in runtimes without global `fetch`.
     const globalFetch = globalThis.fetch as FetchLike | undefined;
@@ -125,24 +178,65 @@ export class OpenFdaRequester {
   async get<TR>(path: string, params?: object): Promise<TR> {
     const url = this.buildUrl(path, params);
 
-    const controller = new AbortController();
-    const timer = setTimeout(() => controller.abort(), this.timeoutMs);
-    try {
-      const response = await this.fetchFn(url, {
-        method: "GET",
-        headers: this.buildHeaders(),
-        signal: controller.signal,
-      });
-      return (await this.parseBody(response, url)) as TR;
-    } catch (err) {
-      if (controller.signal.aborted && !(err instanceof OpenFdaError)) {
-        throw new OpenFdaTimeoutError(this.timeoutMs);
+    for (let attempt = 0; ; attempt += 1) {
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), this.timeoutMs);
+      try {
+        const response = await this.fetchFn(url, {
+          method: "GET",
+          headers: this.buildHeaders(),
+          signal: controller.signal,
+        });
+        // Rate-limited: sleep (Retry-After or exponential backoff), retry.
+        if (response.status === 429 && attempt < this.max429Retries) {
+          // Release the unread body so the connection is not pinned until GC.
+          await response.body?.cancel();
+          const waitMs = this.retryDelayMs(
+            attempt,
+            response.headers.get("Retry-After"),
+          );
+          await sleep(waitMs);
+          continue;
+        }
+        return (await this.parseBody(response, url)) as TR;
+      } catch (err) {
+        if (controller.signal.aborted && !(err instanceof OpenFdaError)) {
+          throw new OpenFdaTimeoutError(this.timeoutMs);
+        }
+        if (err instanceof OpenFdaError) throw err;
+        // A fetch implementation may put the request URL (and key) in its
+        // message, stack, or nested cause. Copy only sanitized diagnostics.
+        const cause = new Error(
+          sanitizeDiagnostic(
+            err instanceof Error ? err.message : String(err),
+            this.apiKey,
+          ),
+        );
+        if (err instanceof Error) {
+          cause.name = sanitizeDiagnostic(err.name, this.apiKey);
+        }
+        throw new OpenFdaNetworkError(
+          sanitizeDiagnostic(url, this.apiKey),
+          cause,
+        );
+      } finally {
+        clearTimeout(timer);
       }
-      if (err instanceof OpenFdaError) throw err;
-      throw new OpenFdaNetworkError(redactApiKey(url), err);
-    } finally {
-      clearTimeout(timer);
     }
+  }
+
+  /**
+   * Milliseconds to wait before 429 retry `attempt` (0-based): the parsed
+   * `Retry-After` value when present (capped), else exponential backoff
+   * (1s, 2s, 4s, …) capped at the same ceiling.
+   */
+  private retryDelayMs(attempt: number, retryAfter: string | null): number {
+    const capMs = MAX_RETRY_AFTER_WAIT_SECONDS * 1000;
+    const seconds = this.parseRetryAfter(retryAfter);
+    if (seconds !== undefined) {
+      return Math.min(seconds * 1000, capMs);
+    }
+    return Math.min(INITIAL_BACKOFF_MS * 2 ** attempt, capMs);
   }
 
   private buildUrl(path: string, params?: object): string {
@@ -173,18 +267,21 @@ export class OpenFdaRequester {
         // openFDA signals "zero matching records" as 404 NOT_FOUND rather
         // than an empty result set. Redacted so logged errors cannot leak
         // the caller's openFDA key.
-        throw new OpenFdaNotFoundError(redactApiKey(url));
+        throw new OpenFdaNotFoundError(sanitizeDiagnostic(url, this.apiKey));
       }
       const retryAfterSeconds = this.parseRetryAfter(
         response.headers.get("Retry-After"),
       );
       throw new OpenFdaApiError({
         status: response.status,
-        body: bodyText,
-        code,
+        body: sanitizeDiagnostic(bodyText, this.apiKey),
+        code:
+          code === undefined
+            ? undefined
+            : sanitizeDiagnostic(code, this.apiKey),
         retryAfterSeconds,
         // Redacted so logged errors cannot leak the caller's openFDA key.
-        url: redactApiKey(url),
+        url: sanitizeDiagnostic(url, this.apiKey),
       });
     }
     if (bodyText === "") return null;
@@ -193,7 +290,10 @@ export class OpenFdaRequester {
     } catch {
       const contentType = response.headers.get("content-type") ?? "unknown";
       throw new OpenFdaError(
-        `openFDA API returned a non-JSON body (${contentType}): ${bodyText.slice(0, 120)}`,
+        sanitizeDiagnostic(
+          `openFDA API returned a non-JSON body (${contentType}): ${bodyText.slice(0, 120)}`,
+          this.apiKey,
+        ),
       );
     }
   }
@@ -214,8 +314,7 @@ export class OpenFdaRequester {
  * Extracts `{"error":{"code":…}}` from an error body, if the body is JSON in
  * that shape. Returns an empty `code` otherwise (HTML error pages, proxies,
  * etc.).
- */
-function parseErrorBody(bodyText: string): { code: string | undefined } {
+ */ function parseErrorBody(bodyText: string): { code: string | undefined } {
   try {
     const parsed: unknown = JSON.parse(bodyText);
     if (

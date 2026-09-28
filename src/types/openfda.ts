@@ -43,8 +43,8 @@ export interface OpenFdaHarmonized {
   pharm_class_pe?: string[];
   /** Pharm class — Chemical/Structure (CS) terms. */
   pharm_class_cs?: string[];
-  /** Whether the labeler is the original packager (`"1"` = true). */
-  is_original_packager?: string[];
+  /** Whether the labeler is the original packager. */
+  is_original_packager?: boolean[];
   /** NDA/ANDA number(s) with any supplemental-number suffixes. */
   application_number_with_suffix?: string[];
   /**

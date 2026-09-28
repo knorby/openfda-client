@@ -37,7 +37,7 @@ export interface OpenFdaResponse<T> {
 /** A row of a `count` query result. */
 export interface CountResult {
   /** The unique field value. */
-  term: string;
+  term: string | number;
   /** How many matching records carry this value. */
   count: number;
 }
@@ -63,6 +63,8 @@ export interface SearchParams {
 export interface CountParams {
   /** Optional search expression narrowing the counted population. */
   search?: string;
+  /** Maximum number of unique values to return (server max 1000). */
+  limit?: number;
   /**
    * Field to count unique values of, suffixed with `.exact` for exact
    * matching (openFDA convention, e.g.

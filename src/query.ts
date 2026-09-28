@@ -5,9 +5,8 @@
  * openFDA endpoints are backed by Elasticsearch, whose query-string syntax
  * uses `field:value` pairs joined by `AND`/`OR`/`NOT`, bracketed ranges
  * `[a TO b]`, and the `_exists_:field` predicate. Writing these strings by
- * hand is error-prone (field separators are colons, so any value containing
- * whitespace must be quoted and embedded quotes escaped) — these helpers
- * handle that for you. The returned strings are plain `search`-syntax
+ * hand is error-prone (literal terms need reserved characters escaped and
+ * phrases quoted) — these helpers handle that for you. The returned strings are plain `search`-syntax
  * strings with literal spaces; {@link OpenFdaClient} URL-encodes them on
  * the way out.
  *
@@ -25,12 +24,14 @@
  */
 
 /**
- * Renders a value as a search term: quoted when it contains whitespace or a
- * field separator (`:`), with embedded quotes escaped.
+ * Renders a literal search term. Reserved query-string characters are escaped;
+ * phrases, values containing colons, and Boolean keywords are quoted.
  */
 export function term(value: string): string {
-  const escaped = value.replace(/"/g, '\\"');
-  return /[\s:]/.test(value) ? `"${escaped}"` : escaped;
+  const escaped = value.replace(/[+\-=!(){}[\]^"~*?:\\/&|<>]/g, "\\$&");
+  return value === "" || /[\s:]|^(AND|OR|NOT)$/i.test(value)
+    ? `"${escaped}"`
+    : escaped;
 }
 
 /** Builds a `field:value` pair. */
@@ -83,9 +84,13 @@ export function or(...clauses: string[]): string {
   return clauses.map(groupIfCompound).join(" OR ");
 }
 
-/** Negates a clause: `NOT <clause>`. */
+/**
+ * Negates a clause: `NOT <clause>`. Parenthesizes compound clauses so
+ * `not(or(a, b))` renders `NOT (a OR b)` — without grouping, Elasticsearch
+ * would parse `NOT a OR b` as `(NOT a) OR b`.
+ */
 export function not(clause: string): string {
-  return `NOT ${clause}`;
+  return `NOT ${groupIfCompound(clause)}`;
 }
 
 /**

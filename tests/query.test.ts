@@ -11,15 +11,30 @@ describe("term", () => {
   });
 
   it("quotes values containing colons", () => {
-    expect(term("a:b")).toBe('"a:b"');
+    expect(term("a:b")).toBe('"a\\:b"');
   });
 
   it("escapes embedded quotes", () => {
     expect(term('the "best" drug')).toBe('"the \\"best\\" drug"');
   });
 
-  it("leaves already-plain values untouched", () => {
-    expect(term("0069-1530")).toBe("0069-1530");
+  it("escapes reserved punctuation in literal values", () => {
+    expect(term("0069-1530")).toBe("0069\\-1530");
+    expect(field("openfda.brand_name", "a(b")).toBe("openfda.brand_name:a\\(b");
+    expect(exact("openfda.brand_name", "A*B")).toBe(
+      "openfda.brand_name.exact:A\\*B",
+    );
+  });
+
+  it("escapes backslashes before quoting a phrase", () => {
+    expect(term("a \\")).toBe('"a \\\\"');
+  });
+
+  it("quotes operator keywords and empty values", () => {
+    expect(term("AND")).toBe('"AND"');
+    expect(term("or")).toBe('"or"');
+    expect(term("NOT")).toBe('"NOT"');
+    expect(term("")).toBe('""');
   });
 });
 
@@ -70,6 +85,14 @@ describe("and / or / not", () => {
   it("negates a clause with NOT", () => {
     expect(not(field("openfda.brand_name", "lipitor"))).toBe(
       "NOT openfda.brand_name:lipitor",
+    );
+  });
+
+  it("parenthesizes compound clauses under NOT", () => {
+    // Without grouping, `NOT a:1 OR a:2` parses as `(NOT a:1) OR a:2`.
+    expect(not(or(field("a", "1"), field("a", "2")))).toBe("NOT (a:1 OR a:2)");
+    expect(not(and(field("a", "1"), field("b", "2")))).toBe(
+      "NOT (a:1 AND b:2)",
     );
   });
 

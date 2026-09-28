@@ -29,7 +29,8 @@ export {
   OpenFdaNotFoundError,
   OpenFdaTimeoutError,
 } from "./errors";
-export type { FetchLike, OpenFdaClientConfig, OpenFdaRequester } from "./http";
+export type { FetchLike, OpenFdaClientConfig } from "./http";
+export { OpenFdaRequester } from "./http";
 // Search-syntax helpers.
 export {
   and,
@@ -79,6 +80,16 @@ export type {
   OpenFdaHarmonized,
   RecallEnforcementReport,
 } from "./types/openfda";
+export type {
+  Substance,
+  SubstanceCode,
+  SubstanceName,
+  SubstanceNameOrg,
+  SubstanceRef,
+  SubstanceReference,
+  SubstanceRelationship,
+  UniiRecord,
+} from "./types/other";
 export type { QueryRecord } from "./utils/serialize";
 // Query-parameter serializer, for advanced/callers building requests.
 export { buildQueryString, mergeParams } from "./utils/serialize";

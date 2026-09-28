@@ -19,6 +19,7 @@ import type {
   DrugsFda,
 } from "./types/drug";
 import type { FoodEnforcement, FoodEvent } from "./types/food";
+import type { Substance, UniiRecord } from "./types/other";
 
 export type {
   FetchLike,
@@ -67,9 +68,23 @@ export function createEndpoint<T>(
       requester.get<OpenFdaResponse<T>>(endpointPath, params),
     count: (params: CountParams) =>
       requester.get<OpenFdaResponse<CountResult>>(endpointPath, params),
-    searchAll: (params = {}, pageSize) =>
-      paginate<T>(requester, endpointPath, params, pageSize),
+    searchAll: (params = {}, pageSize) => {
+      validatePageSize(pageSize);
+      return paginate(requester, endpointPath, params, pageSize);
+    },
   };
+}
+
+/**
+ * Validates the `searchAll` `pageSize` argument so an invalid value throws
+ * at call time, not lazily on the generator's first `next()`.
+ */
+function validatePageSize(pageSize: number | undefined): void {
+  if (pageSize !== undefined && (!Number.isInteger(pageSize) || pageSize < 1)) {
+    throw new RangeError(
+      `pageSize must be a positive integer, got ${pageSize}`,
+    );
+  }
 }
 
 /**
@@ -85,11 +100,6 @@ async function* paginate<T>(
   params: Omit<SearchParams, "skip" | "limit">,
   pageSize?: number,
 ): AsyncGenerator<T> {
-  if (pageSize !== undefined && (!Number.isInteger(pageSize) || pageSize < 1)) {
-    throw new RangeError(
-      `pageSize must be a positive integer, got ${pageSize}`,
-    );
-  }
   const limit = Math.min(pageSize ?? DEFAULT_PAGE_SIZE, MAX_LIMIT);
   let skip = 0;
   for (;;) {
@@ -130,6 +140,8 @@ export interface EndpointResultMap {
   "drug/shortages": DrugShortage;
   "food/enforcement": FoodEnforcement;
   "food/event": FoodEvent;
+  "other/substance": Substance;
+  "other/unii": UniiRecord;
 }
 
 /**
@@ -213,8 +225,8 @@ export class OpenFdaClient {
   readonly other: {
     historicaldocument: EndpointClient<Record<string, unknown>>;
     nsde: EndpointClient<Record<string, unknown>>;
-    substance: EndpointClient<Record<string, unknown>>;
-    unii: EndpointClient<Record<string, unknown>>;
+    substance: EndpointClient<Substance>;
+    unii: EndpointClient<UniiRecord>;
   };
   /** `client.research` — COVID-19 miRNA/proteomics research data. */
   readonly research: {
@@ -310,11 +322,13 @@ export class OpenFdaClient {
   search<P extends EndpointPath | (string & {})>(
     path: P,
     params?: SearchParams,
-  ): Promise<OpenFdaResponse<ResultFor<P>>> {
-    return this.requester.get<OpenFdaResponse<ResultFor<P>>>(
-      `${path}.json`,
-      params,
-    );
+  ): Promise<OpenFdaResponse<ResultFor<P>>>;
+  search<T>(path: string, params?: SearchParams): Promise<OpenFdaResponse<T>>;
+  search(
+    path: string,
+    params?: SearchParams,
+  ): Promise<OpenFdaResponse<unknown>> {
+    return this.requester.get<OpenFdaResponse<unknown>>(`${path}.json`, params);
   }
 
   /**
