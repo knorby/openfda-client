@@ -31,7 +31,7 @@
   `EndpointResultMap` for `client.search("other/…")`. Types are authored
   from the API shape snapshots; field presence varies by record, so every
   field is optional.
-  
+
   Also documents the `other/substance` search quirks (`names.name`
   dead-ends, `.exact` on nested `name_orgs` fields, `names.name` AND
   `name_orgs` 500s, `other/unii` as the crosswalk) in a new README
