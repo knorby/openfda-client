@@ -1,6 +1,6 @@
 {
   "name": "@knorby/openfda-client",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "A fully-typed, zero-dependency TypeScript client for the openFDA API. Universal: Node, React Native, browsers, Bun, and Deno.",
   "license": "Apache-2.0",
   "type": "module",
