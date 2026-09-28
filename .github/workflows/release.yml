@@ -2,21 +2,6 @@ name: Release
 
 # Publishes to npm via OIDC trusted publishing — no NPM_TOKEN secret needed.
 #
-# STAGED WORKFLOW: this file lives in `workflow-templates/` and is INERT in
-# the template repo. GitHub only picks up workflows from
-# `.github/workflows/`. To activate it in a repo created from this template:
-#
-#   git mv workflow-templates/release.yml .github/workflows/release.yml
-#
-# Prerequisites (one-time setup, see README "Releasing"):
-#   - A GitHub environment named `release` (repo Settings → Environments).
-#   - A trusted publisher configured on npmjs.com for this package pointing
-#     at this repository, workflow path `.github/workflows/release.yml`, and
-#     environment `release` (all must match exactly).
-#   - npm >= 11.5.1 for OIDC. The publish job pins Node 24 (which ships a
-#     compatible npm) and upgrades to npm@latest anyway, because Node 22's
-#     bundled npm 10.x cannot perform OIDC token exchange.
-#
 # Runs on every push to main. The `select-mode` job inspects repo state and
 # picks what happens next:
 #   - changesets found          -> `version` job runs `changeset version`
@@ -28,6 +13,12 @@ name: Release
 #     `publish` job publishes via OIDC, pushes git tags, and creates a
 #     GitHub Release.
 #   - nothing to do             -> all downstream jobs are skipped (no-op).
+#
+# Required repository setup: a GitHub environment named `release`, and an
+# npm trusted publisher for this package pointing at this repository,
+# workflow path `.github/workflows/release.yml`, and environment `release`
+# (all must match exactly). The publish job pins Node 24 and upgrades to
+# npm@latest because Node 22's bundled npm 10.x cannot do OIDC exchange.
 #
 # Permissions follow the changesets trusted-publishing guidance: top-level
 # permissions are reset to none and each job receives only what it needs —

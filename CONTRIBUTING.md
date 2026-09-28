@@ -100,61 +100,13 @@ Select the bump type (patch/minor/major) and write a short summary. A new
 
 ### Releasing
 
-**Automated release (default):** the release workflow ships **staged** at
-`workflow-templates/release.yml` — GitHub only runs workflows from
-`.github/workflows/`, so it is inactive in this template. Activate it with:
-
-```bash
-git mv workflow-templates/release.yml .github/workflows/release.yml
-```
-
-Once active, it runs on every push to `main`. With no pending changesets it
-is a no-op; with changesets, it opens a "Version Packages" PR (`changeset
-version` bumps `package.json`, updates `CHANGELOG.md`, and removes the
-consumed changesets). Merging that PR publishes to npm, tags the release,
-and creates a GitHub Release.
-
-Prerequisites (one-time, repository owner): a `release` environment in repo
-Settings → Environments; workflow permissions set to Read and write with PR
-creation allowed; a trusted publisher configured on npmjs.com (repository,
-workflow filename `release.yml`, environment `release` — must match exactly);
-and npm 2FA (`npm profile enable-2fa auth-and-writes`). The very first
-publish is manual (npm needs the package to exist before it can link a
-trusted publisher):
-
-```bash
-npm login
-npx changeset version                     # apply pending changesets before publishing
-npm install --package-lock-only            # keep lockfile version in sync
-git add package.json package-lock.json CHANGELOG.md .changeset
-git commit -m "chore: version packages"   # publish/tag this versioned commit
-npm pkg delete publishConfig.provenance   # provenance needs CI + public repo
-npm run release                           # build + changeset publish
-npm pkg set publishConfig.provenance=true --json
-git diff --exit-code -- package.json       # ensure the temporary edit is gone
-git push origin main --follow-tags
-gh release create vX.Y.Z --notes-from-tag
-```
-
-Verify that restoring provenance returns `package.json` to its committed
-state before pushing. Substitute the actual version for `vX.Y.Z`.
-
-> Publishing also requires the repository to be public (provenance + OIDC
-> trusted publishing). While this repo is private, keep the release workflow
-> staged and publish manually only when ready to go public.
-
-**Manual release (if needed):**
-```bash
-npx changeset version    # bumps package.json + generates CHANGELOG.md
-npm install --package-lock-only
-git add package.json package-lock.json CHANGELOG.md .changeset
-git commit -m "chore: version packages"
-npm pkg delete publishConfig.provenance
-npm run release          # builds + publishes to npm
-npm pkg set publishConfig.provenance=true --json
-git diff --exit-code -- package.json
-git push origin main --follow-tags
-```
+Releases are automated. The [release workflow](.github/workflows/release.yml)
+runs on every push to `main`: with pending changesets it opens a
+"Version Packages" PR (`changeset version` bumps `package.json`, updates
+`CHANGELOG.md`, and removes the consumed changesets); merging that PR
+publishes to npm via OIDC trusted publishing (no npm tokens), tags the
+release, and creates a GitHub Release. With no pending changesets the
+workflow is a no-op.
 
 ### Before publishing, always verify
 
@@ -167,15 +119,13 @@ npm pack --dry-run    # verify only dist/, README.md, CHANGELOG.md, LICENSE
 
 - **Trusted publishing (OIDC)** — the release workflow publishes with an OIDC
   token minted by GitHub Actions; there are no npm tokens (no `NPM_TOKEN`
-  secret). Compatible with 2FA (`npm profile enable-2fa auth-and-writes`)
-  because no token needs an OTP.
+  secret).
 - **Provenance** — this repo publishes with `--provenance` (cryptographic
   attestation linking the published package to the commit + workflow).
-  Requires a public repo and publishing from CI; the manual first publish
-  temporarily removes `publishConfig.provenance`.
-- **Scoped names** — use `@yourscope/package` names to prevent dependency
-  confusion attacks; `publishConfig.access: "public"` is set because scoped
-  packages default to restricted visibility.
+  Requires a public repo and publishing from CI.
+- **Scoped names** — `@knorby/*` scoped names prevent dependency confusion
+  attacks; `publishConfig.access: "public"` is set because scoped packages
+  default to restricted visibility.
 - **No secrets in the package** — the `files` field in `package.json`
   whitelists only `dist`, `README.md`, `CHANGELOG.md`, and `LICENSE`.
 

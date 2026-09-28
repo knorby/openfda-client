@@ -176,14 +176,11 @@ PRs and release them all at once.
   `.changeset/*.md` file alongside the code change.
 - **To release**: `npx changeset version` (bumps `package.json` +
   `CHANGELOG.md`), then `npm run release` (builds + publishes).
-- **GitHub Actions release** (`workflow-templates/release.yml`): ships
-  **staged** — GitHub only runs workflows from `.github/workflows/`, so this
-  workflow is inert until moved
-  (`git mv workflow-templates/release.yml .github/workflows/release.yml`).
-  Once active, it runs on every push to `main` and publishes via OIDC
-  trusted publishing (no npm token secrets involved); with no pending
-  changesets it is a no-op. One-time setup (trusted publisher + GitHub
-  environment) follows the checklist in `CONTRIBUTING.md`.
+- **GitHub Actions release** (`.github/workflows/release.yml`): runs on every
+  push to `main` and publishes via OIDC trusted publishing (no npm token
+  secrets involved); with no pending changesets it is a no-op. One-time
+  setup (npm trusted publisher + a `release` GitHub environment) is an owner
+  task performed directly on npm and GitHub.
 - **Always verify before publishing**: `npm run build && npm pack --dry-run`
   to confirm only `dist/`, `README.md`, `CHANGELOG.md`, and `LICENSE` are
   included.
@@ -192,9 +189,7 @@ PRs and release them all at once.
 
 - **Trusted publishing (OIDC)** — the release workflow publishes with an OIDC
   token minted by GitHub Actions; there are no npm tokens involved (no
-  `NPM_TOKEN` or `NODE_AUTH_TOKEN` secrets). The npm-side trusted-publisher
-  config must match the workflow exactly. This is compatible with 2FA
-  (`npm profile enable-2fa auth-and-writes`) because no token needs an OTP.
+  `NPM_TOKEN` or `NODE_AUTH_TOKEN` secrets).
 - **Provenance** — `publishConfig.provenance: true` in `package.json` enables
   npm provenance attestation (cryptographic link to commit + workflow).
   Provenance requires publishing from CI on a **public** repository.
