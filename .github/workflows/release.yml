@@ -1,19 +1,9 @@
 name: Release
 
 # Publishes to npm via OIDC trusted publishing — no NPM_TOKEN secret.
-# One-time prerequisites:
-#   - GitHub environment named `release` (repo Settings → Environments).
-#   - Trusted publisher on npmjs.com for @knorby/openfda-client pointing at
-#     this repo, workflow path `.github/workflows/release.yml`, and
-#     environment `release` (must match exactly).
-#   - "Allow GitHub Actions to create and approve pull requests" enabled under
-#     Settings → Actions → General → Workflow permissions.
-#   - npm >= 11.5.1 for OIDC: the publish job pins Node 24 and upgrades npm
-#     because Node 22's bundled npm 10.x cannot do the token exchange.
-#
-# select-mode picks the mode: pending changesets -> version job opens a
-# "Version Packages" PR (merge it to publish); unpublished version -> pack +
-# publish via OIDC, git tags, GitHub Release; otherwise no-op.
+# Prereqs: `release` environment, matching npm trusted publisher, and Actions
+# allowed to create pull requests.
+# Pending changesets open a Version Packages PR; an unpublished version publishes.
 
 on:
   push:
