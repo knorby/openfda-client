@@ -87,6 +87,20 @@ describe("OpenFdaRequester.get", () => {
     expect(seenHeaders?.get("User-Agent")).toContain("@knorby/openfda-client/");
   });
 
+  it("prefers a User-Agent supplied via headers over the configured userAgent", async () => {
+    let seenHeaders: Headers | undefined;
+    const fn = vi.fn((_url: string | URL | Request, init?: RequestInit) => {
+      seenHeaders = new Headers(init?.headers);
+      return Promise.resolve(jsonResponse({}));
+    }) as unknown as typeof fetch;
+    await new OpenFdaRequester({
+      fetch: fn,
+      userAgent: "default/1",
+      headers: { "user-agent": "header/2" },
+    }).get("drug/label.json");
+    expect(seenHeaders?.get("User-Agent")).toBe("header/2");
+  });
+
   it("honors a custom User-Agent and extra headers", async () => {
     let seenHeaders: Headers | undefined;
     const fn = vi.fn((_url: string | URL | Request, init?: RequestInit) => {
@@ -166,6 +180,48 @@ describe("error mapping", () => {
     await expect(requester.get("drug/label.json")).rejects.toThrow(
       OpenFdaError,
     );
+  });
+
+  it("reports an unknown content type when a non-JSON body has none", async () => {
+    const body = {
+      ok: true,
+      status: 200,
+      headers: new Headers(),
+      text: () => Promise.resolve("<html>hi</html>"),
+    } as unknown as Response;
+    const fetchFn = vi.fn(() =>
+      Promise.resolve(body),
+    ) as unknown as typeof fetch;
+    const requester = new OpenFdaRequester({ fetch: fetchFn });
+    await expect(requester.get("drug/label.json")).rejects.toThrow("(unknown)");
+  });
+
+  it("ignores an unparsable Retry-After header", async () => {
+    const { fetch } = recordingFetch(() =>
+      jsonResponse(
+        {},
+        { status: 429, headers: { "Retry-After": "not-a-date" } },
+      ),
+    );
+    const requester = new OpenFdaRequester({ fetch });
+    const err = (await requester
+      .get("drug/event.json")
+      .catch((e: unknown) => e)) as OpenFdaApiError;
+    expect(err).toBeInstanceOf(OpenFdaApiError);
+    expect(err.retryAfterSeconds).toBeUndefined();
+  });
+
+  it("wraps non-Error fetch rejections with sanitized diagnostics", async () => {
+    const fn = vi.fn(() =>
+      Promise.reject("request failed for SECRET"),
+    ) as unknown as typeof fetch;
+    const requester = new OpenFdaRequester({ fetch: fn, apiKey: "SECRET" });
+    const err = (await requester
+      .get("drug/label.json")
+      .catch((e: unknown) => e)) as OpenFdaNetworkError;
+    expect(err).toBeInstanceOf(OpenFdaNetworkError);
+    expect(err.cause).toBeInstanceOf(Error);
+    expect((err.cause as Error).message).toBe("request failed for [redacted]");
   });
 
   it("maps fetch failures to OpenFdaNetworkError with redaction", async () => {
@@ -313,6 +369,13 @@ describe("429 retry", () => {
     }
   });
 
+  it("uses the default retry count when maxRetries is omitted", async () => {
+    const { fetch, calls } = limitedFetch(3, "0");
+    const requester = new OpenFdaRequester({ fetch, retryOn429: {} });
+    await expect(requester.get("drug/label.json")).resolves.toEqual({ ok: 1 });
+    expect(calls()).toBe(4); // initial attempt + 3 default retries
+  });
+
   it("backs off 1s, then 2s, then 4s", async () => {
     vi.useFakeTimers();
     try {
@@ -405,6 +468,26 @@ describe("fetch resolution", () => {
       expect(() => new OpenFdaRequester()).toThrow(OpenFdaError);
     } finally {
       globalThis.fetch = original;
+    }
+  });
+
+  it("uses the build-time PKG_VERSION in the default User-Agent", async () => {
+    vi.resetModules();
+    vi.stubGlobal("PKG_VERSION", "9.9.9");
+    try {
+      const { OpenFdaRequester: Requester } = await import("../src/http");
+      let seenHeaders: Headers | undefined;
+      const fn = vi.fn((_url: string | URL | Request, init?: RequestInit) => {
+        seenHeaders = new Headers(init?.headers);
+        return Promise.resolve(jsonResponse({}));
+      }) as unknown as typeof fetch;
+      await new Requester({ fetch: fn }).get("drug/label.json");
+      expect(seenHeaders?.get("User-Agent")).toBe(
+        "@knorby/openfda-client/9.9.9",
+      );
+    } finally {
+      vi.unstubAllGlobals();
+      vi.resetModules();
     }
   });
 });

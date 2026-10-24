@@ -152,6 +152,36 @@ describe("searchAll pagination", () => {
     expect(urls).toHaveLength(2);
   });
 
+  it("uses the default page size when pageSize is omitted", async () => {
+    const { client, urls } = clientWith([envelope([{ n: 1 }])]);
+    const seen: unknown[] = [];
+    for await (const rec of client.drug.label.searchAll()) {
+      seen.push(rec);
+    }
+    expect(seen).toEqual([{ n: 1 }]);
+    expect(urls[0]).toContain("limit=100");
+  });
+
+  it("treats a response without results as an empty final page", async () => {
+    const { client, urls } = clientWith([{ meta: {} }]);
+    const seen: unknown[] = [];
+    for await (const rec of client.drug.label.searchAll({}, 10)) {
+      seen.push(rec);
+    }
+    expect(seen).toEqual([]);
+    expect(urls).toHaveLength(1);
+  });
+
+  it("stops when a full page reaches meta.results.total", async () => {
+    const { client, urls } = clientWith([envelope([{ a: 1 }, { a: 2 }], 2)]);
+    const seen: unknown[] = [];
+    for await (const rec of client.drug.label.searchAll({}, 2)) {
+      seen.push(rec);
+    }
+    expect(seen).toHaveLength(2);
+    expect(urls).toHaveLength(1);
+  });
+
   it("clamps pageSize above the API limit of 1000", async () => {
     const { client, urls } = clientWith([envelope([], 0)]);
     const yielded: unknown[] = [];

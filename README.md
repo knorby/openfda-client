@@ -1,5 +1,12 @@
 # @knorby/openfda-client
 
+[![Tests](https://img.shields.io/github/actions/workflow/status/knorby/openfda-client/tests.yml?branch=main&label=tests&logo=github-actions&logoColor=white)](https://github.com/knorby/openfda-client/actions/workflows/tests.yml)
+[![Coverage](https://img.shields.io/codecov/c/github/knorby/openfda-client/main?logo=codecov&logoColor=white)](https://codecov.io/gh/knorby/openfda-client)
+[![npm version](https://img.shields.io/npm/v/@knorby/openfda-client?logo=npm&logoColor=white)](https://www.npmjs.com/package/@knorby/openfda-client)
+[![GitHub](https://img.shields.io/badge/GitHub-knorby%2Fopenfda-client-181717?logo=github&logoColor=white)](https://github.com/knorby/openfda-client)
+[![License](https://img.shields.io/github/license/knorby/openfda-client)](https://github.com/knorby/openfda-client/blob/main/LICENSE)
+[![TypeScript](https://img.shields.io/badge/TypeScript-strict-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+
 A fully-typed, zero-dependency TypeScript client for the
 [openFDA API](https://open.fda.gov/apis/) — search FDA public data on drugs,
 devices, foods, cosmetics, tobacco, and more. Universal: works in Node,
