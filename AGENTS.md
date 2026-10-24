@@ -122,7 +122,7 @@ means a hook installed under `.git/hooks/` would not execute.
 | `npm run typecheck` | Type-check `src/` + `tests/` with `tsc` (uses `tsconfig.test.json`, no emit) |
 | `npm test` | Run tests once (Vitest) |
 | `npm run test:watch` | Run tests in watch mode |
-| `npm run test:coverage` | Run tests with coverage reporting |
+| `npm run test:coverage` | Run tests with coverage reporting (enforces 100% thresholds; writes `coverage/lcov.info`) |
 | `npm run test:live` | Opt-in live smoke tests against the real openFDA API (`OPENFDA_LIVE_TESTS=1`) |
 | `npm run drift:check` | Verify endpoint registry + shape snapshots against the live API |
 | `npm run drift:capture` | Regenerate shape snapshots in `tests/shapes/` |
@@ -142,7 +142,10 @@ means a hook installed under `.git/hooks/` would not execute.
     so run `npm run check` before committing if hooks are skipped)
   - `npm run typecheck` (tsc, src + tests)
   - `npm run build` (tsup)
-  - `npm test` (Vitest)
+  - `npm run test:coverage` (Vitest — enforces 100% statements, branches,
+    functions, and lines)
+  - Codecov upload of `coverage/lcov.info` via
+    `codecov/codecov-action`; requires the `CODECOV_TOKEN` repository secret
   - `npm audit --audit-level=moderate` (vulnerability scan)
 - The **pre-commit suite** (file hygiene + secret scanning) also runs in CI
   via `.github/workflows/pre-commit.yml` on every push to `main` and PRs
@@ -258,7 +261,7 @@ These rules are mandatory. Follow them strictly.
 
 - Run all quality gates:
   ```bash
-  npm run lint && npm run typecheck && npm test && npm run build
+  npm run lint && npm run typecheck && npm run test:coverage && npm run build
   ```
 - Verify that `npm pack --dry-run` includes only `dist/`, `README.md`,
   `CHANGELOG.md`, and `LICENSE` (no source, config, or secret files).
