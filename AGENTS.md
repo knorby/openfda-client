@@ -182,8 +182,15 @@ PRs and release them all at once.
 - **GitHub Actions release** (`.github/workflows/release.yml`): runs on every
   push to `main` and publishes via OIDC trusted publishing (no npm token
   secrets involved); with no pending changesets it is a no-op. One-time
-  setup (npm trusted publisher + a `release` GitHub environment) is an owner
-  task performed directly on npm and GitHub.
+  setup is an owner task performed directly on npm and GitHub:
+  - an npm trusted publisher for the package, pointing at this repository,
+    workflow path `.github/workflows/release.yml`, and environment `release`
+    (all three must match exactly);
+  - a `release` GitHub environment;
+  - "Allow GitHub Actions to create and approve pull requests" enabled under
+    Settings → Actions → General → Workflow permissions. Without it the
+    `version` job fails with "GitHub Actions is not permitted to create or
+    approve pull requests" and no Version Packages PR is opened.
 - **Always verify before publishing**: `npm run build && npm pack --dry-run`
   to confirm only `dist/`, `README.md`, `CHANGELOG.md`, and `LICENSE` are
   included.

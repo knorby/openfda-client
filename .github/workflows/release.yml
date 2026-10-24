@@ -14,15 +14,26 @@ name: Release
 #     GitHub Release.
 #   - nothing to do             -> all downstream jobs are skipped (no-op).
 #
-# Required repository setup: a GitHub environment named `release`, and an
-# npm trusted publisher for this package pointing at this repository,
-# workflow path `.github/workflows/release.yml`, and environment `release`
-# (all must match exactly). The publish job pins Node 24 and upgrades to
-# npm@latest because Node 22's bundled npm 10.x cannot do OIDC exchange.
+# Required repository setup:
+#   - A GitHub environment named `release`.
+#   - An npm trusted publisher for this package pointing at this repository,
+#     workflow path `.github/workflows/release.yml`, and environment `release`
+#     (all must match exactly).
+#   - "Allow GitHub Actions to create and approve pull requests" enabled under
+#     Settings -> Actions -> General -> Workflow permissions. Without it the
+#     `version` job fails with "GitHub Actions is not permitted to create or
+#     approve pull requests" and no Version Packages PR is opened.
+#
+# The publish job pins Node 24 and upgrades to npm@latest because Node 22's
+# bundled npm 10.x cannot do the OIDC token exchange (npm >= 11.5.1 is
+# required).
 #
 # Permissions follow the changesets trusted-publishing guidance: top-level
 # permissions are reset to none and each job receives only what it needs —
 # `id-token: write` exists solely on the publish job.
+#
+# Actions are pinned to commit SHAs (with the release they came from in a
+# comment) so a retagged upstream action cannot silently change behaviour.
 
 on:
   push:
@@ -47,16 +58,16 @@ jobs:
       mode: ${{ steps.select-mode.outputs.mode }}
       publish-plan-artifact-id: ${{ steps.select-mode.outputs.publish-plan-artifact-id }}
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false # recommended: do not persist git credentials on disk
-      - uses: actions/setup-node@v7
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
-          node-version: 24
+          node-version-file: ".nvmrc"
       - run: npm ci
       - name: Select Changesets mode
         id: select-mode
-        uses: changesets/action/select-mode@v2
+        uses: changesets/action/select-mode@ae32849d5ba541f9ae29e40e22a623bc13562f51 # v2.1.2
 
   version:
     name: Version Packages PR
@@ -68,17 +79,17 @@ jobs:
       contents: write # to commit version changes (changesets/action/version)
       pull-requests: write # to create/update the Version Packages PR
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
-      - uses: actions/setup-node@v7
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
-          node-version: 24
+          node-version-file: ".nvmrc"
           cache: npm
       - run: npm ci
       - name: Create or update the Version Packages pull request
         id: version
-        uses: changesets/action/version@v2
+        uses: changesets/action/version@ae32849d5ba541f9ae29e40e22a623bc13562f51 # v2.1.2
 
   pack:
     name: Build and pack packages
@@ -91,18 +102,18 @@ jobs:
     outputs:
       pack-dir-artifact-id: ${{ steps.pack.outputs.pack-dir-artifact-id }}
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
-      - uses: actions/setup-node@v7
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
-          node-version: 24
+          node-version-file: ".nvmrc"
           cache: npm
       - run: npm ci
       - run: npm run build
       - name: Pack packages for publishing
         id: pack
-        uses: changesets/action/pack@v2
+        uses: changesets/action/pack@ae32849d5ba541f9ae29e40e22a623bc13562f51 # v2.1.2
         with:
           publish-plan-artifact-id: ${{ needs.select-mode.outputs.publish-plan-artifact-id }}
 
@@ -114,20 +125,20 @@ jobs:
     timeout-minutes: 15
     permissions:
       contents: write # to check out repo and create GitHub Releases (changesets/action/publish)
-      id-token: write # for OIDC trusted publishing
+      id-token: write # OIDC trusted publishing + provenance
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
-      - uses: actions/setup-node@v7
+      # Node 24's bundled npm may still not satisfy npm >= 11.5.1 for OIDC.
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: 24
           cache: npm
-      # Node 24's bundled npm still may not satisfy npm >= 11.5.1 for OIDC.
       - name: Upgrade npm for OIDC trusted publishing
         run: npm install -g npm@latest
       - run: npm ci
       - name: Publish packed packages
-        uses: changesets/action/publish@v2
+        uses: changesets/action/publish@ae32849d5ba541f9ae29e40e22a623bc13562f51 # v2.1.2
         with:
           pack-dir-artifact-id: ${{ needs.pack.outputs.pack-dir-artifact-id }}
