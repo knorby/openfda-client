@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.1.1
+
+### Patch Changes
+
+- 38ad593: Add Codecov coverage reporting to CI, raise test coverage to 100% with a
+  coverage threshold, and add README status badges. Also includes dependency
+  security updates from `npm audit fix`.
+
 ## 0.1.0
 
 ### Minor Changes
