@@ -1,45 +1,23 @@
 name: Release
 
-# Publishes to npm via OIDC trusted publishing — no NPM_TOKEN secret needed.
-#
-# Runs on every push to main. The `select-mode` job inspects repo state and
-# picks what happens next:
-#   - changesets found          -> `version` job runs `changeset version`
-#     (bumps package.json, updates CHANGELOG.md, deletes the consumed
-#     changesets) and opens or updates a "Version Packages" pull request.
-#     Merging that PR triggers this workflow again, landing in publish mode.
-#   - new version not yet on
-#     npm (no changesets left) -> `pack` job builds and packs the packages;
-#     `publish` job publishes via OIDC, pushes git tags, and creates a
-#     GitHub Release.
-#   - nothing to do             -> all downstream jobs are skipped (no-op).
-#
-# Required repository setup:
-#   - A GitHub environment named `release`.
-#   - An npm trusted publisher for this package pointing at this repository,
-#     workflow path `.github/workflows/release.yml`, and environment `release`
-#     (all must match exactly).
+# Publishes to npm via OIDC trusted publishing — no NPM_TOKEN secret.
+# One-time prerequisites:
+#   - GitHub environment named `release` (repo Settings → Environments).
+#   - Trusted publisher on npmjs.com for @knorby/openfda-client pointing at
+#     this repo, workflow path `.github/workflows/release.yml`, and
+#     environment `release` (must match exactly).
 #   - "Allow GitHub Actions to create and approve pull requests" enabled under
-#     Settings -> Actions -> General -> Workflow permissions. Without it the
-#     `version` job fails with "GitHub Actions is not permitted to create or
-#     approve pull requests" and no Version Packages PR is opened.
+#     Settings → Actions → General → Workflow permissions.
+#   - npm >= 11.5.1 for OIDC: the publish job pins Node 24 and upgrades npm
+#     because Node 22's bundled npm 10.x cannot do the token exchange.
 #
-# The publish job pins Node 24 and upgrades to npm@latest because Node 22's
-# bundled npm 10.x cannot do the OIDC token exchange (npm >= 11.5.1 is
-# required).
-#
-# Permissions follow the changesets trusted-publishing guidance: top-level
-# permissions are reset to none and each job receives only what it needs —
-# `id-token: write` exists solely on the publish job.
-#
-# Actions are pinned to commit SHAs (with the release they came from in a
-# comment) so a retagged upstream action cannot silently change behaviour.
+# select-mode picks the mode: pending changesets -> version job opens a
+# "Version Packages" PR (merge it to publish); unpublished version -> pack +
+# publish via OIDC, git tags, GitHub Release; otherwise no-op.
 
 on:
   push:
     branches: [main]
-  # Manual trigger: lets you re-run select-mode (e.g. to retry a publish
-  # after a transient failure) without pushing an empty commit.
   workflow_dispatch:
 
 concurrency:
@@ -53,14 +31,14 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     permissions:
-      contents: read # to check out repo (actions/checkout)
+      contents: read
     outputs:
       mode: ${{ steps.select-mode.outputs.mode }}
       publish-plan-artifact-id: ${{ steps.select-mode.outputs.publish-plan-artifact-id }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          persist-credentials: false # recommended: do not persist git credentials on disk
+          persist-credentials: false
       - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version-file: ".nvmrc"
@@ -76,8 +54,8 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     permissions:
-      contents: write # to commit version changes (changesets/action/version)
-      pull-requests: write # to create/update the Version Packages PR
+      contents: write
+      pull-requests: write
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -98,7 +76,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     permissions:
-      contents: read # to check out repo (actions/checkout)
+      contents: read
     outputs:
       pack-dir-artifact-id: ${{ steps.pack.outputs.pack-dir-artifact-id }}
     steps:
@@ -121,22 +99,20 @@ jobs:
     name: Publish to npm
     needs: pack
     runs-on: ubuntu-latest
-    environment: release
     timeout-minutes: 15
+    environment: release
     permissions:
-      contents: write # to check out repo and create GitHub Releases (changesets/action/publish)
+      contents: write
       id-token: write # OIDC trusted publishing + provenance
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
-      # Node 24's bundled npm may still not satisfy npm >= 11.5.1 for OIDC.
       - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: 24
           cache: npm
-      - name: Upgrade npm for OIDC trusted publishing
-        run: npm install -g npm@latest
+      - run: npm install -g npm@latest
       - run: npm ci
       - name: Publish packed packages
         uses: changesets/action/publish@ae32849d5ba541f9ae29e40e22a623bc13562f51 # v2.1.2
