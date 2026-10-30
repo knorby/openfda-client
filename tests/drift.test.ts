@@ -48,6 +48,13 @@ describe("drift CLI exit status", () => {
     }
   });
 
+  it("treats a registered endpoint 404 as reviewable shape drift", () => {
+    const result = runDrift("capture-shapes", "registered-404");
+    expect(result.status, result.stderr).toBe(2);
+    expect(result.stderr).toContain("animalandveterinary/event");
+    expect(result.stderr).toContain("HTTP 404");
+  });
+
   it("treats an unavailable manifest or an ambiguous registered 404 as inconclusive", () => {
     for (const scenario of ["manifest-unavailable", "registered-404"]) {
       const result = runDrift("discover-endpoints", scenario);
