@@ -34,13 +34,14 @@ export const ENDPOINTS = {
   ],
   food: ["enforcement", "event"],
   other: ["historicaldocument", "nsde", "substance", "unii"],
-  research: ["covidmirnaandproteomics"],
-  tobacco: [
-    "problem",
-    "researchdigitalads",
-    "researchpreventionads",
-    "researchsmokefree",
+  research: [
+    "covidmirnaandproteomics",
+    "tobaccodigitalads",
+    "tobaccoharmmenthol",
+    "tobaccopreventionads",
+    "tobaccosmokefree",
   ],
+  tobacco: ["problem"],
   transparency: ["crl"],
 } as const;
 

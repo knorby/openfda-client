@@ -25,6 +25,31 @@ describe("namespaced search", () => {
     expect(urls[0]).toBe("https://api.fda.gov/food/event.json");
   });
 
+  it("routes tobacco research datasets through the research namespace", async () => {
+    const { client, urls } = clientWith([
+      envelope([], 0),
+      envelope([], 0),
+      envelope([], 0),
+      envelope([], 0),
+    ]);
+    const endpoints = [
+      "tobaccodigitalads",
+      "tobaccoharmmenthol",
+      "tobaccopreventionads",
+      "tobaccosmokefree",
+    ] as const;
+
+    for (const endpoint of endpoints) {
+      await client.research[endpoint].search();
+    }
+
+    expect(urls).toEqual(
+      endpoints.map(
+        (endpoint) => `https://api.fda.gov/research/${endpoint}.json`,
+      ),
+    );
+  });
+
   it("count sends the count param and returns term/count results", async () => {
     const { client, urls } = clientWith([
       envelope(

@@ -185,12 +185,12 @@ const client = new OpenFdaClient({ fetch: (url, init) => myFetchImpl(url, init) 
 | `client.food.enforcement`         | Food recall enforcement reports          | `FoodEnforcement` |
 | `client.cosmetic.event`           | Cosmetic adverse events                  | `CosmeticEvent` |
 | `client.device.*` (9 endpoints)   | 510(k)s, PMA, classification, events, recalls, registration & listing, UDI, COVID-19 serology | generic |
-| `client.tobacco.*` (4 endpoints)  | Problem reports + research datasets      | generic     |
+| `client.tobacco.problem`        | Tobacco product problem reports          | generic     |
 | `client.animalandveterinary.event`| Animal-drug adverse events               | generic     |
 | `client.other.nsde`, `.historicaldocument` | NSDE, historical documents | generic |
 | `client.other.substance`             | GSRS substance records                   | `Substance` |
 | `client.other.unii`                  | UNII substance-name crosswalk            | `UniiRecord` |
-| `client.research.covidmirnaandproteomics` | COVID-19 miRNA/proteomics        | generic     |
+| `client.research.*` (5 endpoints)   | COVID-19 miRNA/proteomics + tobacco research datasets | generic |
 | `client.transparency.crl`         | Complete Response Letters                | generic     |
 
 Every endpoint object exposes `search(params)`, `count(params)`, and

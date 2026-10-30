@@ -106,16 +106,29 @@ async function fetchRecords(path) {
   return { res, json };
 }
 
+class CaptureProbeError extends Error {
+  constructor(message, status) {
+    super(message);
+    this.status = status;
+  }
+}
+
 /** Captures one endpoint, failing when a probe cannot establish its shape. */
 async function captureEndpoint(path) {
   await sleep(PROBE_SPACING_MS);
   const { res, json } = await fetchRecords(path);
   if (!res.ok) {
-    throw new Error(`capture-shapes: ${path} returned HTTP ${res.status}`);
+    throw new CaptureProbeError(
+      `capture-shapes: ${path} returned HTTP ${res.status}`,
+      res.status,
+    );
   }
   const records = json?.results;
   if (!Array.isArray(records) || records.length === 0) {
-    throw new Error(`capture-shapes: ${path} returned no records (HTTP ${res.status})`);
+    throw new CaptureProbeError(
+      `capture-shapes: ${path} returned no records (HTTP ${res.status})`,
+      res.status,
+    );
   }
   return shapeOfRecord(records);
 }
@@ -151,10 +164,18 @@ function flattenShape(shape, prefix = "") {
 
 // ── main ──────────────────────────────────────────────────────────────────
 const shapes = new Map();
+const unavailable = [];
 for (const path of ALL_PATHS) {
   try {
     shapes.set(path, await captureEndpoint(path));
-  } catch {
+  } catch (error) {
+    if (error instanceof CaptureProbeError && error.status === 404) {
+      // A registered 404 can mean a removed route or an empty dataset. Either
+      // needs human review; it must not hide other drift or block a drift PR.
+      unavailable.push(path);
+      console.error(`capture-shapes: ${path} returned HTTP 404; marking endpoint drift`);
+      continue;
+    }
     console.error(`capture-shapes: probe for ${path} failed or returned no records`);
     process.exit(1);
   }
@@ -182,9 +203,12 @@ for (const file of await readdir(SHAPES_DIR)) {
   committed.set(path, JSON.parse(await readFile(resolve(SHAPES_DIR, file), "utf8")));
 }
 
-const drifted = [];
-const lines = [];
+const drifted = [...unavailable];
+const lines = unavailable.map(
+  (path) => `${path}: HTTP 404 (removed endpoint or empty dataset; review required)`,
+);
 for (const path of ALL_PATHS) {
+  if (!shapes.has(path)) continue;
   const live = shapes.get(path);
   const snapshot = committed.get(path);
   if (snapshot === undefined) {

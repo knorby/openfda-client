@@ -61,33 +61,9 @@
       "doc_type": "string",
       "public_domain": "boolean",
       "tags": ["string"],
-      "url": "string",
       "uuid": "string",
-      "document_date": "number"
-    }
-  ],
-  "relationships": [
-    {
-      "amount": {
-        "uuid": "string",
-        "high": "number",
-        "low": "number",
-        "units": "string"
-      },
-      "qualification": "string",
-      "references": ["string"],
-      "related_substance": {
-        "linking_id": "string",
-        "name": "string",
-        "ref_pname": "string",
-        "refuuid": "string",
-        "substance_class": "string",
-        "unii": "string",
-        "uuid": "string"
-      },
-      "type": "string",
-      "uuid": "string",
-      "interaction_type": "string"
+      "document_date": "number",
+      "url": "string"
     }
   ],
   "structure": {
@@ -111,43 +87,25 @@
   "uuid": "string",
   "version": "string",
   "modifications": {
-    "agent_modifications": [
-      {
-        "agent_modification_process": "string",
-        "agent_modification_role": "string",
-        "agent_modification_type": "string",
-        "agent_substance": {
-          "linking_id": "string",
-          "name": "string",
-          "ref_pname": "string",
-          "refuuid": "string",
-          "substance_class": "string",
-          "unii": "string",
-          "uuid": "string"
-        },
-        "uuid": "string"
-      }
-    ],
-    "structural_modifications": [
-      {
-        "molecular_fragment": {
-          "linking_id": "string",
-          "name": "string",
-          "ref_pname": "string",
-          "refuuid": "string",
-          "substance_class": "string",
-          "unii": "string",
-          "uuid": "string"
-        },
-        "structural_modification_type": "string",
-        "uuid": "string"
-      }
-    ],
     "uuid": "string"
   },
+  "relationships": [
+    {
+      "related_substance": {
+        "linking_id": "string",
+        "name": "string",
+        "ref_pname": "string",
+        "refuuid": "string",
+        "substance_class": "string",
+        "unii": "string",
+        "uuid": "string"
+      },
+      "type": "string",
+      "uuid": "string",
+      "references": ["string"]
+    }
+  ],
   "structurally_diverse": {
-    "fraction_material_type": "string",
-    "fraction_name": "string",
     "parent_substance": {
       "linking_id": "string",
       "name": "string",
@@ -160,23 +118,7 @@
     "part": ["string"],
     "references": ["string"],
     "source_material_class": "string",
-    "source_material_state": "string",
     "source_material_type": "string",
     "uuid": "string"
-  },
-  "properties": [
-    {
-      "defining": "boolean",
-      "name": "string",
-      "property_type": "string",
-      "references": ["string"],
-      "uuid": "string",
-      "value": {
-        "high": "number",
-        "low": "number",
-        "units": "string",
-        "uuid": "string"
-      }
-    }
-  ]
+  }
 }

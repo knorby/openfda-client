@@ -16,7 +16,7 @@
       "product_code": "string"
     }
   ],
-  "proprietary_name": ["mixed"],
+  "proprietary_name": ["string"],
   "registration": {
     "address_line_1": "string",
     "address_line_2": "string",

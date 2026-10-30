@@ -1,0 +1,110 @@
+{
+  "age_group": "string",
+  "analytic_variables": {
+    "couse_combustibles": "string",
+    "couse_noncombust": "string",
+    "educational_attainment": "string",
+    "future_quit_method": {
+      "evidenced_based": "string",
+      "fda_approved": "string",
+      "switch_lower_harm": "string"
+    },
+    "nicotine_causes": "string",
+    "predicted_class_membership": "string",
+    "quit_attempts": "string",
+    "quit_barrier": {
+      "lives_with_smoker": "string",
+      "stress": "string",
+      "weight_gain": "string",
+      "withdrawal": "string"
+    },
+    "quit_method": {
+      "evidenced_based": "string",
+      "used_vape_or_smokeless": "string"
+    },
+    "race_or_ethnicity": "string",
+    "relative_addiction_menthol": "string",
+    "relative_risk": {
+      "menthol": "string",
+      "smokeless": "string"
+    },
+    "sex": "string",
+    "sexual_orientation": "string",
+    "subjective_income_adequacy": "string",
+    "switch_smokeless": "string",
+    "switch_vape": "string",
+    "tobacco_ad_exposure": "string",
+    "trust_for_quit_info": {
+      "cig_companies": "string",
+      "doctor": "string",
+      "family_or_friends": "string",
+      "gov": "string",
+      "partner": "string",
+      "quitters": "string",
+      "religious_org": "string",
+      "scientists": "string",
+      "state": "string",
+      "vape_companies": "string"
+    }
+  },
+  "current_use": {
+    "vape": "string",
+    "cigarillos": "string",
+    "cigars": "string"
+  },
+  "future_quit_method": {
+    "counseling": "string",
+    "group": "string",
+    "nicotine_replacement": "string",
+    "prescription_pill": "string",
+    "switch_pouches": "string",
+    "switch_smokeless": "string",
+    "switch_vaping": "string",
+    "telephone_or_web": "string"
+  },
+  "nicotine_causes": "string",
+  "quit_barrier": {
+    "habits": "string",
+    "lives_with_smoker": "string",
+    "stress": "string",
+    "withdrawal": "string"
+  },
+  "quit_ever": "string",
+  "quit_intention": "string",
+  "quit_method": {
+    "counseling": "string",
+    "nicotine_replacement": "string",
+    "other_tobacco": "string",
+    "telephone_or_web": "string"
+  },
+  "reason_vape": "string",
+  "record": "string",
+  "relative_addiction_menthol": "string",
+  "relative_risk": {
+    "menthol": "string",
+    "smokeless": "string",
+    "vape": "string"
+  },
+  "switching_intent_smokeless": {
+    "full_replacement": "string",
+    "gradual": "string",
+    "next_six_months": "string"
+  },
+  "switching_intent_vaping": {
+    "full_replacement": "string",
+    "gradual": "string",
+    "next_six_months": "string"
+  },
+  "times_quit": "string",
+  "tobacco_ad_exposure": {
+    "billboards": "string",
+    "events": "string",
+    "newspapers_magazines": "string",
+    "nightlife": "string",
+    "radio": "string",
+    "retail": "string",
+    "social_media": "string",
+    "television": "string",
+    "websites": "string"
+  }
+}

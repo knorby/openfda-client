@@ -1,8 +1,8 @@
 {
   "consumer": {
-    "gender": "string",
     "age": "string",
-    "age_unit": "string"
+    "age_unit": "string",
+    "gender": "string"
   },
   "date_created": "string",
   "date_started": "mixed",

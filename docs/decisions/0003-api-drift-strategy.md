@@ -12,7 +12,7 @@ openFDA is a live, evolving API:
   resources do not exist). The field references are HTML pages generated
   from the openFDA docs, which can drift from what the API actually returns.
 - The endpoint inventory is **not fixed**: datasets appear (e.g.
-  `transparency/crl`, `tobacco/research*`, `other/unii` all postdate the
+  `transparency/crl`, `research/tobacco*`, `other/unii` all postdate the
   original API) and paths sometimes differ from the docs slugs
   (`device/pma` vs. "premarketapproval", `drug/shortages` vs.
   "drugshortages").
@@ -52,8 +52,9 @@ These run together in the scheduled **api-drift workflow**
 (`.github/workflows/api-drift.yml`, weekly cron + manual dispatch): discovery
 report → shape diff → snapshot regeneration on drift → live test tripwire → a
 review PR via SHA-pinned `peter-evans/create-pull-request` only on confirmed
-drift, or an issue when the live tripwire fails. Probe failures stop the
-workflow; no diagnostic report is committed on routine runs.
+drift, or an issue when the live tripwire fails. HTTP 404 shape probes are
+reviewable endpoint drift (a removed route or empty dataset); other probe
+failures stop the workflow. No diagnostic report is committed on routine runs.
 
 ## Consequences
 

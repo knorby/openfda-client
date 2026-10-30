@@ -1,15 +1,36 @@
 {
   "age": "number",
+  "housekeeping_gene_controls": [
+    {
+      "name": "string",
+      "processed_value": "number",
+      "raw_value": "number"
+    }
+  ],
+  "mirnas": [
+    {
+      "name": "string",
+      "processed_value": "number",
+      "raw_value": "number"
+    }
+  ],
+  "plant_gene_controls": [
+    {
+      "name": "string",
+      "raw_value": "number"
+    }
+  ],
+  "positive_control": "number",
+  "qc_control": "string",
+  "sample_id": "string",
+  "severity": "string",
+  "sex": "string",
   "proteins": [
     {
       "olink_id": "string",
       "protein_symbol": "string",
       "uni_prot_id": "string",
-      "value": "number"
+      "value": "mixed"
     }
-  ],
-  "qc_control": "string",
-  "sample_id": "string",
-  "severity": "string",
-  "sex": "string"
+  ]
 }
