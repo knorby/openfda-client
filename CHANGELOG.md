@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.2.0
+
+### Minor Changes
+
+- 7d4d4c2: Move the tobacco digital-ads, prevention-ads, and smokefree research datasets from `client.tobacco` to `client.research`, add the `client.research.tobaccoharmmenthol` endpoint, and refresh endpoint shape snapshots to match the current openFDA API.
+
 ## 0.1.1
 
 ### Patch Changes
