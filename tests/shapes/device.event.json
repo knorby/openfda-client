@@ -40,9 +40,7 @@
         "device_class": "string",
         "device_name": "string",
         "medical_specialty_description": "string",
-        "regulation_number": "string",
-        "fei_number": ["string"],
-        "registration_number": ["string"]
+        "regulation_number": "string"
       },
       "other_id_number": "string",
       "date_returned_to_manufacturer": "string",

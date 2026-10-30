@@ -12,7 +12,7 @@ openFDA is a live, evolving API:
   resources do not exist). The field references are HTML pages generated
   from the openFDA docs, which can drift from what the API actually returns.
 - The endpoint inventory is **not fixed**: datasets appear (e.g.
-  `transparency/crl`, `tobacco/research*`, `other/unii` all postdate the
+  `transparency/crl`, `research/tobacco*`, `other/unii` all postdate the
   original API) and paths sometimes differ from the docs slugs
   (`device/pma` vs. "premarketapproval", `drug/shortages` vs.
   "drugshortages").

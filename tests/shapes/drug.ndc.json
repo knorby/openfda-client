@@ -8,7 +8,6 @@
   "application_number": "string",
   "brand_name": "string",
   "brand_name_base": "string",
-  "brand_name_suffix": "string",
   "dosage_form": "string",
   "finished": "boolean",
   "generic_name": "string",
@@ -19,13 +18,14 @@
   "openfda": {
     "is_original_packager": ["boolean"],
     "manufacturer_name": ["string"],
-    "spl_set_id": ["string"],
-    "unii": ["string"],
-    "upc": ["string"],
-    "rxcui": ["string"],
     "nui": ["string"],
     "pharm_class_epc": ["string"],
-    "pharm_class_moa": ["string"]
+    "pharm_class_pe": ["string"],
+    "rxcui": ["string"],
+    "spl_set_id": ["string"],
+    "unii": ["string"],
+    "pharm_class_moa": ["string"],
+    "upc": ["string"]
   },
   "packaging": [
     {
@@ -35,10 +35,10 @@
       "sample": "boolean"
     }
   ],
+  "pharm_class": ["string"],
   "product_id": "string",
   "product_ndc": "string",
   "product_type": "string",
   "route": ["string"],
-  "spl_id": "string",
-  "pharm_class": ["string"]
+  "spl_id": "string"
 }

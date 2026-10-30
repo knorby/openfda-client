@@ -50,7 +50,18 @@ describe("ENDPOINTS registry", () => {
     expect(ALL_PATHS).not.toContain("drug/drugshortages");
   });
 
-  it("has exactly 30 live endpoints as probed on 2026-09-23", () => {
-    expect(ALL_PATHS.length).toBe(30);
+  it("registers tobacco research datasets under the research noun", () => {
+    expect(ALL_PATHS).toEqual(
+      expect.arrayContaining([
+        "research/tobaccodigitalads",
+        "research/tobaccoharmmenthol",
+        "research/tobaccopreventionads",
+        "research/tobaccosmokefree",
+      ]),
+    );
+  });
+
+  it("has exactly 31 live endpoints as probed on 2026-10-30", () => {
+    expect(ALL_PATHS.length).toBe(31);
   });
 });

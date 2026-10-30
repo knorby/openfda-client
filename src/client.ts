@@ -228,16 +228,17 @@ export class OpenFdaClient {
     substance: EndpointClient<Substance>;
     unii: EndpointClient<UniiRecord>;
   };
-  /** `client.research` — COVID-19 miRNA/proteomics research data. */
+  /** `client.research` — COVID-19 and tobacco research datasets. */
   readonly research: {
     covidmirnaandproteomics: EndpointClient<Record<string, unknown>>;
+    tobaccodigitalads: EndpointClient<Record<string, unknown>>;
+    tobaccoharmmenthol: EndpointClient<Record<string, unknown>>;
+    tobaccopreventionads: EndpointClient<Record<string, unknown>>;
+    tobaccosmokefree: EndpointClient<Record<string, unknown>>;
   };
-  /** `client.tobacco` — problem reports and research datasets. */
+  /** `client.tobacco` — tobacco product problem reports. */
   readonly tobacco: {
     problem: EndpointClient<Record<string, unknown>>;
-    researchdigitalads: EndpointClient<Record<string, unknown>>;
-    researchpreventionads: EndpointClient<Record<string, unknown>>;
-    researchsmokefree: EndpointClient<Record<string, unknown>>;
   };
   /** `client.transparency` — Complete Response Letters (CRL). */
   readonly transparency: { crl: EndpointClient<Record<string, unknown>> };
@@ -289,21 +290,25 @@ export class OpenFdaClient {
         this.requester,
         "research/covidmirnaandproteomics",
       ),
+      tobaccodigitalads: createEndpoint(
+        this.requester,
+        "research/tobaccodigitalads",
+      ),
+      tobaccoharmmenthol: createEndpoint(
+        this.requester,
+        "research/tobaccoharmmenthol",
+      ),
+      tobaccopreventionads: createEndpoint(
+        this.requester,
+        "research/tobaccopreventionads",
+      ),
+      tobaccosmokefree: createEndpoint(
+        this.requester,
+        "research/tobaccosmokefree",
+      ),
     };
     this.tobacco = {
       problem: createEndpoint(this.requester, "tobacco/problem"),
-      researchdigitalads: createEndpoint(
-        this.requester,
-        "tobacco/researchdigitalads",
-      ),
-      researchpreventionads: createEndpoint(
-        this.requester,
-        "tobacco/researchpreventionads",
-      ),
-      researchsmokefree: createEndpoint(
-        this.requester,
-        "tobacco/researchsmokefree",
-      ),
     };
     this.transparency = {
       crl: createEndpoint(this.requester, "transparency/crl"),

@@ -2,7 +2,7 @@
   "application_number": ["string"],
   "approval_status": "string",
   "approver_center": ["mixed"],
-  "approver_name": "string",
+  "approver_name": "mixed",
   "approver_title": "mixed",
   "company_address": "string",
   "company_name": "string",

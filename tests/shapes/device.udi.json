@@ -41,12 +41,6 @@
   "is_single_use": "string",
   "labeler_duns_number": "string",
   "mri_safety": "string",
-  "premarket_submissions": [
-    {
-      "submission_number": "string",
-      "supplement_number": "string"
-    }
-  ],
   "product_codes": [
     {
       "code": "string",
@@ -67,7 +61,8 @@
   "record_status": "string",
   "sterilization": {
     "is_sterile": "string",
-    "is_sterilization_prior_use": "string"
+    "is_sterilization_prior_use": "string",
+    "sterilization_methods": "string"
   },
   "version_or_model_number": "string",
   "catalog_number": "string",
@@ -75,6 +70,19 @@
     {
       "email": "string",
       "phone": "string"
+    }
+  ],
+  "storage": [
+    {
+      "high": {
+        "unit": "string",
+        "value": "string"
+      },
+      "low": {
+        "unit": "string",
+        "value": "string"
+      },
+      "type": "string"
     }
   ]
 }
