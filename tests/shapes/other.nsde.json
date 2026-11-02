@@ -1,5 +1,4 @@
 {
-  "application_number_or_citation": "string",
   "dosage_form": "string",
   "marketing_category": "string",
   "marketing_start_date": "string",
@@ -7,6 +6,6 @@
   "package_ndc11": "string",
   "product_type": "string",
   "proprietary_name": "string",
-  "billing_unit": "string",
-  "marketing_end_date": "string"
+  "application_number_or_citation": "string",
+  "billing_unit": "string"
 }

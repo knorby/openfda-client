@@ -1,10 +1,4 @@
 {
-  "active_ingredients": [
-    {
-      "name": "string",
-      "strength": "string"
-    }
-  ],
   "application_number": "string",
   "brand_name": "string",
   "brand_name_base": "string",
@@ -24,7 +18,6 @@
     "rxcui": ["string"],
     "spl_set_id": ["string"],
     "unii": ["string"],
-    "pharm_class_moa": ["string"],
     "upc": ["string"]
   },
   "packaging": [
@@ -35,10 +28,17 @@
       "sample": "boolean"
     }
   ],
-  "pharm_class": ["string"],
   "product_id": "string",
   "product_ndc": "string",
   "product_type": "string",
+  "spl_id": "string",
+  "active_ingredients": [
+    {
+      "name": "string",
+      "strength": "string"
+    }
+  ],
   "route": ["string"],
-  "spl_id": "string"
+  "pharm_class": ["string"],
+  "dea_schedule": "string"
 }

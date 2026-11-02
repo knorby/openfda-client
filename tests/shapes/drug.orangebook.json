@@ -21,5 +21,6 @@
       "route": "string",
       "therapeutic_equivalence_codes": ["string"]
     }
-  ]
+  ],
+  "approved_prior_to_1982": "boolean"
 }
