@@ -1,7 +1,12 @@
 {
-  "application_number": "string",
+  "active_ingredients": [
+    {
+      "name": "string",
+      "strength": "string"
+    }
+  ],
   "brand_name": "string",
-  "brand_name_base": "string",
+  "brand_name_base": "mixed",
   "dosage_form": "string",
   "finished": "boolean",
   "generic_name": "string",
@@ -13,12 +18,11 @@
     "is_original_packager": ["boolean"],
     "manufacturer_name": ["string"],
     "nui": ["string"],
+    "pharm_class_cs": ["string"],
     "pharm_class_epc": ["string"],
     "pharm_class_pe": ["string"],
-    "rxcui": ["string"],
     "spl_set_id": ["string"],
-    "unii": ["string"],
-    "upc": ["string"]
+    "unii": ["string"]
   },
   "packaging": [
     {
@@ -28,17 +32,10 @@
       "sample": "boolean"
     }
   ],
+  "pharm_class": ["string"],
   "product_id": "string",
   "product_ndc": "string",
   "product_type": "string",
-  "spl_id": "string",
-  "active_ingredients": [
-    {
-      "name": "string",
-      "strength": "string"
-    }
-  ],
   "route": ["string"],
-  "pharm_class": ["string"],
-  "dea_schedule": "string"
+  "spl_id": "string"
 }

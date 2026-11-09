@@ -3,7 +3,11 @@
   "latest_received_date": "string",
   "legacy_report_id": "string",
   "meddra_version": "string",
-  "outcomes": ["string"],
+  "patient": {
+    "gender": "string",
+    "age": "string",
+    "age_unit": "string"
+  },
   "products": [
     {
       "product_name": "string",
@@ -14,10 +18,6 @@
   "report_number": "string",
   "report_type": "string",
   "report_version": "string",
-  "event_date": "string",
-  "patient": {
-    "age": "string",
-    "age_unit": "string",
-    "gender": "string"
-  }
+  "outcomes": ["string"],
+  "event_date": "string"
 }

@@ -28,6 +28,5 @@
   "supplement_type": "string",
   "trade_name": "string",
   "zip": "string",
-  "zip_ext": "string",
-  "fed_reg_notice_date": "string"
+  "zip_ext": "string"
 }

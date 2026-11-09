@@ -6,7 +6,7 @@
       "unit": "string"
     },
     "breed": {
-      "breed_component": "mixed",
+      "breed_component": "string",
       "is_crossbred": "string"
     },
     "female_animal_physiological_status": "string",
@@ -32,17 +32,10 @@
           "name": "string"
         }
       ],
+      "administered_by": "string",
       "atc_vet_code": "string",
       "brand_name": "string",
       "dosage_form": "string",
-      "lot_number": "string",
-      "manufacturer": {
-        "name": "string",
-        "registration_number": "string"
-      },
-      "route": "string",
-      "used_according_to_label": "string",
-      "administered_by": "string",
       "dose": {
         "denominator": "string",
         "denominator_unit": "string",
@@ -51,13 +44,28 @@
       },
       "first_exposure_date": "string",
       "last_exposure_date": "string",
+      "manufacturer": {
+        "name": "string",
+        "registration_number": "string"
+      },
       "previous_exposure_to_drug": "string",
+      "route": "string",
+      "used_according_to_label": "string",
+      "ae_abated_after_stopping_drug": "string",
+      "ae_reappeared_after_resuming_drug": "string",
       "frequency_of_administration": {
         "unit": "string",
         "value": "string"
-      }
+      },
+      "lot_expiration": "string",
+      "lot_number": "string",
+      "previous_ae_to_drug": "string"
     }
   ],
+  "duration": {
+    "unit": "string",
+    "value": "string"
+  },
   "foreign_or_domestic": "string",
   "health_assessment_prior_to_exposure": {
     "assessed_by": "string",
@@ -67,6 +75,12 @@
   "number_of_animals_treated": "string",
   "onset_date": "string",
   "original_receive_date": "string",
+  "outcome": [
+    {
+      "medical_status": "string",
+      "number_of_animals_affected": "string"
+    }
+  ],
   "primary_reporter": "string",
   "reaction": [
     {
@@ -86,19 +100,8 @@
     "street_address": "string"
   },
   "report_id": "string",
-  "type_of_information": "string",
-  "unique_aer_id_number": "string",
-  "outcome": [
-    {
-      "medical_status": "string",
-      "number_of_animals_affected": "string"
-    }
-  ],
-  "secondary_reporter": "string",
   "serious_ae": "string",
   "treated_for_ae": "string",
-  "duration": {
-    "unit": "string",
-    "value": "string"
-  }
+  "type_of_information": "string",
+  "unique_aer_id_number": "string"
 }

@@ -47,11 +47,6 @@
       "vape_companies": "string"
     }
   },
-  "current_use": {
-    "vape": "string",
-    "cigarillos": "string",
-    "cigars": "string"
-  },
   "future_quit_method": {
     "counseling": "string",
     "group": "string",
@@ -77,7 +72,6 @@
     "other_tobacco": "string",
     "telephone_or_web": "string"
   },
-  "reason_vape": "string",
   "record": "string",
   "relative_addiction_menthol": "string",
   "relative_risk": {
@@ -106,5 +100,13 @@
     "social_media": "string",
     "television": "string",
     "websites": "string"
-  }
+  },
+  "current_use": {
+    "vape": "string",
+    "cigarillos": "string",
+    "cigars": "string",
+    "smokeless": "string"
+  },
+  "reason_vape": "string",
+  "reason_smokeless": "string"
 }

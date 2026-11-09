@@ -1,6 +1,6 @@
 ## Endpoint discovery
 ```text
-discover-endpoints: 31 candidate endpoint(s) from download.json (last_updated 2026-10-30)
+discover-endpoints: 31 candidate endpoint(s) from download.json (last_updated 2026-11-06)
   ALIVE  animalandveterinary/event
   ALIVE  cosmetic/event
   ALIVE  device/510k
@@ -68,26 +68,96 @@ OK    transparency/crl
 ```
 ## Shape drift (tests/shapes/)
 ```text
-capture-shapes --check: DRIFT DETECTED in 5 endpoint(s):
+capture-shapes --check: DRIFT DETECTED in 13 endpoint(s):
 
-drug/drugsfda: fields ADDED (types may be stale):
-  submissions[].application_docs[].date: string
-  submissions[].application_docs[].id: string
-  submissions[].application_docs[].type: string
-  submissions[].application_docs[].url: string
+animalandveterinary/event: fields ADDED (types may be stale):
+  animal.breed.breed_component: string
+  drug[].ae_abated_after_stopping_drug: string
+  drug[].ae_reappeared_after_resuming_drug: string
+  drug[].lot_expiration: string
+  drug[].previous_ae_to_drug: string
+animalandveterinary/event: fields REMOVED (possible breaking change):
+  animal.breed.breed_component: mixed
+  secondary_reporter: string
+device/pma: fields REMOVED (possible breaking change):
+  fed_reg_notice_date: string
+device/registrationlisting: fields ADDED (types may be stale):
+  proprietary_name[]: mixed
+device/registrationlisting: fields REMOVED (possible breaking change):
+  proprietary_name[]: string
+device/udi: fields ADDED (types may be stale):
+  device_sizes[].text: string
+  device_sizes[].type: string
+  premarket_submissions[].submission_number: string
+  premarket_submissions[].supplement_number: string
+device/udi: fields REMOVED (possible breaking change):
+  identifiers[].package_status: string
+  identifiers[].package_type: string
+  identifiers[].quantity_per_package: string
+  identifiers[].unit_of_use_id: string
+  catalog_number: string
+  storage[].high.unit: string
+  storage[].high.value: string
+  storage[].low.unit: string
+  storage[].low.value: string
+  storage[].type: string
 drug/ndc: fields ADDED (types may be stale):
-  dea_schedule: string
-drug/ndc: fields REMOVED (possible breaking change):
-  openfda.pharm_class_moa[]: string
-drug/orangebook: fields ADDED (types may be stale):
-  approved_prior_to_1982: boolean
-drug/shortages: fields ADDED (types may be stale):
-  openfda.pharm_class_pe[]: string
-drug/shortages: fields REMOVED (possible breaking change):
-  change_date: string
+  brand_name_base: mixed
   openfda.pharm_class_cs[]: string
-  openfda.pharm_class_moa[]: string
-  resolved_note: string
-other/nsde: fields REMOVED (possible breaking change):
+drug/ndc: fields REMOVED (possible breaking change):
+  application_number: string
+  brand_name_base: string
+  openfda.rxcui[]: string
+  openfda.upc[]: string
+  dea_schedule: string
+drug/orangebook: fields REMOVED (possible breaking change):
+  approved_prior_to_1982: boolean
+drug/shortages: fields REMOVED (possible breaking change):
+  openfda.nui[]: string
+  openfda.pharm_class_epc[]: string
+  openfda.pharm_class_pe[]: string
+  shortage_reason: string
+food/event: fields ADDED (types may be stale):
+  date_started: null
+food/event: fields REMOVED (possible breaking change):
+  date_started: mixed
+other/nsde: fields ADDED (types may be stale):
   marketing_end_date: string
+  inactivation_date: string
+  reactivation_date: string
+other/nsde: fields REMOVED (possible breaking change):
+  billing_unit: string
+other/substance: fields ADDED (types may be stale):
+  structurally_diverse.organism_author: string
+  structurally_diverse.organism_family: string
+  structurally_diverse.organism_genus: string
+  structurally_diverse.organism_species: string
+  relationships[].amount.uuid: string
+other/substance: fields REMOVED (possible breaking change):
+  codes[].comments: string
+  names[].domains[]: string
+  names[].name_orgs[].name_org: string
+  names[].name_orgs[].uuid: string
+  relationships[].references[]: string
+  structurally_diverse.parent_substance.linking_id: string
+  structurally_diverse.parent_substance.name: string
+  structurally_diverse.parent_substance.ref_pname: string
+  structurally_diverse.parent_substance.refuuid: string
+  structurally_diverse.parent_substance.substance_class: string
+  structurally_diverse.parent_substance.unii: string
+  structurally_diverse.parent_substance.uuid: string
+research/covidmirnaandproteomics: fields REMOVED (possible breaking change):
+  proteins[].olink_id: string
+  proteins[].protein_symbol: string
+  proteins[].uni_prot_id: string
+  proteins[].value: mixed
+research/tobaccoharmmenthol: fields ADDED (types may be stale):
+  current_use.smokeless: string
+  reason_smokeless: string
+transparency/crl: fields ADDED (types may be stale):
+  approver_name: string
+  letter_type: mixed
+transparency/crl: fields REMOVED (possible breaking change):
+  approver_name: mixed
+  letter_type: string
 ```

@@ -6,8 +6,7 @@
       "references": ["string"],
       "type": "string",
       "url": "string",
-      "uuid": "string",
-      "comments": "string"
+      "uuid": "string"
     }
   ],
   "definition_level": "string",
@@ -45,14 +44,7 @@
       "references": ["string"],
       "stdName": "string",
       "type": "string",
-      "uuid": "string",
-      "domains": ["string"],
-      "name_orgs": [
-        {
-          "name_org": "string",
-          "uuid": "string"
-        }
-      ]
+      "uuid": "string"
     }
   ],
   "references": [
@@ -89,8 +81,22 @@
   "modifications": {
     "uuid": "string"
   },
+  "structurally_diverse": {
+    "organism_author": "string",
+    "organism_family": "string",
+    "organism_genus": "string",
+    "organism_species": "string",
+    "part": ["string"],
+    "references": ["string"],
+    "source_material_class": "string",
+    "source_material_type": "string",
+    "uuid": "string"
+  },
   "relationships": [
     {
+      "amount": {
+        "uuid": "string"
+      },
       "related_substance": {
         "linking_id": "string",
         "name": "string",
@@ -101,24 +107,7 @@
         "uuid": "string"
       },
       "type": "string",
-      "uuid": "string",
-      "references": ["string"]
-    }
-  ],
-  "structurally_diverse": {
-    "parent_substance": {
-      "linking_id": "string",
-      "name": "string",
-      "ref_pname": "string",
-      "refuuid": "string",
-      "substance_class": "string",
-      "unii": "string",
       "uuid": "string"
-    },
-    "part": ["string"],
-    "references": ["string"],
-    "source_material_class": "string",
-    "source_material_type": "string",
-    "uuid": "string"
-  }
+    }
+  ]
 }

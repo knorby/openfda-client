@@ -5,7 +5,7 @@
     "gender": "string"
   },
   "date_created": "string",
-  "date_started": "mixed",
+  "date_started": "null",
   "outcomes": ["string"],
   "products": [
     {
