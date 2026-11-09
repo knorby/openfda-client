@@ -2,8 +2,20 @@
   "brand_name": "string",
   "commercial_distribution_status": "string",
   "company_name": "string",
+  "customer_contacts": [
+    {
+      "email": "string",
+      "phone": "string"
+    }
+  ],
   "device_count_in_base_package": "string",
   "device_description": "string",
+  "device_sizes": [
+    {
+      "text": "string",
+      "type": "string"
+    }
+  ],
   "gmdn_terms": [
     {
       "code": "string",
@@ -22,11 +34,7 @@
     {
       "id": "string",
       "issuing_agency": "string",
-      "type": "string",
-      "package_status": "string",
-      "package_type": "string",
-      "quantity_per_package": "string",
-      "unit_of_use_id": "string"
+      "type": "string"
     }
   ],
   "is_combination_product": "string",
@@ -41,6 +49,12 @@
   "is_single_use": "string",
   "labeler_duns_number": "string",
   "mri_safety": "string",
+  "premarket_submissions": [
+    {
+      "submission_number": "string",
+      "supplement_number": "string"
+    }
+  ],
   "product_codes": [
     {
       "code": "string",
@@ -64,25 +78,5 @@
     "is_sterilization_prior_use": "string",
     "sterilization_methods": "string"
   },
-  "version_or_model_number": "string",
-  "catalog_number": "string",
-  "customer_contacts": [
-    {
-      "email": "string",
-      "phone": "string"
-    }
-  ],
-  "storage": [
-    {
-      "high": {
-        "unit": "string",
-        "value": "string"
-      },
-      "low": {
-        "unit": "string",
-        "value": "string"
-      },
-      "type": "string"
-    }
-  ]
+  "version_or_model_number": "string"
 }

@@ -24,13 +24,5 @@
   "qc_control": "string",
   "sample_id": "string",
   "severity": "string",
-  "sex": "string",
-  "proteins": [
-    {
-      "olink_id": "string",
-      "protein_symbol": "string",
-      "uni_prot_id": "string",
-      "value": "mixed"
-    }
-  ]
+  "sex": "string"
 }
