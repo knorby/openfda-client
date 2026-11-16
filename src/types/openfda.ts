@@ -15,6 +15,8 @@ export interface OpenFdaHarmonized {
   generic_name?: string[];
   /** Manufacturer / labeler name(s). */
   manufacturer_name?: string[];
+  /** NDF-RT unique identifier(s). */
+  nui?: string[];
   /** 5-digit product NDC(s) (e.g. `"0069-0015"`). */
   product_ndc?: string[];
   /** Product type(s) (e.g. `"HUMAN PRESCRIPTION DRUG"`). */
