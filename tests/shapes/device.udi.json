@@ -1,19 +1,22 @@
 {
   "brand_name": "string",
+  "catalog_number": "string",
   "commercial_distribution_status": "string",
   "company_name": "string",
   "customer_contacts": [
     {
       "email": "string",
-      "phone": "string"
+      "phone": "string",
+      "ext": "string"
     }
   ],
   "device_count_in_base_package": "string",
   "device_description": "string",
   "device_sizes": [
     {
-      "text": "string",
-      "type": "string"
+      "type": "string",
+      "unit": "string",
+      "value": "string"
     }
   ],
   "gmdn_terms": [
@@ -78,5 +81,6 @@
     "is_sterilization_prior_use": "string",
     "sterilization_methods": "string"
   },
-  "version_or_model_number": "string"
+  "version_or_model_number": "string",
+  "commercial_distribution_end_date": "string"
 }

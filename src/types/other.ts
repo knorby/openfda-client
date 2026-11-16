@@ -114,8 +114,14 @@ export interface SubstanceRelationship {
   references?: string[];
   /** Interaction type, for interaction relationships. */
   interaction_type?: string;
-  /** Amount bounds associated with the relationship. */
-  amount?: { uuid?: string; high?: number; low?: number; units?: string };
+  /** Amount data associated with the relationship. */
+  amount?: {
+    uuid?: string;
+    average?: number;
+    high?: number;
+    low?: number;
+    units?: string;
+  };
   /** The substance this relationship points at. */
   related_substance?: SubstanceRef;
 }
@@ -172,6 +178,11 @@ export interface Substance {
    * Opaque pass-through — not modeled.
    */
   properties?: Record<string, unknown>[];
+  /**
+   * GSRS protein section (sequence, subunits, glycosylation, …).
+   * Opaque pass-through — not modeled.
+   */
+  protein?: Record<string, unknown>;
 }
 
 /**

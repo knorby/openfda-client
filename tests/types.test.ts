@@ -35,6 +35,7 @@ const label: DrugLabel = {
     brand_name: ["LIPITOR"],
     generic_name: ["ATORVASTATIN CALCIUM"],
     manufacturer_name: ["Parke-Davis Div of Pfizer Labs"],
+    nui: ["N0000000000"],
     package_ndc: ["0069-1530-66", "0069-1530-90"],
     product_ndc: ["0069-1530"],
     product_type: ["HUMAN PRESCRIPTION DRUG"],
@@ -47,6 +48,7 @@ const label: DrugLabel = {
   },
 };
 expect(label.active_ingredient?.[0]).toContain("Atorvastatin");
+expect(label.openfda?.nui?.[0]).toBe("N0000000000");
 expect(
   label.carcinogenesis_and_mutagenesis_and_impairment_of_fertility?.[0],
 ).toBe("See studies.");
@@ -190,10 +192,12 @@ const substance: Substance = {
   relationships: [
     {
       type: "active-moiety",
+      amount: { average: 1.5 },
       related_substance: { name: "ATORVASTATIN", unii: "K4MIA10C8L" },
     },
   ],
   structure: { formula: "C66H68CaF2N4O10", stereochemistry: "undefined" },
+  protein: { protein_type: "FILAMENTOUS" },
 };
 expect(substance.names?.[0]?.name_orgs?.[0]?.name_org).toContain(
   "Pharmacopeia",
@@ -202,6 +206,8 @@ expect(substance.codes?.[0]?.code_system).toBe("UNII");
 expect(substance.relationships?.[0]?.related_substance?.unii).toBe(
   "K4MIA10C8L",
 );
+expect(substance.relationships?.[0]?.amount?.average).toBe(1.5);
+expect(substance.protein?.protein_type).toBe("FILAMENTOUS");
 
 // A realistic other/unii crosswalk record.
 const unii: UniiRecord = { substance_name: "ATORVASTATIN", unii: "K4MIA10C8L" };

@@ -44,7 +44,13 @@
       "references": ["string"],
       "stdName": "string",
       "type": "string",
-      "uuid": "string"
+      "uuid": "string",
+      "name_orgs": [
+        {
+          "name_org": "string",
+          "uuid": "string"
+        }
+      ]
     }
   ],
   "references": [
@@ -56,6 +62,29 @@
       "uuid": "string",
       "document_date": "number",
       "url": "string"
+    }
+  ],
+  "relationships": [
+    {
+      "amount": {
+        "uuid": "string",
+        "average": "number",
+        "units": "string"
+      },
+      "references": ["string"],
+      "related_substance": {
+        "linking_id": "string",
+        "name": "string",
+        "ref_pname": "string",
+        "refuuid": "string",
+        "substance_class": "string",
+        "unii": "string",
+        "uuid": "string"
+      },
+      "type": "string",
+      "uuid": "string",
+      "interaction_type": "string",
+      "qualification": "string"
     }
   ],
   "structure": {
@@ -79,35 +108,81 @@
   "uuid": "string",
   "version": "string",
   "modifications": {
-    "uuid": "string"
+    "uuid": "string",
+    "structural_modifications": [
+      {
+        "extent": "string",
+        "location_type": "string",
+        "molecular_fragment": {
+          "linking_id": "string",
+          "name": "string",
+          "ref_pname": "string",
+          "refuuid": "string",
+          "substance_class": "string",
+          "unii": "string",
+          "uuid": "string"
+        },
+        "residue_modified": "string",
+        "sites": [
+          {
+            "residue_index": "number",
+            "subunit_index": "number"
+          }
+        ],
+        "structural_modification_type": "string",
+        "uuid": "string"
+      }
+    ]
   },
-  "structurally_diverse": {
-    "organism_author": "string",
-    "organism_family": "string",
-    "organism_genus": "string",
-    "organism_species": "string",
-    "part": ["string"],
-    "references": ["string"],
-    "source_material_class": "string",
-    "source_material_type": "string",
-    "uuid": "string"
-  },
-  "relationships": [
+  "properties": [
     {
-      "amount": {
-        "uuid": "string"
-      },
-      "related_substance": {
-        "linking_id": "string",
-        "name": "string",
-        "ref_pname": "string",
-        "refuuid": "string",
-        "substance_class": "string",
-        "unii": "string",
-        "uuid": "string"
-      },
+      "defining": "boolean",
+      "name": "string",
+      "property_type": "string",
       "type": "string",
-      "uuid": "string"
+      "uuid": "string",
+      "value": {
+        "average": "number",
+        "type": "string",
+        "units": "string",
+        "uuid": "string",
+        "non_numeric_value": "string"
+      }
     }
-  ]
+  ],
+  "protein": {
+    "disulfide_links": [
+      {
+        "sites": [
+          {
+            "residue_index": "number",
+            "subunit_index": "number"
+          }
+        ]
+      }
+    ],
+    "glycosylation": {
+      "glycosylation_type": "string",
+      "n_glycosylation_sites": [
+        {
+          "residue_index": "number",
+          "subunit_index": "number"
+        }
+      ],
+      "uuid": "string"
+    },
+    "protein_sub_type": "string",
+    "protein_type": "string",
+    "references": ["string"],
+    "sequence_origin": "string",
+    "sequence_type": "string",
+    "subunits": [
+      {
+        "sequence": "string",
+        "subunit_index": "number",
+        "uuid": "string"
+      }
+    ],
+    "uuid": "string"
+  }
 }
