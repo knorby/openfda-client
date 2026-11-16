@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.2.1
+
+### Patch Changes
+
+- f0f937d: Add types for openFDA NUI identifiers, substance relationship averages, and protein records.
+
 ## 0.2.0
 
 ### Minor Changes
