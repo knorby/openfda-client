@@ -1,12 +1,14 @@
 {
+  "event_date": "string",
   "initial_received_date": "string",
   "latest_received_date": "string",
   "legacy_report_id": "string",
   "meddra_version": "string",
+  "outcomes": ["string"],
   "patient": {
-    "gender": "string",
     "age": "string",
-    "age_unit": "string"
+    "age_unit": "string",
+    "gender": "string"
   },
   "products": [
     {
@@ -17,7 +19,5 @@
   "reactions": ["string"],
   "report_number": "string",
   "report_type": "string",
-  "report_version": "string",
-  "outcomes": ["string"],
-  "event_date": "string"
+  "report_version": "string"
 }

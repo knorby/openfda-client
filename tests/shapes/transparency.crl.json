@@ -9,7 +9,7 @@
   "company_rep": "string",
   "file_name": "string",
   "letter_date": "string",
-  "letter_type": "mixed",
+  "letter_type": "string",
   "letter_year": "string",
   "text": "string"
 }
