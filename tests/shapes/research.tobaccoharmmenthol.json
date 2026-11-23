@@ -47,6 +47,13 @@
       "vape_companies": "string"
     }
   },
+  "current_use": {
+    "cigarillos": "string",
+    "cigars": "string",
+    "smokeless": "string",
+    "pouches": "string",
+    "vape": "string"
+  },
   "future_quit_method": {
     "counseling": "string",
     "group": "string",
@@ -101,12 +108,6 @@
     "television": "string",
     "websites": "string"
   },
-  "current_use": {
-    "vape": "string",
-    "cigarillos": "string",
-    "cigars": "string",
-    "smokeless": "string"
-  },
-  "reason_vape": "string",
-  "reason_smokeless": "string"
+  "reason_smokeless": "string",
+  "reason_vape": "string"
 }

@@ -6,19 +6,11 @@
   "customer_contacts": [
     {
       "email": "string",
-      "phone": "string",
-      "ext": "string"
+      "phone": "string"
     }
   ],
   "device_count_in_base_package": "string",
   "device_description": "string",
-  "device_sizes": [
-    {
-      "type": "string",
-      "unit": "string",
-      "value": "string"
-    }
-  ],
   "gmdn_terms": [
     {
       "code": "string",
@@ -81,6 +73,25 @@
     "is_sterilization_prior_use": "string",
     "sterilization_methods": "string"
   },
+  "storage": [
+    {
+      "high": {
+        "unit": "string",
+        "value": "string"
+      },
+      "low": {
+        "unit": "string",
+        "value": "string"
+      },
+      "type": "string"
+    }
+  ],
   "version_or_model_number": "string",
-  "commercial_distribution_end_date": "string"
+  "device_sizes": [
+    {
+      "type": "string",
+      "unit": "string",
+      "value": "string"
+    }
+  ]
 }

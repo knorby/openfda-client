@@ -1,5 +1,20 @@
 {
   "application_number": "string",
+  "openfda": {
+    "application_number": ["string"],
+    "brand_name": ["string"],
+    "generic_name": ["string"],
+    "manufacturer_name": ["string"],
+    "package_ndc": ["string"],
+    "product_ndc": ["string"],
+    "product_type": ["string"],
+    "route": ["string"],
+    "rxcui": ["string"],
+    "spl_id": ["string"],
+    "spl_set_id": ["string"],
+    "substance_name": ["string"],
+    "unii": ["string"]
+  },
   "products": [
     {
       "active_ingredients": [
@@ -37,23 +52,5 @@
         }
       ]
     }
-  ],
-  "openfda": {
-    "application_number": ["string"],
-    "brand_name": ["string"],
-    "generic_name": ["string"],
-    "manufacturer_name": ["string"],
-    "nui": ["string"],
-    "package_ndc": ["string"],
-    "pharm_class_cs": ["string"],
-    "pharm_class_epc": ["string"],
-    "product_ndc": ["string"],
-    "product_type": ["string"],
-    "route": ["string"],
-    "rxcui": ["string"],
-    "spl_id": ["string"],
-    "spl_set_id": ["string"],
-    "substance_name": ["string"],
-    "unii": ["string"]
-  }
+  ]
 }

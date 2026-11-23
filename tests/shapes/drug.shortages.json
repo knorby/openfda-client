@@ -1,7 +1,7 @@
 {
+  "availability": "string",
   "company_name": "string",
   "contact_info": "string",
-  "discontinued_date": "string",
   "dosage_form": "string",
   "generic_name": "string",
   "initial_posting_date": "string",
@@ -22,11 +22,11 @@
   },
   "package_ndc": "string",
   "presentation": "string",
-  "related_info": "string",
   "status": "string",
   "therapeutic_category": ["string"],
   "update_date": "string",
   "update_type": "string",
-  "availability": "string",
-  "shortage_reason": "string"
+  "related_info": "string",
+  "shortage_reason": "string",
+  "discontinued_date": "string"
 }

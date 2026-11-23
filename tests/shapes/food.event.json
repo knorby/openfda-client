@@ -1,11 +1,11 @@
 {
   "consumer": {
+    "gender": "string",
     "age": "string",
-    "age_unit": "string",
-    "gender": "string"
+    "age_unit": "string"
   },
   "date_created": "string",
-  "date_started": "null",
+  "date_started": "mixed",
   "outcomes": ["string"],
   "products": [
     {
