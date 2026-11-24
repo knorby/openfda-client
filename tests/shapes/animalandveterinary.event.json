@@ -1,13 +1,13 @@
 {
   "animal": {
     "age": {
+      "max": "string",
       "min": "string",
       "qualifier": "string",
-      "unit": "string",
-      "max": "string"
+      "unit": "string"
     },
     "breed": {
-      "breed_component": "string",
+      "breed_component": "mixed",
       "is_crossbred": "string"
     },
     "female_animal_physiological_status": "string",
@@ -15,6 +15,7 @@
     "reproductive_status": "string",
     "species": "string",
     "weight": {
+      "max": "string",
       "min": "string",
       "qualifier": "string",
       "unit": "string"
@@ -44,14 +45,19 @@
         "numerator_unit": "string"
       },
       "first_exposure_date": "string",
+      "frequency_of_administration": {
+        "unit": "string",
+        "value": "string"
+      },
+      "last_exposure_date": "string",
       "lot_number": "string",
       "manufacturer": {
         "name": "string",
         "registration_number": "string"
       },
-      "off_label_use": "string",
+      "off_label_use": ["string"],
+      "previous_ae_to_drug": "string",
       "previous_exposure_to_drug": "string",
-      "product_ndc": "string",
       "route": "string",
       "used_according_to_label": "string"
     }
@@ -78,6 +84,8 @@
   "primary_reporter": "string",
   "reaction": [
     {
+      "accuracy": "string",
+      "number_of_animals_affected": "string",
       "veddra_term_code": "string",
       "veddra_term_name": "string",
       "veddra_version": "string"

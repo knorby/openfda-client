@@ -11,6 +11,9 @@
   ],
   "definition_level": "string",
   "definition_type": "string",
+  "modifications": {
+    "uuid": "string"
+  },
   "moieties": [
     {
       "atropisomerism": "string",
@@ -38,40 +41,73 @@
   "names": [
     {
       "display_name": "boolean",
+      "domains": ["string"],
       "languages": ["string"],
       "name": "string",
-      "preferred": "boolean",
-      "references": ["string"],
-      "stdName": "string",
-      "type": "string",
-      "uuid": "string",
       "name_orgs": [
         {
           "name_org": "string",
           "uuid": "string"
         }
-      ]
+      ],
+      "preferred": "boolean",
+      "references": ["string"],
+      "stdName": "string",
+      "type": "string",
+      "uuid": "string"
     }
   ],
+  "properties": [
+    {
+      "defining": "boolean",
+      "name": "string",
+      "property_type": "string",
+      "type": "string",
+      "uuid": "string",
+      "value": {
+        "average": "number",
+        "non_numeric_value": "string",
+        "type": "string",
+        "units": "string",
+        "uuid": "string"
+      }
+    }
+  ],
+  "protein": {
+    "glycosylation": {
+      "uuid": "string"
+    },
+    "protein_sub_type": "string",
+    "protein_type": "string",
+    "references": ["string"],
+    "sequence_origin": "string",
+    "sequence_type": "string",
+    "subunits": [
+      {
+        "sequence": "string",
+        "subunit_index": "number",
+        "uuid": "string"
+      }
+    ],
+    "uuid": "string"
+  },
   "references": [
     {
       "citation": "string",
       "doc_type": "string",
+      "document_date": "number",
       "public_domain": "boolean",
       "tags": ["string"],
-      "uuid": "string",
-      "document_date": "number",
-      "url": "string"
+      "url": "string",
+      "uuid": "string"
     }
   ],
   "relationships": [
     {
       "amount": {
-        "uuid": "string",
-        "average": "number",
-        "units": "string"
+        "uuid": "string"
       },
-      "references": ["string"],
+      "comments": "string",
       "related_substance": {
         "linking_id": "string",
         "name": "string",
@@ -82,9 +118,7 @@
         "uuid": "string"
       },
       "type": "string",
-      "uuid": "string",
-      "interaction_type": "string",
-      "qualification": "string"
+      "uuid": "string"
     }
   ],
   "structure": {
@@ -106,83 +140,5 @@
   "substance_class": "string",
   "unii": "string",
   "uuid": "string",
-  "version": "string",
-  "modifications": {
-    "uuid": "string",
-    "structural_modifications": [
-      {
-        "extent": "string",
-        "location_type": "string",
-        "molecular_fragment": {
-          "linking_id": "string",
-          "name": "string",
-          "ref_pname": "string",
-          "refuuid": "string",
-          "substance_class": "string",
-          "unii": "string",
-          "uuid": "string"
-        },
-        "residue_modified": "string",
-        "sites": [
-          {
-            "residue_index": "number",
-            "subunit_index": "number"
-          }
-        ],
-        "structural_modification_type": "string",
-        "uuid": "string"
-      }
-    ]
-  },
-  "properties": [
-    {
-      "defining": "boolean",
-      "name": "string",
-      "property_type": "string",
-      "type": "string",
-      "uuid": "string",
-      "value": {
-        "average": "number",
-        "type": "string",
-        "units": "string",
-        "uuid": "string",
-        "non_numeric_value": "string"
-      }
-    }
-  ],
-  "protein": {
-    "disulfide_links": [
-      {
-        "sites": [
-          {
-            "residue_index": "number",
-            "subunit_index": "number"
-          }
-        ]
-      }
-    ],
-    "glycosylation": {
-      "glycosylation_type": "string",
-      "n_glycosylation_sites": [
-        {
-          "residue_index": "number",
-          "subunit_index": "number"
-        }
-      ],
-      "uuid": "string"
-    },
-    "protein_sub_type": "string",
-    "protein_type": "string",
-    "references": ["string"],
-    "sequence_origin": "string",
-    "sequence_type": "string",
-    "subunits": [
-      {
-        "sequence": "string",
-        "subunit_index": "number",
-        "uuid": "string"
-      }
-    ],
-    "uuid": "string"
-  }
+  "version": "string"
 }

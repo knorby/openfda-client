@@ -1,4 +1,5 @@
 {
+  "availability": "string",
   "company_name": "string",
   "contact_info": "string",
   "discontinued_date": "string",
@@ -23,10 +24,9 @@
   "package_ndc": "string",
   "presentation": "string",
   "related_info": "string",
+  "shortage_reason": "string",
   "status": "string",
   "therapeutic_category": ["string"],
   "update_date": "string",
-  "update_type": "string",
-  "availability": "string",
-  "shortage_reason": "string"
+  "update_type": "string"
 }

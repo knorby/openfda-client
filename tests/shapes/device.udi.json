@@ -6,8 +6,7 @@
   "customer_contacts": [
     {
       "email": "string",
-      "phone": "string",
-      "ext": "string"
+      "phone": "string"
     }
   ],
   "device_count_in_base_package": "string",
@@ -81,6 +80,18 @@
     "is_sterilization_prior_use": "string",
     "sterilization_methods": "string"
   },
-  "version_or_model_number": "string",
-  "commercial_distribution_end_date": "string"
+  "storage": [
+    {
+      "high": {
+        "unit": "string",
+        "value": "string"
+      },
+      "low": {
+        "unit": "string",
+        "value": "string"
+      },
+      "type": "string"
+    }
+  ],
+  "version_or_model_number": "string"
 }

@@ -2,6 +2,7 @@
   "action": "string",
   "additional_info_contact": "string",
   "address_1": "string",
+  "address_2": "string",
   "cfres_id": "string",
   "city": "string",
   "code_info": "string",
@@ -30,6 +31,5 @@
   "recalling_firm": "string",
   "res_event_number": "string",
   "root_cause_description": "string",
-  "state": "string",
-  "address_2": "string"
+  "state": "string"
 }
