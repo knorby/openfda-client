@@ -50,8 +50,8 @@
   "current_use": {
     "cigarillos": "string",
     "cigars": "string",
-    "smokeless": "string",
     "pouches": "string",
+    "smokeless": "string",
     "vape": "string"
   },
   "future_quit_method": {
@@ -79,6 +79,8 @@
     "other_tobacco": "string",
     "telephone_or_web": "string"
   },
+  "reason_smokeless": "string",
+  "reason_vape": "string",
   "record": "string",
   "relative_addiction_menthol": "string",
   "relative_risk": {
@@ -107,7 +109,5 @@
     "social_media": "string",
     "television": "string",
     "websites": "string"
-  },
-  "reason_smokeless": "string",
-  "reason_vape": "string"
+  }
 }

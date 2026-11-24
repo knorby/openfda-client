@@ -38,30 +38,34 @@
       "atc_vet_code": "string",
       "brand_name": "string",
       "dosage_form": "string",
-      "first_exposure_date": "string",
-      "last_exposure_date": "string",
-      "lot_number": "string",
-      "manufacturer": {
-        "name": "string",
-        "registration_number": "string"
-      },
-      "previous_exposure_to_drug": "string",
-      "route": "string",
-      "used_according_to_label": "string",
       "dose": {
         "denominator": "string",
         "denominator_unit": "string",
         "numerator": "string",
         "numerator_unit": "string"
       },
-      "previous_ae_to_drug": "string",
+      "first_exposure_date": "string",
       "frequency_of_administration": {
         "unit": "string",
         "value": "string"
       },
-      "off_label_use": ["string"]
+      "last_exposure_date": "string",
+      "lot_number": "string",
+      "manufacturer": {
+        "name": "string",
+        "registration_number": "string"
+      },
+      "off_label_use": ["string"],
+      "previous_ae_to_drug": "string",
+      "previous_exposure_to_drug": "string",
+      "route": "string",
+      "used_according_to_label": "string"
     }
   ],
+  "duration": {
+    "unit": "string",
+    "value": "string"
+  },
   "foreign_or_domestic": "string",
   "health_assessment_prior_to_exposure": {
     "assessed_by": "string",
@@ -99,9 +103,5 @@
   "serious_ae": "string",
   "treated_for_ae": "string",
   "type_of_information": "string",
-  "unique_aer_id_number": "string",
-  "duration": {
-    "unit": "string",
-    "value": "string"
-  }
+  "unique_aer_id_number": "string"
 }

@@ -9,6 +9,7 @@
   "distribution_pattern": "string",
   "event_id": "string",
   "initial_firm_notification": "string",
+  "more_code_info": "string",
   "openfda": {
     "application_number": ["string"],
     "brand_name": ["string"],
@@ -37,6 +38,5 @@
   "state": "string",
   "status": "string",
   "termination_date": "string",
-  "voluntary_mandated": "string",
-  "more_code_info": "string"
+  "voluntary_mandated": "string"
 }

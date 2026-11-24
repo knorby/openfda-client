@@ -1,9 +1,25 @@
 import { spawnSync } from "node:child_process";
-import { readFileSync } from "node:fs";
+import { readdirSync, readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { describe, expect, it } from "vitest";
 
 const preload = resolve("tests/fixtures/drift-fetch.mjs");
+
+function expectSortedKeys(value: unknown, path: string): void {
+  if (Array.isArray(value)) {
+    value.forEach((entry, index) => {
+      expectSortedKeys(entry, `${path}[${index}]`);
+    });
+    return;
+  }
+  if (value === null || typeof value !== "object") return;
+
+  const keys = Object.keys(value);
+  expect(keys, path).toEqual([...keys].sort());
+  for (const key of keys) {
+    expectSortedKeys((value as Record<string, unknown>)[key], `${path}.${key}`);
+  }
+}
 
 function runDrift(script: string, scenario?: string) {
   return spawnSync(
@@ -82,4 +98,18 @@ it("gates drift PRs on explicit drift status and captures diagnostic stderr", ()
   expect(workflow).not.toContain(
     "node scripts/capture-shapes.mjs --check || true",
   );
+});
+
+it("stores every shape snapshot with recursively sorted keys", () => {
+  const files = readdirSync("tests/shapes").filter((file) =>
+    file.endsWith(".json"),
+  );
+  expect(files.length).toBeGreaterThan(0);
+
+  for (const file of files) {
+    const snapshot = JSON.parse(
+      readFileSync(resolve("tests/shapes", file), "utf8"),
+    );
+    expectSortedKeys(snapshot, file);
+  }
 });

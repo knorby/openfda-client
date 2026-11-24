@@ -29,6 +29,7 @@ import { createRequire } from "node:module";
 import { resolve } from "node:path";
 import { promisify } from "node:util";
 import { ALL_PATHS } from "../src/endpoints.ts";
+import { sortJson } from "./sort-json.ts";
 
 const require = createRequire(import.meta.url);
 const execFileP = promisify(execFile);
@@ -185,7 +186,7 @@ if (!CHECK_ONLY) {
   await mkdir(SHAPES_DIR, { recursive: true });
   for (const [path, shape] of shapes) {
     const file = resolve(SHAPES_DIR, `${path.replace("/", ".")}.json`);
-    await writeFile(file, `${JSON.stringify(shape, null, 2)}\n`);
+    await writeFile(file, `${JSON.stringify(sortJson(shape), null, 2)}\n`);
   }
   await formatShapes();
   console.log(

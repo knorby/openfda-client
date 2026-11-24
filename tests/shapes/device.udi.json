@@ -11,6 +11,13 @@
   ],
   "device_count_in_base_package": "string",
   "device_description": "string",
+  "device_sizes": [
+    {
+      "type": "string",
+      "unit": "string",
+      "value": "string"
+    }
+  ],
   "gmdn_terms": [
     {
       "code": "string",
@@ -86,12 +93,5 @@
       "type": "string"
     }
   ],
-  "version_or_model_number": "string",
-  "device_sizes": [
-    {
-      "type": "string",
-      "unit": "string",
-      "value": "string"
-    }
-  ]
+  "version_or_model_number": "string"
 }

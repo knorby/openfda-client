@@ -1,5 +1,6 @@
 {
   "application_number_or_citation": "string",
+  "billing_unit": "string",
   "dosage_form": "string",
   "inactivation_date": "string",
   "marketing_category": "string",
@@ -9,6 +10,5 @@
   "package_ndc11": "string",
   "product_type": "string",
   "proprietary_name": "string",
-  "reactivation_date": "string",
-  "billing_unit": "string"
+  "reactivation_date": "string"
 }

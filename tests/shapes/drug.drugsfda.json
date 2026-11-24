@@ -36,13 +36,6 @@
   "sponsor_name": "string",
   "submissions": [
     {
-      "submission_number": "string",
-      "submission_status": "string",
-      "submission_status_date": "string",
-      "submission_type": "string",
-      "submission_class_code": "string",
-      "submission_class_code_description": "string",
-      "review_priority": "string",
       "application_docs": [
         {
           "date": "string",
@@ -50,7 +43,14 @@
           "type": "string",
           "url": "string"
         }
-      ]
+      ],
+      "review_priority": "string",
+      "submission_class_code": "string",
+      "submission_class_code_description": "string",
+      "submission_number": "string",
+      "submission_status": "string",
+      "submission_status_date": "string",
+      "submission_type": "string"
     }
   ]
 }

@@ -1,22 +1,26 @@
 {
   "companynumb": "string",
+  "duplicate": "string",
   "fulfillexpeditecriteria": "string",
+  "occurcountry": "string",
   "patient": {
     "drug": [
       {
+        "actiondrug": "string",
+        "drugadditional": "string",
         "drugadministrationroute": "string",
         "drugauthorizationnumb": "string",
-        "drugcharacterization": "string",
-        "drugindication": "string",
-        "medicinalproduct": "string",
         "drugbatchnumb": "string",
+        "drugcharacterization": "string",
+        "drugdosageform": "string",
         "drugdosagetext": "string",
+        "drugindication": "string",
+        "drugrecurreadministration": "string",
         "drugstartdate": "string",
         "drugstartdateformat": "string",
         "drugstructuredosagenumb": "string",
         "drugstructuredosageunit": "string",
-        "drugadditional": "string",
-        "drugrecurreadministration": "string",
+        "medicinalproduct": "string",
         "openfda": {
           "application_number": ["string"],
           "brand_name": ["string"],
@@ -27,6 +31,7 @@
           "pharm_class_cs": ["string"],
           "pharm_class_epc": ["string"],
           "pharm_class_moa": ["string"],
+          "pharm_class_pe": ["string"],
           "product_ndc": ["string"],
           "product_type": ["string"],
           "route": ["string"],
@@ -34,11 +39,8 @@
           "spl_id": ["string"],
           "spl_set_id": ["string"],
           "substance_name": ["string"],
-          "unii": ["string"],
-          "pharm_class_pe": ["string"]
-        },
-        "actiondrug": "string",
-        "drugdosageform": "string"
+          "unii": ["string"]
+        }
       }
     ],
     "patientdeath": {
@@ -60,6 +62,7 @@
     "qualification": "string",
     "reportercountry": "string"
   },
+  "primarysourcecountry": "string",
   "receiptdate": "string",
   "receiptdateformat": "string",
   "receivedate": "string",
@@ -68,24 +71,21 @@
     "receiverorganization": "string",
     "receivertype": "string"
   },
+  "reportduplicate": {
+    "duplicatenumb": "string",
+    "duplicatesource": "string"
+  },
+  "reporttype": "string",
   "safetyreportid": "string",
+  "safetyreportversion": "string",
   "sender": {
     "senderorganization": "string",
     "sendertype": "string"
   },
   "serious": "string",
   "seriousnessdeath": "string",
-  "transmissiondate": "string",
-  "transmissiondateformat": "string",
-  "duplicate": "string",
-  "primarysourcecountry": "string",
-  "reportduplicate": {
-    "duplicatenumb": "string",
-    "duplicatesource": "string"
-  },
-  "reporttype": "string",
-  "safetyreportversion": "string",
   "seriousnessdisabling": "string",
   "seriousnessother": "string",
-  "occurcountry": "string"
+  "transmissiondate": "string",
+  "transmissiondateformat": "string"
 }

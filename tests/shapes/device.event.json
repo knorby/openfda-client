@@ -7,6 +7,7 @@
   "date_received": "string",
   "date_report": "string",
   "date_report_to_fda": "string",
+  "date_report_to_manufacturer": "string",
   "device": [
     {
       "baseline_510_k__exempt_flag": "string",
@@ -14,8 +15,10 @@
       "baseline_510_k__number": "string",
       "brand_name": "string",
       "catalog_number": "string",
+      "combination_product_flag": "string",
       "date_received": "string",
       "date_removed_flag": "string",
+      "date_returned_to_manufacturer": "string",
       "device_age_text": "string",
       "device_availability": "string",
       "device_evaluated_by_manufacturer": "string",
@@ -43,8 +46,6 @@
         "regulation_number": "string"
       },
       "other_id_number": "string",
-      "date_returned_to_manufacturer": "string",
-      "combination_product_flag": "string",
       "udi_di": "string",
       "udi_public": "string"
     }
@@ -117,18 +118,19 @@
       "date_received": "string",
       "patient_age": "string",
       "patient_ethnicity": "string",
+      "patient_problems": ["string"],
       "patient_race": "string",
       "patient_sequence_number": "string",
       "patient_sex": "string",
       "patient_weight": "string",
       "sequence_number_outcome": ["string"],
-      "sequence_number_treatment": ["string"],
-      "patient_problems": ["string"]
+      "sequence_number_treatment": ["string"]
     }
   ],
   "pma_pmn_number": "string",
   "previous_use_code": "string",
   "product_problem_flag": "string",
+  "product_problems": ["string"],
   "remedial_action": ["string"],
   "removal_correction_number": "string",
   "report_date": "string",
@@ -145,7 +147,5 @@
   "summary_report_flag": "string",
   "suppl_dates_fda_received": "string",
   "suppl_dates_mfr_received": "string",
-  "type_of_report": ["string"],
-  "date_report_to_manufacturer": "string",
-  "product_problems": ["string"]
+  "type_of_report": ["string"]
 }
