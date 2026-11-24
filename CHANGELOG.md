@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.2.2
+
+### Patch Changes
+
+- 8dcf5a6: chore: refresh openFDA endpoint shape snapshots after API drift
+
 ## 0.2.1
 
 ### Patch Changes
