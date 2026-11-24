@@ -100,6 +100,19 @@ it("gates drift PRs on explicit drift status and captures diagnostic stderr", ()
   );
 });
 
+it("adds a fixed patch changeset to drift PRs", () => {
+  const workflow = readFileSync(".github/workflows/api-drift.yml", "utf8");
+  const changesetPath = ".changeset/openfda-drift.md";
+  const addPaths = workflow.split("add-paths: |")[1];
+
+  expect(workflow).toContain(`cat > ${changesetPath} <<'EOF'`);
+  expect(workflow).toContain('"@knorby/openfda-client": patch');
+  expect(workflow).toContain(
+    "chore: refresh openFDA endpoint shape snapshots after API drift",
+  );
+  expect(addPaths).toContain(changesetPath);
+});
+
 it("stores every shape snapshot with recursively sorted keys", () => {
   const files = readdirSync("tests/shapes").filter((file) =>
     file.endsWith(".json"),

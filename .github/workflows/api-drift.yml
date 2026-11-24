@@ -99,6 +99,18 @@ jobs:
             echo '```'
           } > drift-report.txt
 
+      - name: Create patch changeset
+        if: success() && (steps.endpoints.outputs.drift == 'true' || steps.shapes.outputs.drift == 'true')
+        run: |
+          mkdir -p .changeset
+          cat > .changeset/openfda-drift.md <<'EOF'
+          ---
+          "@knorby/openfda-client": patch
+          ---
+
+          chore: refresh openFDA endpoint shape snapshots after API drift
+          EOF
+
       - name: Open drift PR
         if: success() && (steps.endpoints.outputs.drift == 'true' || steps.shapes.outputs.drift == 'true')
         uses: peter-evans/create-pull-request@3ffccacd46053766916f087ce41d627c0b8cf2d1 # v8.1.3
@@ -109,6 +121,7 @@ jobs:
           add-paths: |
             tests/shapes/*.json
             drift-report.txt
+            .changeset/openfda-drift.md
           commit-message: "chore: refresh endpoint shape snapshots after openFDA drift"
           delete-branch: true
 
