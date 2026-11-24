@@ -41,20 +41,24 @@ Three complementary mechanisms, ordered by leverage:
 
 3. **Sample-based shape snapshots (`scripts/capture-shapes.mjs`).** Since
    no schema source exists, drift detection samples a few records per
-   endpoint and records the *skeleton* (sorted keys + scalar kinds, no
-   values) in `tests/shapes/*.json`. A regenerated capture that differs
-   from the committed snapshot means: added fields (typed models going
-   stale), removed/retyped fields (possible breaking change), or new/lost
-   endpoints. Snapshots double as living documentation for the ~20
-   endpoints without hand-written models.
+   endpoint and records the *skeleton* (recursively alphabetical keys +
+   scalar kinds, no values) in `tests/shapes/*.json`. Serialization sorts
+   every object key so record merge order cannot create ordering churn. A
+   regenerated capture that differs from the committed snapshot means: added
+   fields (typed models going stale), removed/retyped fields (possible
+   breaking change), or new/lost endpoints. Snapshots double as living
+   documentation for the ~20 endpoints without hand-written models.
 
 These run together in the scheduled **api-drift workflow**
 (`.github/workflows/api-drift.yml`, weekly cron + manual dispatch): discovery
 report → shape diff → snapshot regeneration on drift → live test tripwire → a
 review PR via SHA-pinned `peter-evans/create-pull-request` only on confirmed
-drift, or an issue when the live tripwire fails. HTTP 404 shape probes are
-reviewable endpoint drift (a removed route or empty dataset); other probe
-failures stop the workflow. No diagnostic report is committed on routine runs.
+drift, or an issue when the live tripwire fails. The PR carries a fixed
+`.changeset/openfda-drift.md` patch changeset; reusing one path prevents
+duplicate changesets when the bot branch is updated. HTTP 404 shape probes
+are reviewable endpoint drift (a removed route or empty dataset); other
+probe failures stop the workflow. No diagnostic report is committed on
+routine runs.
 
 ## Consequences
 
@@ -70,8 +74,13 @@ failures stop the workflow. No diagnostic report is committed on routine runs.
   worthwhile.
 - **Snapshot noise.** Rare fields may appear/disappear in snapshots if the
   sampled records happen to include them; the sampled-record count (5) and
-  shape merging keep this manageable. Snapshot changes should be reviewed
+  shape merging keep this manageable. Recursive key sorting removes ordering
+  churn, so remaining hunks are semantic. Snapshot changes should be reviewed
   with the field references in hand.
+- **Patch release cadence.** Every drift PR queues a patch release through
+  Changesets. A maintainer merges the drift PR first and the resulting Version
+  Packages PR second; neither step is automated, and direct `package.json`
+  edits are not used for drift releases.
 - **Keyless budget.** The drift run makes ~35 requests + ~11 live-test
   requests per week — comfortably inside the 1,000/day keyless limit;
   `OPENFDA_API_KEY` can be added as a repository secret if desired.

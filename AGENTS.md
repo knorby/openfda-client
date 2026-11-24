@@ -41,11 +41,14 @@ surface: `search`/`count`/`limit`/`skip`/`sort`):
   (`and/or/not/field/exact/range/exists/term`).
 - Drift protection: `tests/shapes/*.json` are skeleton snapshots of every
   endpoint; `scripts/capture-shapes.mjs` regenerates/diffs them (comparison is
-  semantic, and the capture script reformats output with Biome after writing,
-  so regenerated snapshots always pass `npm run lint`). The weekly
-  `api-drift` GitHub workflow opens a review PR on drift — **never
-  auto-merge drift PRs**; a human checks the diff against the field
-  references. (Note: GitHub disables cron workflows after 60 days of repo
+  semantic; serialization recursively sorts object keys for stable diffs, and
+  the capture script reformats output with Biome after writing, so regenerated
+  snapshots always pass `npm run lint`). The weekly `api-drift` GitHub
+  workflow opens a review PR on drift, carrying a fixed
+  `.changeset/openfda-drift.md` patch bump — **never auto-merge drift PRs**;
+  a human checks the diff against the field references. Merging the drift PR
+  opens the Changesets Version Packages PR, and merging that PR publishes the
+  patch release. (Note: GitHub disables cron workflows after 60 days of repo
   inactivity; re-enable under Actions if the repo goes quiet.)
 
 ---
@@ -177,6 +180,9 @@ PRs and release them all at once.
 - **Before a PR that changes published output**: run `npx changeset`, select
   bump type (patch/minor/major), write a summary. Commit the generated
   `.changeset/*.md` file alongside the code change.
+- **Drift PRs** carry a fixed `openfda-drift` patch changeset automatically.
+  Merging one queues the micro release; merge the later Version Packages PR
+  to publish it.
 - **To release**: `npx changeset version` (bumps `package.json` +
   `CHANGELOG.md`), then `npm run release` (builds + publishes).
 - **GitHub Actions release** (`.github/workflows/release.yml`): runs on every
